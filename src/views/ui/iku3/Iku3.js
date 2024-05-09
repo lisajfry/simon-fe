@@ -1,7 +1,6 @@
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
-import LulusanContext from '../lulusan/LulusanContext';
 import Iku3Context from './Iku3Context';
 import { FaChartBar , FaFile, FaDatabase } from 'react-icons/fa';
 import {
@@ -71,44 +70,7 @@ const Iku3 = () => {
     <div>
       <Row>
         <h5 className="mb-3 mt-3">CAPAIAN IKU3 (Dosen Berkegiatan di Luar Kampus)</h5>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Jumlah Dosen</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataDosen}</p></CardText>
-            <div>
-            <NavLink to="/lulusanlist">
-              <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        
-        <Col md="6" lg="3">
-          <Card body className="text-center"color="success" inverse>
-            <CardTitle tag="h5">Pencapaian IKU3</CardTitle>
-            <CardText>
-              berapa persen
-            </CardText>
-            <div>
-              <NavLink to="/rekapiku1">
-              <Button color="light-success">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        </Row>
-        <Row>
-        <Col md="6" lg="4">
-          <Card body className="text-center" color="light-success">
-            <CardTitle tag="h5">Jumlah kegiatan Dosen diluar kampus</CardTitle>
-            <CardText></CardText>
-            <div>
-              <Button color="success">Selengkapnya</Button>
-            </div>
-          </Card>
-        </Col>
-        
-        <Col md="6" lg="3">
+        <Col md="6" lg="12">
           <Card body className="text-center"color="light-info">
             <CardTitle tag="h5">Input</CardTitle>
             <CardText>
@@ -121,6 +83,66 @@ const Iku3 = () => {
             </div>
           </Card>
         </Col>
+        <Col md="6" lg="12">
+          <Card body className="text-center"color="success" inverse>
+            <CardTitle tag="h5">Pencapaian IKU3</CardTitle>
+            <CardText>
+              berapa persen
+            </CardText>
+            <div>
+              <NavLink to="/rekapiku1">
+              <Button color="light-success">Selengkapnya</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
+        
+        <Col md="6" lg="4">
+          <Card body className="text-center">
+            <CardTitle tag="h5">Jumlah Dosen</CardTitle>
+            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataDosen}</p></CardText>
+            <div>
+            <NavLink to="/lulusanlist">
+              <Button color="light-warning">Selengkapnya</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
+        
+        
+        </Row>
+        <Row>
+        
+        <Col md="6" lg="4">
+          <Card body className="text-center" color="light-success">
+            <CardTitle tag="h5">Jumlah Dosen Melakukan Tridharma di Kampus Lain</CardTitle>
+            <CardText></CardText>
+            <div>
+              <Button color="success">Selengkapnya</Button>
+            </div>
+          </Card>
+        </Col>
+        <Col md="6" lg="4">
+          <Card body className="text-center" color="light-success">
+            <CardTitle tag="h5">Jumlah Dosen Bekerja Sebagai Prakisi</CardTitle>
+            <CardText></CardText>
+            <div>
+              <Button color="success">Selengkapnya</Button>
+            </div>
+          </Card>
+        </Col>
+
+        <Col md="6" lg="4">
+          <Card body className="text-center" color="light-success">
+            <CardTitle tag="h5">Jumlah Dosen Membimbing Mahasiswa Berprestasi</CardTitle>
+            <CardText></CardText>
+            <div>
+              <Button color="success">Selengkapnya</Button>
+            </div>
+          </Card>
+        </Col>
+        
+        
         </Row>
     </div>
   );

@@ -1,17 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import {
-    Card,
-    CardImg,
-    CardText,
-    CardBody,
-    CardTitle,
-    CardSubtitle,
-    CardGroup,
-    Button,
-    Col,
-  } from "reactstrap";
+import {Card, CardBody, CardTitle, Button, Col, } from "reactstrap";
 
   const Iku1TidakSesuai = () => {
     const [iku1, setIku1] = useState([]);
@@ -20,12 +10,32 @@ import {
 
     useEffect(() => {
         getIku1();
+        fetchNamaMahasiswa();
     }, []);
 
     const getIku1 = async () => {
         const response = await axios.get("http://localhost:8080/iku1");
-        setIku1(response.data);
+        const iku1Data = response.data;
+    
+        // Fetch nama mahasiswa for each iku1
+        const iku1WithMahasiswa = await Promise.all(iku1Data.map(async (iku1) => {
+            const namaMahasiswa = await fetchNamaMahasiswa(iku1.NIM);
+            return { ...iku1, nama_mahasiswa: namaMahasiswa };
+        }));
+    
+        setIku1(iku1WithMahasiswa);
     }
+    
+
+    const fetchNamaMahasiswa = async (NIM) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
+        return response.data.nama_mahasiswa;
+        } catch (error) {
+            console.error("Error while fetching nama mahasiswa:", error);
+        return null;
+        }
+    };
 
     const deleteIku1 = async (iku1_id) => {
         const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus pengguna?");
@@ -68,8 +78,8 @@ import {
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>No Ijazah</th>
-                                <th>Nama Alumni</th>
+                                <th>NIM</th>
+                                <th>Nama Lulusan</th>
                                 <th>Status</th>
                                 <th>Gaji</th>
                                 <th>Masa Tunggu</th>
@@ -80,8 +90,8 @@ import {
                             {filteredTidakSesuai.map((iku_1, index) => (
                                 <tr key={iku_1.iku1_id}>
                                     <td>{index + 1}</td>
-                                    <td>{iku_1.no_ijazah}</td>
-                                    <td>{iku_1.nama_alumni}</td>
+                                    <td>{iku_1.NIM}</td>
+                                    <td>{iku_1.nama_mahasiswa}</td>
                                     <td>{iku_1.status}</td>
                                     <td>{iku_1.gaji}</td>
                                     <td>{iku_1.masa_tunggu}</td>

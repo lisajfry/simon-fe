@@ -4,17 +4,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import MahasiswaContext from '../mahasiswa/MahasiswaContext';
 import KegiatanContext from './KegiatanContext';
 import PrestasiContext from './PrestasiContext';
-
-import { FaFile, FaDatabase } from 'react-icons/fa';
-import {
-  Card,
-  CardText,
-  CardTitle,
-  Button,
-  Row,
-  Col,
-} from 'reactstrap';
-import ReactApexChart from 'react-apexcharts';
+import {Card,CardText,CardTitle,Button,Row,Col,} from 'reactstrap';
 
 const Iku2 = () => {
   const [options, setOptions] = useState({
@@ -50,6 +40,7 @@ const Iku2 = () => {
   const [totalData, setTotalData] = useState(0);
   const { totalDataMahasiswa } = useContext(MahasiswaContext);
   const { totalDataKegiatan } = useContext(KegiatanContext);
+  const { totalDataPertukaranPelajar } = useContext(KegiatanContext);
   const { totalDataPrestasi } = useContext(PrestasiContext);
   
 
@@ -73,27 +64,18 @@ const Iku2 = () => {
       <Row>
         <h5 className="mb-3 mt-3">CAPAIAN IKU2 (MAHASISWA BERKEGIATAN DILUAR PROGRAM STUDI)</h5>
         <Row>
+
         <Col md="6" lg="4">
-          <Card body className="text-center" color= "light-info">
-            <CardTitle tag="h5">Input Kegiatan di Luar Prodi</CardTitle>
+          <Card body className="text-center"color="light-info">
+            <CardTitle tag="h5">Input Kegiatan Diluar Prodi</CardTitle>
             <div>
-            <NavLink to="/addiku2kegiatan">
-              <Button color="info">Selengkapnya</Button>
+              <NavLink to="/addiku2kegiatan">
+              <Button body color="info">Input Data</Button>
               </NavLink>
             </div>
           </Card>
         </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-center" color="light-info">
-            <CardTitle tag="h5">Input Prestasi</CardTitle>
-            <div>
-            <NavLink to="/addiku2prestasi">
-              <Button color="info">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        </Row>
+
         <Col md="6" lg="4">
           <Card body className="text-center">
             <CardTitle tag="h5">Jumlah Mahasiswa Berkegiatan di Luar Prodi</CardTitle>
@@ -105,23 +87,35 @@ const Iku2 = () => {
             </div>
           </Card>
         </Col>
+
         <Col md="6" lg="4">
         <Card body className="text-center">
           <CardTitle tag="h5">Jumlah Mahasiswa yang Diterima Pertukaran Pelajar </CardTitle>
             <CardText >
-            <p style={{ marginLeft: '50 px' }}>{totalData}</p>
+            <p style={{ marginLeft: '50 px' }}>{totalDataPertukaranPelajar}</p>
             </CardText>
          <div>
-            <NavLink to="/iku2list">
+            <NavLink to="/pertukaranpelajarlist">
               <Button color="light-danger">Selengkapnya</Button>
              </NavLink>
         </div>
         </Card>
         </Col>
+
+        <Col md="6" lg="4">
+          <Card body className="text-center"color="light-info">
+            <CardTitle tag="h5">Input Prestasi</CardTitle>
+            <div>
+              <NavLink to="/addiku2prestasi">
+              <Button body color="info">Input Data</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
         <Col md="6" lg="4">
           <Card body className="text-center">
             <CardTitle tag="h5">Jumlah Prestasi oleh Mahasiswa</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalData}</p></CardText>
+            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataPrestasi}</p></CardText>
             <div>
             <NavLink to="/iku2prestasilist">
               <Button color="light-warning">Selengkapnya</Button>
@@ -129,14 +123,19 @@ const Iku2 = () => {
             </div>
           </Card>
         </Col>
+        
+        </Row>
+        
+        
+        
         </Row>
         <Row>
         <Col md="6" lg="4">
           <Card body className="text-center">
             <CardTitle tag="h5">Jumlah Mahasiswa yang Memenuhi Syarat</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataKegiatan}</p></CardText>
+            <CardText><p style={{ marginLeft: '50 px' }}>{}</p></CardText>
             <div>
-            <NavLink to="/lulusanlist">
+            <NavLink to="">
               <Button color="light-warning">Selengkapnya</Button>
               </NavLink>
             </div>
@@ -156,9 +155,9 @@ const Iku2 = () => {
         <Col md="6" lg="4">
           <Card body className="text-center">
             <CardTitle tag="h5">Pencapaian IKU2</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalData}</p></CardText>
+            <CardText>berapa persen</CardText>
             <div>
-            <NavLink to="/lulusanlist">
+            <NavLink to="">
               <Button color="light-warning">Selengkapnya</Button>
               </NavLink>
             </div>

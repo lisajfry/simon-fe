@@ -4,15 +4,12 @@ import axios from "axios";
 import { Link } from 'react-router-dom';
 import { Card, CardText,CardBody,CardTitle,Button,Col,Row} from "reactstrap";
 import { FaExclamationCircle } from 'react-icons/fa';
-import LulusanContext from '../lulusan/LulusanContext';
-import RespondenContext from './RespondenContext';
 import MinResponden from './Minresponden';
+
 
 
     const Iku1Rekap = () => {
       const [iku1, setIku1] = useState([]);
-      const { totalDataLulusan } = useContext(LulusanContext);
-      const { totalDataResponden } = useContext(RespondenContext);
 
     useEffect(() => {
         getIku1();
@@ -20,14 +17,28 @@ import MinResponden from './Minresponden';
 
     const getIku1 = async () => {
         const response = await axios.get("http://localhost:8080/iku1");
-        setIku1(response.data);
-        // Menambahkan properti bobot ke setiap objek data
-        const dataWithBobot = response.data.map(data => ({
-            ...data,
-            bobot: calculateBobot(data) // Fungsi untuk menghitung bobot
+        const iku1Data = response.data;
+
+        // Fetch nama mahasiswa for each iku1
+        const iku1WithMahasiswa = await Promise.all(iku1Data.map(async (iku1) => {
+            const namaMahasiswa = await fetchNamaMahasiswa(iku1.NIM);
+            return { ...iku1, nama_mahasiswa: namaMahasiswa, bobot: calculateBobot(iku1) };
         }));
-        setIku1(dataWithBobot);
+
+        setIku1(iku1WithMahasiswa);
     }
+
+    const fetchNamaMahasiswa = async (NIM) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
+            return response.data.nama_mahasiswa;
+        } catch (error) {
+            console.error("Error while fetching nama mahasiswa:", error);
+            return null;
+        }
+    };
+
+   
 
     const deleteIku1 = async (iku1_id) => {
         const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus pengguna?");
@@ -131,31 +142,25 @@ import MinResponden from './Minresponden';
                                 <thead>
                                     <tr>
                                         <th>No</th>
-                                        <th>No Ijazah</th>
-                                        <th>Nama Alumni</th>
+                                        <th>NIM</th>
+                                        <th>Nama Lulusan</th>
                                         <th>Status</th>
                                         <th>Gaji</th>
                                         <th>Masa Tunggu</th>
                                         <th>Bobot</th>
-                                        <th>Actions</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {filteredIku1.map((iku_1, index) => (
                                         <tr key={iku_1.iku1_id}>
                                             <td>{index + 1}</td>
-                                            <td>{iku_1.no_ijazah}</td>
-                                            <td>{iku_1.nama_alumni}</td>
+                                            <td>{iku_1.NIM}</td>
+                                            <td>{iku_1.nama_mahasiswa}</td>
                                             <td>{iku_1.status}</td>
                                             <td>{iku_1.gaji}</td>
                                             <td>{iku_1.masa_tunggu}</td>
                                             <td>{iku_1.bobot}</td>
-                                            <td>
-                                                <Link to={`/update/iku1/${iku_1.iku1_id}`}>
-                                                    <Button className="btn" outline color="info">Edit</Button>
-                                                </Link>
-                                                <Button className="btn" outline color="danger" onClick={() => deleteIku1(iku_1.iku1_id)}>Delete</Button>
-                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -166,7 +171,7 @@ import MinResponden from './Minresponden';
             </Col>
      
       <Row>
-      <MinResponden totalDataLulusan={totalDataLulusan} />
+      <MinResponden  />
       </Row>
       
     </div>

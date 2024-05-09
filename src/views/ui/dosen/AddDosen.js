@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { Container, Row, Card, Col } from "reactstrap";
+import { Container, Row, Card, Col, CardTitle } from "reactstrap";
 
 const AddDosen = () => {
   const [NIDN, setNIDN] = useState('');
@@ -48,26 +48,14 @@ const AddDosen = () => {
   return (
     <div>
       <Container fluid style={{ maxWidth: '80%' }}>
+      
         <Row>
           <Col xs="12" md="12" sm="12">
-            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px' }}>
-              <form onSubmit={saveDosen}>
-                <div className="form-group">
-                  <label>File Excel</label>
-                  <input type="file" className="form-control" required accept=".xls, .xlsx" onChange={(e) => setFile(e.target.files[0])} style={{ marginBottom: '10px' }} />
-                </div>
-                <div className="form-group">
-                  <button type="submit" className="btn btn-primary">Save</button>
-                </div>
-              </form>
-            </Card>
-          </Col>
-        </Row>
-        <Row>
-          <Col xs="12" md="12" sm="12">
+          
             <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
+            <CardTitle><b>FORM INPUT DOSEN</b></CardTitle>
               <form onSubmit={saveDosenData}>
-                <div className="form-group">
+                <div className="form-group" style={{marginTop: '20px'}}>
                   <label htmlFor="NIDN">NIDN</label>
                   <input
                     type="text"
@@ -78,7 +66,7 @@ const AddDosen = () => {
                     placeholder="NIDN"
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group" style={{marginTop: '10px'}}>
                   <label htmlFor="nama_dosen">Nama Dosen</label>
                   <input
                     type="text"
@@ -92,7 +80,7 @@ const AddDosen = () => {
                 <div>
                   <p></p>
                 <div className="form-group">
-                <p><button type="submit" className="btn btn-primary">Save</button></p>
+                <p><button type="submit" className="btn btn-primary">Tambahkan</button></p>
                 </div>
                 </div>
               </form>

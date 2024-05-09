@@ -1,13 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { useNavigate, useParams } from 'react-router-dom';
+import { Container, Row, Card, Col } from "reactstrap";
+
 
 const EditIku2kegiatan = () => {
     const [NIM, setNIM] = useState('');
     const [nama_mahasiswa, setNamaMahasiswa] = useState('');
-    const [angkatan, setAngkatan] = useState('');
     const [aktivitas, setAktivitas] = useState('');
+    const [tempat_kegiatan, setTempatKegiatan] = useState('');
     const [sks, setSks] = useState('');
+    const [tgl_mulai_kegiatan, setTglMulaiKegiatan] = useState('');
+    const [tgl_selesai_kegiatan, setTglSelesaiKegiatan] = useState('');
     const navigate = useNavigate();
     const { iku2kegiatan_id } = useParams();
 
@@ -17,11 +21,11 @@ const EditIku2kegiatan = () => {
             const response = await axios.get(`http://localhost:8080/iku2kegiatan/${iku2kegiatan_id}`);
             const iku2kegiatan = response.data;
             setNIM(iku2kegiatan.NIM);
-            setNamaMahasiswa(iku2kegiatan.nama_mahasiswa);
-            setAngkatan(iku2kegiatan.angkatan);
+            setTempatKegiatan(iku2kegiatan.tempat_kegiatan);
             setAktivitas(iku2kegiatan.aktivitas);
             setSks(iku2kegiatan.sks);
-           
+            setTglMulaiKegiatan(iku2kegiatan.tgl_mulai_kegiatan);
+            setTglSelesaiKegiatan(iku2kegiatan.tgl_selesai_kegiatan);
         }
         fetchIku2kegiatan();
     }, [iku2kegiatan_id]);
@@ -31,50 +35,37 @@ const EditIku2kegiatan = () => {
         if (!iku2kegiatan_id) return; // Pemeriksaan untuk iku2kegiatan_id
         await axios.put(`http://localhost:8080/update/iku2kegiatan/${iku2kegiatan_id}`, {
             NIM: NIM,
-            nama_mahasiswa: nama_mahasiswa,
-            angkatan: angkatan,
+            tempat_kegiatan: tempat_kegiatan,
             aktivitas: aktivitas,
             sks: sks,
-          
+            tgl_mulai_kegiatan: tgl_mulai_kegiatan,
+            tgl_selesai_kegiatan: tgl_selesai_kegiatan,
         });
         navigate('/iku2kegiatanlist');
     }
 
     return (
         <div>
+            <Container fluid style={{ maxWidth: '80%' }}>
+                <Row>
+                <Col xs="12" md="12" sm="12">
+                    <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px' }}>
             <h2>Edit Data</h2>
             <form onSubmit={saveIku2kegiatan}>
-                <div className="field">
+                <div className="form-group" >
                     <label className="label">NIM</label>
                     <input
                         type="text"
-                        className="input"
+                        className="form-control"
                         value={NIM}
                         onChange={(e) => setNIM(e.target.value)}
                         placeholder="NIM" />
                 </div>
-                <div className="field">
-                    <label className="label">Nama Mahasiswa</label>
-                    <input
-                        type="text"
-                        className="input"
-                        value={nama_mahasiswa}
-                        onChange={(e) => setNamaMahasiswa(e.target.value)}
-                        placeholder="Nama Mahasiswa" />
-                </div>
-                <div className="field">
-                    <label className="label">Angkatan</label>
-                    <input
-                        type="text"
-                        className="input"
-                        value={angkatan}
-                        onChange={(e) => setAngkatan(e.target.value)}
-                        placeholder="angkatan" />
-                </div>
-                <div className="field">
+                
+                <div className="form-group">
                     <label className="label">Aktivitas</label>
                     <select
-                        className="select"
+                        className="form-control"
                         value={aktivitas}
                         onChange={(e) => setAktivitas(e.target.value)}
                     >
@@ -89,20 +80,49 @@ const EditIku2kegiatan = () => {
                             <option value="penelitian atau riset">Penelitian atau riset</option>
                     </select>
                 </div>
-                <div className="field">
+                <div className="form-group">
+                    <label className="label">Tempat Kegiatan</label>
+                    <input
+                        className="form-control"
+                        value={tempat_kegiatan}
+                        onChange={(e) => setTempatKegiatan(e.target.value)}
+                        placeholder="Tempat Kegiatan" />
+                </div>
+                <div className="form-group">
                     <label className="label">sks</label>
-                    <select
-                        className="select"
+                    <input
+                        className="form-control"
                         value={sks}
                         onChange={(e) => setSks(e.target.value)}
                         placeholder="sks" />
                 </div>
-                
-                <div className="field">
-                    <button type="submit" className="button is-primary">Simpan</button>
+                <div className="form-group">
+                    <label className="label">Tanggal Mulai Kegiatan</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={tgl_mulai_kegiatan}
+                        onChange={(e) => setTglMulaiKegiatan(e.target.value)}
+                        placeholder="Tanggal Mulai Kegiatan" />
+                </div>
+                <div className="form-group">
+                    <label className="label">Tanggal Selesai Kegiatan</label>
+                    <input
+                        type="date"
+                        className="form-control"
+                        value={tgl_selesai_kegiatan}
+                        onChange={(e) => setTglSelesaiKegiatan(e.target.value)}
+                        placeholder="Tanggal Selesai Kegiatan" />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <button type="submit" className="btn btn-primary">Update</button>
                 </div>
             </form>
-        </div>
+            </Card>
+            </Col>
+        </Row>
+        </Container>
+    </div>
     )
 }
 

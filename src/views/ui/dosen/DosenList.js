@@ -48,7 +48,7 @@ const DosenList = () => {
                         <button type="submit" className="btn btn-primary">Input</button>
                     </Link>
                 </div>
-                <Card>
+                <Card style={{ marginTop: '10px' }}>
                     <div>
                         <p style={{ marginLeft: '10px' }}>Total data: {totalDataDosen}</p>
                     </div>

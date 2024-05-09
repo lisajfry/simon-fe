@@ -1,26 +1,31 @@
 import React, { createContext, useState, useEffect } from 'react';
 import axios from "axios";
 
-const MahasiswaContext = createContext();
+export const MahasiswaContext = createContext();
 
 export const MahasiswaProvider = ({ children }) => {
-  const [totalDataMahasiswa, setTotalDataMahasiswa] = useState(0);
+  const [totalData, setTotalData] = useState({
+    totalDataMahasiswa: 0,
+    totalDataLulus: 0
+  });
 
   useEffect(() => {
-    getTotalDataMahasiswa();
+    getTotalData();
   }, []);
 
-  const getTotalDataMahasiswa = async () => {
+  const getTotalData = async () => {
     try {
       const response = await axios.get("http://localhost:8080/mahasiswa");
-      setTotalDataMahasiswa(response.data.length); // Menggunakan response.data.length
+      const totalDataMahasiswa = response.data.length;
+      const totalDataLulus = response.data.filter(mahasiswa => mahasiswa.keterangan === 'lulus').length;
+      setTotalData({ totalDataMahasiswa, totalDataLulus });
     } catch (error) {
       console.error("Error fetching total data mahasiswa:", error);
     }
   };
-  
+
   return (
-    <MahasiswaContext.Provider value={{ totalDataMahasiswa, setTotalDataMahasiswa }}>
+    <MahasiswaContext.Provider value={totalData}>
       {children}
     </MahasiswaContext.Provider>
   );

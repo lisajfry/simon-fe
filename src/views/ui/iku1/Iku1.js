@@ -1,17 +1,12 @@
 import axios from 'axios';
 import { NavLink } from 'react-router-dom';
 import React, { useState, useContext, useEffect } from 'react';
-import LulusanContext from '../lulusan/LulusanContext';
 import RespondenContext from './RespondenContext';
-import { FaChartBar , FaFile, FaDatabase } from 'react-icons/fa';
-import {
-  Card,
-  CardText,
-  CardTitle,
-  Button,
-  Row,
-  Col,
-} from 'reactstrap';
+import SesuaiContext from './RespondenContext';
+import TidakSesuaiContext from './RespondenContext';
+import {  FaDatabase } from 'react-icons/fa';
+import { MahasiswaContext } from '../mahasiswa/MahasiswaContext';
+import {Card,CardText,CardTitle,Button,Row,Col,} from 'reactstrap';
 import ReactApexChart from 'react-apexcharts';
 
 const Iku1 = () => {
@@ -45,10 +40,12 @@ const Iku1 = () => {
     },
   ]);
 
-  const [totalData, setTotalData] = useState(0);
-  const { totalDataLulusan } = useContext(LulusanContext);
-  const {totalDataResponden} = useContext(RespondenContext);
 
+  const {totalDataResponden} = useContext(RespondenContext);
+  const {totalDataSesuai} = useContext(SesuaiContext);
+  const {totalDataTidakSesuai} = useContext(TidakSesuaiContext);
+  const { totalDataLulus } = useContext(MahasiswaContext);
+  const [totalData, setTotalData] = useState(null);
   
 
   useEffect(() => {
@@ -80,15 +77,7 @@ const Iku1 = () => {
                 </select>
             </div>
 
-            <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect02">Semester</label>
-                <select class="form-select" id="inputGroupSelect02">
-                    <option selected>Pilih</option>
-                    <option value="1">Semester 1</option>
-                    <option value="2">Semester 2</option>
-                </select>
-            </div>
-
+           
             <div class="input-group mb-3">
                 <button class="btn btn-primary" type="button">Cari</button>
                 <button class="btn btn-secondary" type="button">Reset Pencarian</button>
@@ -96,11 +85,11 @@ const Iku1 = () => {
 
         <Col md="6" lg="4">
           <Card body className="text-center">
-            <CardTitle tag="h5">Jumlah Lulusan</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataLulusan}</p></CardText>
+            <CardTitle tag="h5">Total Data Lulusan</CardTitle>
+            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataLulus}</p></CardText>
             <div>
-            <NavLink to="/lulusanlist">
-              <Button color="light-warning">Selengkapnya</Button>
+              <NavLink to="/lulusanlist">
+                <Button color="light-warning">Selengkapnya</Button>
               </NavLink>
             </div>
           </Card>
@@ -110,7 +99,7 @@ const Iku1 = () => {
           <CardTitle tag="h5">Jumlah responden</CardTitle>
             <CardText >
             <p style={{ marginLeft: '10px' }}>{totalDataResponden}</p>
-            </CardText>
+            </CardText> 
          <div>
             <NavLink to="/iku1list">
               <Button color="light-danger">Selengkapnya</Button>
@@ -118,13 +107,12 @@ const Iku1 = () => {
         </div>
         </Card>
         </Col>
-        
         </Row>
         <Row>
         <Col md="6" lg="4">
           <Card body className="text-center" color="light-success">
             <CardTitle tag="h5">Data Sesuai</CardTitle>
-            <CardText></CardText>
+            <CardText><p style={{ marginLeft: '10px' }}>{totalDataSesuai}</p></CardText>
             <div>
             
             <NavLink to="/iku1valid">
@@ -137,8 +125,7 @@ const Iku1 = () => {
         <Col md="6" lg="4">
         <Card body className="text-center" color="light-warning"> 
           <CardTitle tag="h5">Tidak Sesuai</CardTitle>
-            <CardText >
-            </CardText>
+          <CardText><p style={{ marginLeft: '10px' }}>{totalDataTidakSesuai}</p></CardText>
          <div>
             <NavLink to="/iku1notvalid">
               <Button color="warning">Selengkapnya</Button>

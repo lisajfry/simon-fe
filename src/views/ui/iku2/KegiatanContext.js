@@ -5,23 +5,28 @@ import axios from "axios";
 const KegiatanContext = createContext();
 
 export const KegiatanProvider = ({ children }) => {
-    const [totalDataKegiatan, setTotalDataKegiatan] = useState(0);
+    const [totalData, setTotalData] = useState({
+    totalDataKegiatan: 0,
+    totalDataPertukaranPelajar: 0
+  });
   
     useEffect(() => {
-      getTotalDataKegiatan();
+      getTotalData();
     }, []);
   
-    const getTotalDataKegiatan = async () => {
+    const getTotalData = async () => {
       try {
         const response = await axios.get("http://localhost:8080/iku2kegiatan"); // Ganti URL dengan endpoint yang benar
-        setTotalDataKegiatan(response.data.length); // Ubah cara Anda mengambil jumlah data sesuai dengan respons endpoint
+        const totalDataKegiatan = response.data.length;
+        const totalDataPertukaranPelajar = response.data.filter(iku2kegiatan => iku2kegiatan.aktivitas === 'pertukaran pelajar').length;
+        setTotalData({ totalDataKegiatan, totalDataPertukaranPelajar}); // Ubah cara Anda mengambil jumlah data sesuai dengan respons endpoint
       } catch (error) {
         console.error("Error fetching total data Kegiatan:", error);
       }
     };
     
     return (
-      <KegiatanContext.Provider value={{ totalDataKegiatan, setTotalDataKegiatan }}>
+      <KegiatanContext.Provider value={totalData}>
         {children}
       </KegiatanContext.Provider>
     );

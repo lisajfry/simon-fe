@@ -21,13 +21,9 @@ import EditIku1 from "./views/ui/iku1/EditIku1.js";
 import Iku1Sesuai from "./views/ui/iku1/Iku1sesuai.js";
 import Iku1TidakSesuai from "./views/ui/iku1/Iku1tidaksesuai.js";
 import RekapIku1 from "./views/ui/iku1/RekapIku1.js";
-import LulusanList from "./views/ui/lulusan/LulusanList.js";
-import AddLulusan from "./views/ui/lulusan/AddLulusan.js";
 import AddIku1 from "./views/ui/iku1/AddIku1.js";
-import { LulusanProvider } from './views/ui/lulusan/LulusanContext';
 import { RespondenProvider } from './views/ui/iku1/RespondenContext';
 import Iku2 from "./views/ui/iku2/Iku2.js";
-import EditLulusan from "./views/ui/lulusan/EditLulusan.js";
 import MahasiswaList from "./views/ui/mahasiswa/MahasiswaList.js";
 import DosenList from "./views/ui/dosen/DosenList.js";
 import { MahasiswaProvider } from "./views/ui/mahasiswa/MahasiswaContext.js";
@@ -52,6 +48,10 @@ import EditIku3 from "./views/ui/iku3/EditIku3.js";
 import Iku3List from "./views/ui/iku3/Iku3List.js";
 import Iku3 from "./views/ui/iku3/Iku3.js";
 import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
+import LulusanList from "./views/ui/iku1/Lulusan.js";
+import Iku6 from "./views/ui/iku6/Iku6.js";
+import PertukaranPelajarList from "./views/ui/iku2/Pertukaranpelajar.js";
+import Iku7List from "./views/ui/iku7/Iku7List.js";
 
 
 
@@ -62,7 +62,6 @@ const App = () => {
           <Route
             path="/"
             element={
-              <LulusanProvider>
       <RespondenProvider>
         <MahasiswaProvider>
         <DosenProvider>
@@ -75,8 +74,7 @@ const App = () => {
         </KegiatanProvider>
         </DosenProvider>
         </MahasiswaProvider>
-      </RespondenProvider>
-    </LulusanProvider>}
+      </RespondenProvider>}
           >
             <Route index element={<Navigate to="/dashboard" />} />
             <Route path="/dashboard" element={<Dashboard />}/>
@@ -109,8 +107,7 @@ const App = () => {
             <Route path="/iku1notvalid" element={<Iku1TidakSesuai />} />
             <Route path="/rekapiku1" element={<RekapIku1 />} />
             <Route path="/lulusanlist" element={<LulusanList />} />
-            <Route path="/addlulusan" element={<AddLulusan />} />
-            <Route path="/update/lulusan/:no_ijazah" element={<EditLulusan />} />
+            <Route path="/pertukaranpelajarlist" element={<PertukaranPelajarList />} />
             <Route path="/iku2" element={<Iku2/>} />
             <Route path="/iku2kegiatanlist" element={<Iku2kegiatanList/>} />
             <Route path="/addiku2kegiatan" element={<AddIku2kegiatan />} />
@@ -119,10 +116,12 @@ const App = () => {
             <Route path="/addiku2prestasi" element={<AddIku2prestasi />} />
             <Route path="/update/iku2prestasi/:iku2prestasi_id" element={<EditIku2prestasi />} />
             <Route path="/iku7" element={<Iku7/>} />
+            <Route path="/iku7list" element={<Iku7List/>} />
             <Route path="/iku3" element={<Iku3/>} />
            <Route path="/addiku3" element={<AddIku3 />} />
             <Route path="/update/iku3/:iku3_id" element={<EditIku3 />} />
             <Route path="/iku3list" element={<Iku3List />} />
+            <Route path="/iku6" element={<Iku6/>} />
           </Route>
         </Routes>
     </Router>
