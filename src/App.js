@@ -43,15 +43,17 @@ import Iku2prestasiList from "./views/ui/iku2/Iku2prestasiList.js";
 import AddIku2prestasi from "./views/ui/iku2/AddIku2prestasi.js";
 import EditIku2prestasi from "./views/ui/iku2/EditIku2prestasi.js";
 import { PrestasiProvider } from "./views/ui/iku2/PrestasiContext.js";
-import AddIku3 from "./views/ui/iku3/AddIku3.js";
-import EditIku3 from "./views/ui/iku3/EditIku3.js";
-import Iku3List from "./views/ui/iku3/Iku3List.js";
 import Iku3 from "./views/ui/iku3/Iku3.js";
 import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
 import LulusanList from "./views/ui/iku1/Lulusan.js";
 import Iku6 from "./views/ui/iku6/Iku6.js";
 import PertukaranPelajarList from "./views/ui/iku2/Pertukaranpelajar.js";
 import Iku7List from "./views/ui/iku7/Iku7List.js";
+import Iku3tridharmaList from "./views/ui/iku3/Iku3tridharmaList.js";
+import AddIku3tridharma from "./views/ui/iku3/AddIku3tridharma.js";
+import EditIku3tridharma from "./views/ui/iku3/EditIku3tridharma.js"; 
+import AddIku3praktisi from "./views/ui/iku3/AddIku3praktisi.js";
+import Iku3praktisiList from "./views/ui/iku3/Iku3praktisiList.js";
 
 
 
@@ -117,10 +119,12 @@ const App = () => {
             <Route path="/update/iku2prestasi/:iku2prestasi_id" element={<EditIku2prestasi />} />
             <Route path="/iku7" element={<Iku7/>} />
             <Route path="/iku7list" element={<Iku7List/>} />
-            <Route path="/iku3" element={<Iku3/>} />
-           <Route path="/addiku3" element={<AddIku3 />} />
-            <Route path="/update/iku3/:iku3_id" element={<EditIku3 />} />
-            <Route path="/iku3list" element={<Iku3List />} />
+            <Route path="/iku3tridharmalist" element={<Iku3tridharmaList/>} />
+           <Route path="/addiku3tridharma" element={<AddIku3tridharma />} />
+            <Route path="/update/iku3tridharma/:iku3tridharma_id" element={<EditIku3tridharma />} />
+            <Route path="/iku3praktisilist" element={<Iku3praktisiList/>} />
+           <Route path="/addiku3praktisi" element={<AddIku3praktisi />} /> 
+            <Route path="/iku3" element={<Iku3 />} />
             <Route path="/iku6" element={<Iku6/>} />
           </Route>
         </Routes>

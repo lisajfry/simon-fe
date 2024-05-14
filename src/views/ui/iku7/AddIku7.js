@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
-import { Container, Row, Card, Col } from "reactstrap";
+import { Container, Row, Card, Col, CardTitle} from "reactstrap";
 
 const AddIku7 = () => {
   const [Kode_MK, setKodeMK] = useState('');
@@ -10,12 +10,16 @@ const AddIku7 = () => {
   const [Semester, setSemester] = useState('');
   const [Kelas, setKelas] = useState('');
   const [Presentase_Bobot_Terpenuhi, setPresentaseBobotTerpenuhi] = useState('');
-  const [RPS, setRPS] = useState('');
-  const [Rancangan_Tugas_Dan_Evaluasi, setRancanganTugasDanEvaluasi] = useState('');
+  const [RPS, setRPS] = useState(null); // Menyimpan file RPS
+  const [Rancangan_Tugas_Dan_Evaluasi, setRancanganTugasDanEvaluasi] = useState(null); // Menyimpan file Rancangan_Tugas_Dan_Evaluasi
   const navigate = useNavigate();
 
-  const addiku7 = async (e) => {
+  const saveIku7Data = async (e) => {
     e.preventDefault();
+    if (!RPS || !Rancangan_Tugas_Dan_Evaluasi) {
+      console.error("RPS dan Rancangan Tugas Dan Evaluasi harus diunggah.");
+      return;
+    }
     const formData = new FormData();
     formData.append('Kode_MK', Kode_MK);
     formData.append('Nama_MK', Nama_MK);
@@ -23,15 +27,29 @@ const AddIku7 = () => {
     formData.append('Semester', Semester);
     formData.append('Kelas', Kelas);
     formData.append('Presentase_Bobot_Terpenuhi', Presentase_Bobot_Terpenuhi);
-    formData.append('RPS', RPS);
-    formData.append('Rancangan_Tugas_Dan_Evaluasi', Rancangan_Tugas_Dan_Evaluasi);
+    formData.append('RPS', RPS); // Mengirimkan file RPS
+    formData.append('Rancangan_Tugas_Dan_Evaluasi', Rancangan_Tugas_Dan_Evaluasi); // Mengirimkan file Rancangan_Tugas_Dan_Evaluasi
 
     try {
-      await axios.post('http://localhost:8080/add/iku7', formData);
-      navigate('/iku7list', { replace: true });
+      await axios.post('http://localhost:8080/add/iku7', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      navigate('/', { replace: true });
     } catch (error) {
       console.error("Error while saving data:", error);
     }
+  };
+
+  const handleFileChangeRPS = (e) => {
+    const file = e.target.files[0];
+    setRPS(file);
+  };
+
+  const handleFileChangeRancanganTugasDanEvaluasi = (e) => {
+    const file = e.target.files[0];
+    setRancanganTugasDanEvaluasi(file);
   };
 
   return (
@@ -39,8 +57,9 @@ const AddIku7 = () => {
       <Container fluid style={{ maxWidth: '80%' }}>
         <Row>
           <Col xs="12" md="12" sm="12">
-            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px' }}>
-              <form onSubmit={addiku7}>
+            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
+            <CardTitle><b>FORM INPUT IKU 7</b></CardTitle>
+              <form onSubmit={saveIku7Data}>
                 <div className="form-group">
                   <label htmlFor="Kode_MK">Kode MK</label>
                   <input
@@ -65,25 +84,33 @@ const AddIku7 = () => {
                 </div>
                 <div className="form-group">
                   <label htmlFor="Tahun">Tahun</label>
-                  <input
-                    type="text"
+                  <select
                     className="form-control"
                     id="Tahun"
                     value={Tahun}
                     onChange={(e) => setTahun(e.target.value)}
-                    placeholder="Tahun"
-                  />
+                  >
+                    <option value="">Pilih Tahun</option>
+                    <option value="2022">2022</option>
+                    <option value="2023">2023</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label htmlFor="Semester">Semester</label>
-                  <input
-                    type="text"
+                  <select
                     className="form-control"
                     id="Semester"
                     value={Semester}
                     onChange={(e) => setSemester(e.target.value)}
-                    placeholder="Semester"
-                  />
+                  >
+                    <option value="">Pilih Semester</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                  </select>
                 </div>
                 <div className="form-group">
                   <label htmlFor="Kelas">Kelas</label>
@@ -96,38 +123,29 @@ const AddIku7 = () => {
                     placeholder="Kelas"
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="Presentase_Bobot_Terpenuhi">Presentase Bobot Terpenuhi</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="Presentase_Bobot_Terpenuhi"
-                    value={Presentase_Bobot_Terpenuhi}
-                    onChange={(e) => setPresentaseBobotTerpenuhi(e.target.value)}
-                    placeholder="Presentase Bobot Terpenuhi"
-                  />
+              </form>
+            </Card>
+          </Col>
+          <Col xs="12" md="12" sm="12">
+            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px' }}>
+              <form onSubmit={saveIku7Data}>
+              <div className="form-group" style={{ marginTop: '10px' }}>
+                <label htmlFor="RPS">RPS</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="RPS"
+                  onChange={handleFileChangeRPS}
+                />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="RPS">RPS</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="RPS"
-                    value={RPS}
-                    onChange={(e) => setRPS(e.target.value)}
-                    placeholder="RPS"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="Rancangan_Tugas_Dan_Evaluasi">Rancangan Tugas Dan Evaluasi</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="Rancangan_Tugas_Dan_Evaluasi"
-                    value={Rancangan_Tugas_Dan_Evaluasi}
-                    onChange={(e) => setRancanganTugasDanEvaluasi(e.target.value)}
-                    placeholder="Rancangan Tugas Dan Evaluasi"
-                  />
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                <label htmlFor="Rancangan_Tugas_Dan_Evaluasi">Rancangan Tugas Dan Evaluasi</label>
+                <input
+                  type="file"
+                  className="form-control"
+                  id="Rancangan_Tugas_Dan_Evaluasi"
+                  onChange={handleFileChangeRancanganTugasDanEvaluasi}
+                />
                 </div>
                 <div className="form-group">
                   <button type="submit" className="btn btn-primary">Save</button>

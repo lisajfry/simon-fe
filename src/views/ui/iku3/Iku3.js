@@ -71,19 +71,6 @@ const Iku3 = () => {
       <Row>
         <h5 className="mb-3 mt-3">CAPAIAN IKU3 (Dosen Berkegiatan di Luar Kampus)</h5>
         <Col md="6" lg="12">
-          <Card body className="text-center"color="light-info">
-            <CardTitle tag="h5">Input</CardTitle>
-            <CardText>
-            <FaDatabase style={{ color: 'black', fontWeight: 'bold', fontSize: '35px', marginRight: '10px' }}/>
-            </CardText>
-            <div>
-              <NavLink to="/addiku3">
-              <Button body color="info">Input Data</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="12">
           <Card body className="text-center"color="success" inverse>
             <CardTitle tag="h5">Pencapaian IKU3</CardTitle>
             <CardText>
@@ -92,6 +79,19 @@ const Iku3 = () => {
             <div>
               <NavLink to="/rekapiku1">
               <Button color="light-success">Selengkapnya</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
+        <Col md="6" lg="12">
+          <Card body className="text-center"color="light-info">
+            <CardTitle tag="h5">Input</CardTitle>
+            <CardText>
+            <FaDatabase style={{ color: 'black', fontWeight: 'bold', fontSize: '35px', marginRight: '10px' }}/>
+            </CardText>
+            <div>
+              <NavLink to="/addiku3tridharma">
+              <Button body color="info">Input Data</Button>
               </NavLink>
             </div>
           </Card>
@@ -117,8 +117,10 @@ const Iku3 = () => {
           <Card body className="text-center" color="light-success">
             <CardTitle tag="h5">Jumlah Dosen Melakukan Tridharma di Kampus Lain</CardTitle>
             <CardText></CardText>
-            <div>
+            <div>`
+            <NavLink to="/iku3tridharmalist">
               <Button color="success">Selengkapnya</Button>
+              `</NavLink>
             </div>
           </Card>
         </Col>
@@ -127,7 +129,9 @@ const Iku3 = () => {
             <CardTitle tag="h5">Jumlah Dosen Bekerja Sebagai Prakisi</CardTitle>
             <CardText></CardText>
             <div>
+            <NavLink to="/iku3praktisilist">
               <Button color="success">Selengkapnya</Button>
+              </NavLink>
             </div>
           </Card>
         </Col>

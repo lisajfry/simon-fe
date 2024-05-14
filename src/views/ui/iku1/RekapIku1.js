@@ -91,7 +91,6 @@ import MinResponden from './Minresponden';
     
     return (
         <div>
-          <h5 className="mb-3 mt-3">,</h5>
           <Row>
         <Col md="6" lg="4">
           <Card body>

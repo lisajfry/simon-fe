@@ -64,6 +64,19 @@ const Iku2 = () => {
       <Row>
         <h5 className="mb-3 mt-3">CAPAIAN IKU2 (MAHASISWA BERKEGIATAN DILUAR PROGRAM STUDI)</h5>
         <Row>
+        <Col md="6" lg="12">
+          <Card body className="text-center"color="success" inverse>
+            <CardTitle tag="h5">Pencapaian IKU2</CardTitle>
+            <CardText>
+              berapa persen
+            </CardText>
+            <div>
+              <NavLink to="/rekapiku1">
+              <Button color="light-success">Selengkapnya</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
 
         <Col md="6" lg="4">
           <Card body className="text-center"color="light-info">
@@ -152,17 +165,7 @@ const Iku2 = () => {
             </div>
           </Card>
         </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Pencapaian IKU2</CardTitle>
-            <CardText>berapa persen</CardText>
-            <div>
-            <NavLink to="">
-              <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
+        
         </Row>
         
     </div>

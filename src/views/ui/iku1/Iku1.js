@@ -83,6 +83,21 @@ const Iku1 = () => {
                 <button class="btn btn-secondary" type="button">Reset Pencarian</button>
             </div>
 
+
+            <Col md="6" lg="12">
+          <Card body className="text-center"color="success" inverse>
+            <CardTitle tag="h5">Pencapaian IKU1</CardTitle>
+            <CardText>
+              berapa persen
+            </CardText>
+            <div>
+              <NavLink to="/rekapiku1">
+              <Button color="light-success">Selengkapnya</Button>
+              </NavLink>
+            </div>
+          </Card>
+        </Col>
+      
         <Col md="6" lg="4">
           <Card body className="text-center">
             <CardTitle tag="h5">Total Data Lulusan</CardTitle>
@@ -150,20 +165,7 @@ const Iku1 = () => {
           </Card>
         </Col>
         
-        <Col md="6" lg="12">
-          <Card body className="text-center"color="success" inverse>
-            <CardTitle tag="h5">Pencapaian IKU1</CardTitle>
-            <CardText>
-              berapa persen
-            </CardText>
-            <div>
-              <NavLink to="/rekapiku1">
-              <Button color="light-success">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-      
+        
     </div>
   );
 };
