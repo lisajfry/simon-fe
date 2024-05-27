@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import {Card, CardBody, CardTitle, Button, Col, } from "reactstrap";
+import { Table, Col, Card, CardBody, CardTitle, Button } from "reactstrap";
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
-  const Iku1TidakSesuai = () => {
+const Iku1TidakSesuai = () => {
     const [iku1, setIku1] = useState([]);
-    const [filteredsesuai, setFilteredSesuai] = useState([]);
-    const [filteredtidaksesuai, setFilteredTidakSesuai] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
 
     useEffect(() => {
         getIku1();
-        fetchNamaMahasiswa();
     }, []);
 
     const getIku1 = async () => {
@@ -30,10 +30,10 @@ import {Card, CardBody, CardTitle, Button, Col, } from "reactstrap";
     const fetchNamaMahasiswa = async (NIM) => {
         try {
             const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
-        return response.data.nama_mahasiswa;
+            return response.data.nama_mahasiswa;
         } catch (error) {
             console.error("Error while fetching nama mahasiswa:", error);
-        return null;
+            return null;
         }
     };
 
@@ -45,36 +45,36 @@ import {Card, CardBody, CardTitle, Button, Col, } from "reactstrap";
         }
     }
 
-    const totalData = iku1.length;
-
     // Filter data based on criteria
     const filteredIku1 = iku1.filter((data) => {
-        if (data.status === "wiraswasta" || data.status === "mendapat pekerjaan" || data.status === "melanjutkan studi") {
-            return true;
-        } else if (data.status === "belum berpendapatan" && data.mahasiswa) {
-            return true;
-        }
-        return false;
+        return data.status === "mencari pekerjaan" || data.status === "belum berpendapatan";
     });
 
-    // Filter out data that is not suitable for "Tabel Sesuai"
-    const filteredTidakSesuai = iku1.filter((data) => {
-        return !filteredIku1.includes(data);
-    });
+    // Get current posts
+    const indexOfLastPost = currentPage * itemsPerPage;
+    const indexOfFirstPost = indexOfLastPost - itemsPerPage;
+    const currentPosts = filteredIku1.slice(indexOfFirstPost, indexOfLastPost);
+
+    // Change page
+    const paginate = pageNumber => setCurrentPage(pageNumber);
+
+    // Calculate total pages
+    const totalPages = Math.ceil(filteredIku1.length / itemsPerPage);
 
     return (
         <div>
-
             <Col>
             <Card>
             <div style={{textAlign: 'center'}}>
-                <CardTitle>TABEL TIDAK SESUAI</CardTitle>
+                <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                    TABEL TABEL DATA LULUSAN YANG TIDAK SESUAI KRITERIA
+                </CardTitle>
             </div>
 
             <CardBody>
                 <div className='row'>
-                    <p style={{ marginLeft: '10px' }}>Total data: {filteredTidakSesuai.length}</p>
-                    <table className="table is-striped is-fullwidth">
+                    <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data: {filteredIku1.length}</p>
+                    <Table responsive>
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -83,28 +83,28 @@ import {Card, CardBody, CardTitle, Button, Col, } from "reactstrap";
                                 <th>Status</th>
                                 <th>Gaji</th>
                                 <th>Masa Tunggu</th>
-                                <th>Actions</th>
+                               
                             </tr>
                         </thead>
                         <tbody>
-                            {filteredTidakSesuai.map((iku_1, index) => (
+                            {currentPosts.map((iku_1, index) => (
                                 <tr key={iku_1.iku1_id}>
-                                    <td>{index + 1}</td>
+                                    <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                     <td>{iku_1.NIM}</td>
                                     <td>{iku_1.nama_mahasiswa}</td>
                                     <td>{iku_1.status}</td>
                                     <td>{iku_1.gaji}</td>
                                     <td>{iku_1.masa_tunggu}</td>
-                                    <td>
-                                        <Link to={`/update/iku1/${iku_1.iku1_id}`}>
-                                            <Button className="btn" outline color="info">Edit</Button>
-                                        </Link>
-                                        <Button className="btn" outline color="danger" onClick={() => deleteIku1(iku_1.iku1_id)}>Delete</Button>
-                                    </td>
+                                    
                                 </tr>
                             ))}
                         </tbody>
-                    </table>
+                    </Table>
+                    <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button onClick={() => paginate(currentPage - 1)} disabled={currentPage === 1} size="sm">Previous</Button>
+                        <span style={{ margin: '0 10px', fontSize: '14px' }}>Page {currentPage}</span>
+                        <Button onClick={() => paginate(currentPage + 1)} disabled={currentPage === totalPages} size="sm">Next</Button>
+                    </div>
                 </div>
             </CardBody>
             </Card>

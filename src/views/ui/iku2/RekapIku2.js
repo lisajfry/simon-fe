@@ -1,30 +1,30 @@
 import React, { useState, useContext, useEffect } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { Card, CardText,CardBody,CardTitle,CardSubtitle,Button,Col,Row} from "reactstrap";
+import { Card, CardText,CardBody,CardTitle,Button,Col,Row} from "reactstrap";
 import { FaExclamationCircle } from 'react-icons/fa';
 
-    const Iku1Rekap = () => {
-      const [iku1, setIku1] = useState([]);
+    const Iku2Rekap = () => {
+      const [iku2, setIku2] = useState([]);
       const [currentPage, setCurrentPage] = useState(1);
         const itemsPerPage = 10;
         
 
     useEffect(() => {
-        getIku1();
+        getIku2();
     }, []);
 
-    const getIku1 = async () => {
-        const response = await axios.get("http://localhost:8080/iku1");
-        const iku1Data = response.data;
+    const getIku2 = async () => {
+        const response = await axios.get("http://localhost:8080/iku2");
+        const iku2Data = response.data;
 
         // Fetch nama mahasiswa for each iku1
-        const iku1WithMahasiswa = await Promise.all(iku1Data.map(async (iku1) => {
-            const namaMahasiswa = await fetchNamaMahasiswa(iku1.NIM);
-            return { ...iku1, nama_mahasiswa: namaMahasiswa, bobot: calculateBobot(iku1) };
+        const iku2WithMahasiswa = await Promise.all(iku2Data.map(async (iku2) => {
+            const namaMahasiswa = await fetchNamaMahasiswa(iku2.NIM);
+            return { ...iku2, nama_mahasiswa: namaMahasiswa, bobot: calculateBobot(iku2) };
         }));
 
-        setIku1(iku1WithMahasiswa);
+        setIku2(iku2WithMahasiswa);
     }
 
     const fetchNamaMahasiswa = async (NIM) => {
@@ -37,18 +37,18 @@ import { FaExclamationCircle } from 'react-icons/fa';
         }
     };
 
-    const deleteIku1 = async (iku1_id) => {
+    const deleteIku2 = async (iku2_id) => {
         const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus pengguna?");
         if (confirmDelete) {
-            await axios.delete(`http://localhost:8080/delete/iku1/${iku1_id}`);
-            getIku1();
+            await axios.delete(`http://localhost:8080/delete/iku2/${iku2_id}`);
+            getIku2();
         }
     }
 
-    const totalData = iku1.length;
+    const totalData = iku2.length;
 
     // Filter data based on criteria
-    const filteredIku1 = iku1.filter((data) => {
+    const filteredIku2 = iku2.filter((data) => {
         if (data.status === "wiraswasta" || data.status === "mendapat pekerjaan" || data.status === "melanjutkan studi") {
             return true;
         } else if (data.status === "belum berpendapatan" && data.mahasiswa) {
@@ -82,41 +82,32 @@ import { FaExclamationCircle } from 'react-icons/fa';
     };
 
     // Perhitungan total bobot
-    const totalBobot = filteredIku1.reduce((accumulator, currentValue) => accumulator + currentValue.bobot, 0);
+    const totalBobot = filteredIku2.reduce((accumulator, currentValue) => accumulator + currentValue.bobot, 0);
 
 
     // Get current items
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = filteredIku1.slice(indexOfFirstItem, indexOfLastItem);
+  const currentItems = filteredIku2.slice(indexOfFirstItem, indexOfLastItem);
 
   // Change page
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   // Calculate total pages
-  const totalPages = Math.ceil(filteredIku1.length / itemsPerPage);
+  const totalPages = Math.ceil(filteredIku2.length / itemsPerPage);
 
     return (
         <div>
           <Row>
-        <Col md="6" lg="6">
+        <Col md="6" lg="4">
           <Card body>
-            <CardSubtitle tag="h5">Ketentuan Pembobotan </CardSubtitle>
+            <CardTitle tag="h5">Ketentuan Pembobotan</CardTitle>
             <CardText style={{ fontSize: 'small', color: '#999' }}>
-              <FaExclamationCircle style={{ marginRight: '5px' }} /> 
+              <FaExclamationCircle style={{ marginRight: '5px' }} />
               <div>mendapat pekerjaan lebih dari 1.2xUMP kurang dari 6 bulan = 1.0</div>
               <div>mendapat pekerjaan kurang dari 1.2xUMP kurang dari 6 bulan = 0.7</div>
               <div>mendapat pekerjaan lebih dari 1.2xUMP antara 6 sampai 12bulan = 0.8</div>
               <div>mendapat pekerjaan kurang dari 1.2xUMP antara 6 sampai 12bulan = 0.5</div>
-              
-            </CardText>
-          </Card>
-        </Col>
-        <Col md="6" lg="6">
-          <Card body>
-            <CardSubtitle tag="h5">Ketentuan Pembobotan</CardSubtitle>
-            <CardText style={{ fontSize: 'small', color: '#999' }}>
-              <FaExclamationCircle style={{ marginRight: '5px' }} /> 
               
               <div>wiraswasta lebih dari 1.2xUMP kurang dari 6 bulan = 1.2</div>
               <div>wiraswasta kurang dari 1.2xUMP kurang dari 6 bulan = 1.0</div>
@@ -127,16 +118,31 @@ import { FaExclamationCircle } from 'react-icons/fa';
             </CardText>
           </Card>
         </Col>
+        <Col md="6" lg="4">
+          <Card body>
+            <CardTitle tag="h5">Responden Minimum</CardTitle>
+            <CardText style={{ fontSize: 'small', color: '#999' }}>
+              <FaExclamationCircle style={{ marginRight: '5px' }} />
+              <div>jumlah responden minimum = </div>
+              <div>jumlah lulusan </div>
+              <div>______________ </div>
+              <div>jumlah lulusan * galat(2,5%)^2 + 1</div>
+              <div>
+              <div>Jika tidak memenuhi jumlah responden minimum, maka pencapaian IKU 1 akan dihitung 0</div>
+              </div>
+            </CardText>
+          </Card>
+        </Col>
         </Row>
             <Col>
                 <Card>
+                    <div style={{ textAlign: 'center' }}>
+                        <CardTitle>TABEL PEMBOBOTAN IKU1</CardTitle>
+                    </div>
                     <CardBody>
                         <div className='row'>
-                            <p style={{ marginLeft: '10px' }}>Total data: {filteredIku1.length}</p>
+                            <p style={{ marginLeft: '10px' }}>Total data: {filteredIku2.length}</p>
                             <p style={{ marginLeft: '10px' }}>Total bobot: {totalBobot}</p>
-                            <div style={{ textAlign: 'center' }}>
-                    <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>TABEL PEMBOBOTAN IKU1</CardTitle>
-                    </div>
                             <table className="table is-striped is-fullwidth">
                                 <thead>
                                     <tr>
@@ -151,16 +157,16 @@ import { FaExclamationCircle } from 'react-icons/fa';
                                     </tr>
                                 </thead>
                                 <tbody>
-                                {currentItems.map((iku_1, index) => (
+                                {currentItems.map((iku_2, index) => (
                                     
-                                        <tr key={iku_1.iku1_id}>
+                                        <tr key={iku_2.iku1_id}>
                                             <td>{index + 1}</td>
-                                            <td>{iku_1.NIM}</td>
-                                            <td>{iku_1.nama_mahasiswa}</td>
-                                            <td>{iku_1.status}</td>
-                                            <td>{iku_1.gaji}</td>
-                                            <td>{iku_1.masa_tunggu}</td>
-                                            <td>{iku_1.bobot}</td>
+                                            <td>{iku_2.NIM}</td>
+                                            <td>{iku_2.nama_mahasiswa}</td>
+                                            <td>{iku_2.status}</td>
+                                            <td>{iku_2.gaji}</td>
+                                             <td>{iku_2.masa_tunggu}</td>
+                                            <td>{iku_2.bobot}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -174,9 +180,10 @@ import { FaExclamationCircle } from 'react-icons/fa';
  </CardBody>
                 </Card>
             </Col>
+      
     </div>
     );
 }
 
 
-export default Iku1Rekap;
+export default Iku2Rekap;

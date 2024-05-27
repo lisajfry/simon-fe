@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa'; // Import FontAwesome icons
 import KegiatanContext from './KegiatanContext';
 
 const Iku2kegiatanList = () => {
@@ -10,21 +11,18 @@ const Iku2kegiatanList = () => {
     const [error, setError] = useState(null);
     const { totalDataKegiatan } = useContext(KegiatanContext);
     const [data, setData] = useState([]);
-    
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
     useEffect(() => {
         fetchIku2kegiatanList();
-        // fetchNamaMahasiswa(); // Perlu dihapus karena tidak digunakan di komponen ini
         axios.get('http://localhost:8080/iku2kegiatan')
             .then(response => {
-                setData(response.data.map(item => {
-                    console.log('Tanggal Mulai:', new Date(item.tgl_mulai_kegiatan).toLocaleDateString());
-                    console.log('Tanggal Selesai:', new Date(item.tgl_selesai_kegiatan).toLocaleDateString());
-                    return {
-                        ...item,
-                        tgl_mulai_kegiatan: new Date(item.tgl_mulai_kegiatan).toLocaleDateString(),
-                        tgl_selesai_kegiatan: new Date(item.tgl_selesai_kegiatan).toLocaleDateString()
-                    };
-                }));
+                setData(response.data.map(item => ({
+                    ...item,
+                    tgl_mulai_kegiatan: new Date(item.tgl_mulai_kegiatan).toLocaleDateString(),
+                    tgl_selesai_kegiatan: new Date(item.tgl_selesai_kegiatan).toLocaleDateString()
+                })));
             })
             .catch(error => {
                 console.error('Error fetching data: ', error);
@@ -36,7 +34,7 @@ const Iku2kegiatanList = () => {
             const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
             return response.data.nama_mahasiswa;
         } catch (error) {
-            console.error("Error while fetching nama mahasiswa:", error);
+            console.error("Error fetching nama mahasiswa:", error);
             return null;
         }
     };
@@ -69,19 +67,40 @@ const Iku2kegiatanList = () => {
         }
     };
 
+    const handleNextPage = () => {
+        if ((currentPage * itemsPerPage) < iku2kegiatanList.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const displayedData = iku2kegiatanList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
         <Col>
+            <div className="form-group" style={{ marginBottom: '10px' }}>
+                <Link to="/addiku2kegiatan">
+                    <Button color="primary">Input</Button>
+                </Link>
+            </div>
             <Card>
                 <div>
-                    <p style={{ marginLeft: '10px' }}>Total data: {totalDataKegiatan}</p>
+                    <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data: {totalDataKegiatan}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <CardTitle>TABEL Responden</CardTitle>
+                    <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                        TABEL KEGIATAN MAHASISWA DI LUAR PROGRAM STUDI
+                    </CardTitle>
                 </div>
                 <CardBody>
-                    <Table>
+                    <Table responsive>
                         <thead>
-                            <tr> 
+                            <tr>
                                 <th>No</th>
                                 <th>NIM</th>
                                 <th>Nama Lulusan</th>
@@ -94,9 +113,9 @@ const Iku2kegiatanList = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {iku2kegiatanList.map((iku2kegiatan, index) => (
-                                <tr key={index}>
-                                    <th scope="row">{index + 1}</th>
+                            {displayedData.map((iku2kegiatan, index) => (
+                                <tr key={iku2kegiatan.iku2kegiatan_id}>
+                                    <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                     <td>{iku2kegiatan.NIM}</td>
                                     <td>{iku2kegiatan.nama_mahasiswa}</td>
                                     <td>{iku2kegiatan.aktivitas}</td>
@@ -105,15 +124,22 @@ const Iku2kegiatanList = () => {
                                     <td>{iku2kegiatan.tgl_mulai_kegiatan}</td>
                                     <td>{iku2kegiatan.tgl_selesai_kegiatan}</td>
                                     <td>
-                                        <Link to={`/update/iku2kegiatan/${iku2kegiatan.iku2kegiatan_id}`}>
-                                            <Button className="btn" outline color="info">Edit</Button>
-                                        </Link>
-                                        <Button className="btn" outline color="danger" onClick={() => deleteIku2kegiatan(iku2kegiatan.iku2kegiatan_id)}>Delete</Button>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Link to={`/update/iku2kegiatan/${iku2kegiatan.iku2kegiatan_id}`}>
+                                                <Button outline color="info" size="sm"><FaEdit /></Button>
+                                            </Link>
+                                            <Button outline color="danger" size="sm" onClick={() => deleteIku2kegiatan(iku2kegiatan.iku2kegiatan_id)}><FaTrash /></Button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
+                    <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button onClick={handlePreviousPage} disabled={currentPage === 1} size="sm">Previous</Button>
+                        <span style={{ margin: '0 10px', fontSize: '14px' }}>Page {currentPage}</span>
+                        <Button onClick={handleNextPage} disabled={(currentPage * itemsPerPage) >= iku2kegiatanList.length} size="sm">Next</Button>
+                    </div>
                 </CardBody>
             </Card>
         </Col>

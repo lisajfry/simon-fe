@@ -1,12 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
+import { AiOutlineFilePdf } from 'react-icons/ai';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import Iku3Context from './Iku3Context';
 
 const Iku3praktisiList = () => {
     const [iku3praktisiList, setIku3praktisiList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+    const {totalDataIku3Praktisi} = useContext (Iku3Context);
     
     useEffect(() => {
         fetchIku3praktisiList();
@@ -50,17 +56,35 @@ const Iku3praktisiList = () => {
         }
     };
 
+    const handleNextPage = () => {
+        if ((currentPage * itemsPerPage) < iku3praktisiList.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const displayedData = iku3praktisiList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
         <Col>
-        <Link to="/addiku3praktisi">
-                <Button className="btn" outline color="info">Tambahkan</Button>
-            </Link>
+        <div className="form-group" style={{ marginBottom: '10px' }}>
+                <Link to="/addiku3praktisi">
+                    <button type="submit" className="btn btn-primary">Input</button>
+                </Link>
+            </div>
             <Card>
                 <div>
                     <p style={{ marginLeft: '10px' }}>Total data: {}</p>
-                </div>
+                    </div>
                 <div style={{ textAlign: 'center' }}>
-                    <CardTitle>TABEL DOSEN PRAKTISI DI KAMPUS LAIN</CardTitle>
+                <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                    TABEL DOSEN BEKERJA SEBAGAI PRAKTISI DI INSTANSI PRAKTISI
+                    </CardTitle>
                 </div>
                 <CardBody>
                     <Table>
@@ -84,22 +108,29 @@ const Iku3praktisiList = () => {
                                     <td>{iku3praktisi.nama_dosen}</td>
                                     <td>
                                         <a href={`http://localhost:8080/uploads/${iku3praktisi.surat_sk}`} target="_blank" rel="noopener noreferrer">
-                                            {iku3praktisi.surat_sk}
+                                            <AiOutlineFilePdf /> {/* Gunakan ikon di sini */}
                                         </a>
                                     </td>
                                     <td>{iku3praktisi.instansi_praktisi}</td>
                                     <td>{iku3praktisi.tgl_mulai_praktisi}</td>
                                     <td>{iku3praktisi.tgl_selesai_praktisi}</td>
                                     <td>
-                                        <Link to={`/update/iku3praktisi/${iku3praktisi.iku3praktisi_id}`}>
-                                            <Button className="btn" outline color="info">Edit</Button>
-                                        </Link>
-                                        <Button className="btn" outline color="danger" onClick={() => deleteIku3praktisi(iku3praktisi.iku3praktisi_id)}>Delete</Button>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Link to={`/update/iku3praktisi/${iku3praktisi.iku3praktisi_id}`}>
+                                                <Button outline color="info" size="sm"><FaEdit /></Button>
+                                            </Link>
+                                            <Button outline color="danger" size="sm" onClick={() => deleteIku3praktisi(iku3praktisi.iku3praktisi_id)}><FaTrash /></Button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
+                    <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button onClick={handlePreviousPage} disabled={currentPage === 1} size="sm">Previous</Button>
+                        <span style={{ margin: '0 10px', fontSize: '14px' }}>Page {currentPage}</span>
+                        <Button onClick={handleNextPage} disabled={(currentPage * itemsPerPage) >= iku3praktisiList.length} size="sm">Next</Button>
+                    </div>
                 </CardBody>
             </Card>
         </Col>

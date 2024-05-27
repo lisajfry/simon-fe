@@ -43,17 +43,42 @@ import Iku2prestasiList from "./views/ui/iku2/Iku2prestasiList.js";
 import AddIku2prestasi from "./views/ui/iku2/AddIku2prestasi.js";
 import EditIku2prestasi from "./views/ui/iku2/EditIku2prestasi.js";
 import { PrestasiProvider } from "./views/ui/iku2/PrestasiContext.js";
-import Iku3 from "./views/ui/iku3/Iku3.js";
 import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
+import Iku3 from "./views/ui/iku3/Iku3.js";
 import LulusanList from "./views/ui/iku1/Lulusan.js";
 import Iku6 from "./views/ui/iku6/Iku6.js";
 import PertukaranPelajarList from "./views/ui/iku2/Pertukaranpelajar.js";
-import Iku7List from "./views/ui/iku7/Iku7List.js";
 import Iku3tridharmaList from "./views/ui/iku3/Iku3tridharmaList.js";
 import AddIku3tridharma from "./views/ui/iku3/AddIku3tridharma.js";
 import EditIku3tridharma from "./views/ui/iku3/EditIku3tridharma.js"; 
 import AddIku3praktisi from "./views/ui/iku3/AddIku3praktisi.js";
 import Iku3praktisiList from "./views/ui/iku3/Iku3praktisiList.js";
+import MahasiswaAktifList from "./views/ui/iku2/MahasiswaAktif.js";
+import AddIku2inbound from "./views/ui/iku2/AddIku2inbound.js";
+import Iku2inboundList from "./views/ui/iku2/Iku2inboundList.js";
+import EditIku2inbound from "./views/ui/iku2/EditIku2inbound.js";
+import EditIku3praktisi from "./views/ui/iku3/EditIku3praktisi.js";
+import Addiku6 from "./views/ui/iku6/AddIku6.js";
+import Iku6List from "./views/ui/iku6/Iku6List.js";
+import EditIku6 from "./views/ui/iku6/EditIku6.js";
+import Iku4 from "./views/ui/iku4/Iku4.js";
+import AddIku4 from "./views/ui/iku4/AddIku4.js";
+import Iku4List from "./views/ui/iku4/Iku4List.js";
+import EditIku4 from "./views/ui/iku4/EditIku4.js";
+import RekapIku4 from "./views/ui/iku4/RekapIku4.js";
+import Iku5 from "./views/ui/iku5/Iku5.js";
+import AddIku5 from "./views/ui/iku5/AddIku5.js";
+import Iku5List from "./views/ui/iku5/Iku5List.js";
+import AddDosenpraktisi from "./views/ui/iku4/Dosenpraktisi/AddDosenpraktisi.js";
+import DosenpraktisiList from "./views/ui/iku4/Dosenpraktisi/DosenpraktisiList.js";
+import AddIku7 from "./views/ui/iku7/AddIku7.js";
+import EditIku7 from "./views/ui/iku7/EditIku7.js";
+import CountryForm from "./views/ui/iku2/CountryForm.js";
+import PrestasiDetail from "./views/ui/iku2/PrestasiDetail.js";
+import DosenBerkualifikasiS3 from "./views/ui/iku4/DosenBerkualifikasiS3List.js";
+import SertifikasiKompetensiDosen from "./views/ui/iku4/SertifikasiKompetensiDosenList.js";
+import PraktisiMenjadiDosenDosen from "./views/ui/iku4/PraktisiMenjadiDosenList.js";
+
 
 
 
@@ -111,21 +136,46 @@ const App = () => {
             <Route path="/lulusanlist" element={<LulusanList />} />
             <Route path="/pertukaranpelajarlist" element={<PertukaranPelajarList />} />
             <Route path="/iku2" element={<Iku2/>} />
+            <Route path="/mahasiswaaktif" element={<MahasiswaAktifList />} />
             <Route path="/iku2kegiatanlist" element={<Iku2kegiatanList/>} />
             <Route path="/addiku2kegiatan" element={<AddIku2kegiatan />} />
             <Route path="/update/iku2kegiatan/:iku2kegiatan_id" element={<EditIku2kegiatan />} />
+            <Route path="/addiku2inbound" element={<AddIku2inbound />} />
+            <Route path="/iku2inboundlist" element={<Iku2inboundList />} />
+            <Route path="/update/iku2inbound/:iku2inbound_id" element={<EditIku2inbound />} />
             <Route path="/iku2prestasilist" element={<Iku2prestasiList/>} />
             <Route path="/addiku2prestasi" element={<AddIku2prestasi />} />
             <Route path="/update/iku2prestasi/:iku2prestasi_id" element={<EditIku2prestasi />} />
             <Route path="/iku7" element={<Iku7/>} />
-            <Route path="/iku7list" element={<Iku7List/>} />
+            
+            <Route path="/addiku7" element={<AddIku7/>} />
+            <Route path="/update/iku7/:iku7_id" element={<EditIku7/>} />
             <Route path="/iku3tridharmalist" element={<Iku3tridharmaList/>} />
            <Route path="/addiku3tridharma" element={<AddIku3tridharma />} />
             <Route path="/update/iku3tridharma/:iku3tridharma_id" element={<EditIku3tridharma />} />
             <Route path="/iku3praktisilist" element={<Iku3praktisiList/>} />
            <Route path="/addiku3praktisi" element={<AddIku3praktisi />} /> 
+           <Route path="/update/iku3praktisi/:iku3praktisi_id" element={<EditIku3praktisi />} />
             <Route path="/iku3" element={<Iku3 />} />
             <Route path="/iku6" element={<Iku6/>} />
+            <Route path="/iku6list" element={<Iku6List/>} />
+            <Route path="/addiku6" element={<Addiku6/>} />
+            <Route path="/update/iku6/:iku6_id" element={<EditIku6/>} />
+            <Route path="/iku4" element={<Iku4/>} />
+            <Route path="/addiku4" element={<AddIku4 />} />
+            <Route path="/iku4list" element={<Iku4List/>} />
+            <Route path="/editiku4" element={<EditIku4/>} />
+            <Route path="/rekapiku4" element={<RekapIku4/>} />
+            <Route path="/iku5" element={<Iku5/>} />
+            <Route path="/addiku5" element={<AddIku5/>} />
+            <Route path="/iku5list" element={<Iku5List/>} />
+            <Route path="/adddosenpraktisi" element={<AddDosenpraktisi/>} />
+            <Route path="/dosenpraktisilist" element={<DosenpraktisiList/>} />
+            <Route path="/country-form" element={<CountryForm />} />
+            <Route path="/prestasidetail/:iku2prestasi_id" component={PrestasiDetail} />
+            <Route path="/dosenberkualifikasis3" element={<DosenBerkualifikasiS3/>} />
+            <Route path="/sertifikasikompetensidosen" element={<SertifikasiKompetensiDosen/>} />
+            <Route path="/praktisimenjadidosen" element={<PraktisiMenjadiDosenDosen/>} />
           </Route>
         </Routes>
     </Router>

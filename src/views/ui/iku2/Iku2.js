@@ -4,44 +4,19 @@ import React, { useState, useContext, useEffect } from 'react';
 import MahasiswaContext from '../mahasiswa/MahasiswaContext';
 import KegiatanContext from './KegiatanContext';
 import PrestasiContext from './PrestasiContext';
-import {Card,CardText,CardTitle,Button,Row,Col,} from 'reactstrap';
+import {  FaDatabase } from 'react-icons/fa';
+import {Card,CardText,CardTitle,Button,Row,Col, CardSubtitle} from 'reactstrap';
 
 const Iku2 = () => {
-  const [options, setOptions] = useState({
-    chart: {
-      type: 'bar',
-      height: 350,
-      width: '100%',
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true,
-      },
-    },
-    xaxis: {
-      categories: ['Bekerja', 'Wiraswasta', 'Melanjutkan Pekerjaan', 'Masih Mencari Pekerjaan'],
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    title: {
-      text: 'Capaian IKU2',
-    },
-  });
-
-  const [series, setSeries] = useState([
-    {
-      name: 'Total',
-      data: [75, 20, 50, 30],
-      colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'], // Set warna untuk setiap bar
-    },
-  ]);
 
   const [totalData, setTotalData] = useState(0);
-  const { totalDataMahasiswa } = useContext(MahasiswaContext);
+  const { totalDataMahasiswaAktif } = useContext(MahasiswaContext);
   const { totalDataKegiatan } = useContext(KegiatanContext);
+  const {persentaseKegiatan} = useContext(KegiatanContext);
   const { totalDataPertukaranPelajar } = useContext(KegiatanContext);
+  const {persentasePertukaranPelajar} = useContext(KegiatanContext);
   const { totalDataPrestasi } = useContext(PrestasiContext);
+  const {persentasePrestasi} = useContext(PrestasiContext);
   
 
   useEffect(() => {
@@ -64,107 +39,90 @@ const Iku2 = () => {
       <Row>
         <h5 className="mb-3 mt-3">CAPAIAN IKU2 (MAHASISWA BERKEGIATAN DILUAR PROGRAM STUDI)</h5>
         <Row>
-        <Col md="6" lg="12">
-          <Card body className="text-center"color="success" inverse>
-            <CardTitle tag="h5">Pencapaian IKU2</CardTitle>
-            <CardText>
-              berapa persen
-            </CardText>
+
+
+        <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">Tahun</label>
+                <select class="form-select" id="inputGroupSelect01">
+                    <option selected>Pilih</option>
+                    <option value="1">2022</option>
+                    <option value="2">2023</option>
+                </select>
+            </div>
+           
+            <div class="input-group mb-3">
+                <button class="btn btn-primary" type="button">Cari</button>
+                <button class="btn btn-secondary" type="button">Reset Pencarian</button>
+            </div>
+
+            <Col md="6" lg="12">
+              <Card body className="text-center" color="success" inverse>
+                  <CardTitle tag="h5"> <p style={{  color: 'black' }}>0  (0%)</p></CardTitle>
+                  <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Pencapaian IKU2</CardSubtitle>
+                  <CardText></CardText>
+                  <div>
+                      <NavLink to="/rekapiku1">
+                          <Button color="light-success">Selengkapnya</Button>
+                      </NavLink>
+                  </div>
+              </Card>
+          </Col>
+
+          <Col md="6" lg="12">
+          <Card body className="text-center" color="light-warning">
+            <CardTitle tag="h5"> <p style={{ marginLeft: '50 px' }}>{totalDataMahasiswaAktif}</p></CardTitle>
+            <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Mahasiswa Aktif</CardSubtitle>
+            <CardText></CardText>
             <div>
-              <NavLink to="/rekapiku1">
-              <Button color="light-success">Selengkapnya</Button>
+            <NavLink to="/mahasiswaaktif">
+              <Button color="warning">Selengkapnya</Button>
               </NavLink>
             </div>
           </Card>
         </Col>
 
-        <Col md="6" lg="4">
-          <Card body className="text-center"color="light-info">
-            <CardTitle tag="h5">Input Kegiatan Diluar Prodi</CardTitle>
-            <div>
-              <NavLink to="/addiku2kegiatan">
-              <Button body color="info">Input Data</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
 
         <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Jumlah Mahasiswa Berkegiatan di Luar Prodi</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataKegiatan}</p></CardText>
+          <Card body className="text-center"  >
+            <CardTitle tag="h5"> <p style={{ marginLeft: '50 px' }} >{totalDataKegiatan} ({persentaseKegiatan}) </p></CardTitle>
+            <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Mahasiswa Berkegiatan di Luar Program Studi</CardSubtitle>
+            <CardText></CardText>
             <div>
             <NavLink to="/iku2kegiatanlist">
-              <Button color="light-warning">Selengkapnya</Button>
+              <Button color="light-danger">Selengkapnya</Button>
               </NavLink>
             </div>
           </Card>
         </Col>
 
         <Col md="6" lg="4">
-        <Card body className="text-center">
-          <CardTitle tag="h5">Jumlah Mahasiswa yang Diterima Pertukaran Pelajar </CardTitle>
+        <Card body className="text-center" color="light-success" >
+          <CardTitle tag="h5"><p style={{ marginLeft: '50 px' }}>{totalDataPertukaranPelajar} ({persentasePertukaranPelajar})</p></CardTitle>
+          <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Mahasiswa Inbound yang Diterima Pertukaran Pelajar</CardSubtitle>
             <CardText >
-            <p style={{ marginLeft: '50 px' }}>{totalDataPertukaranPelajar}</p>
             </CardText>
          <div>
-            <NavLink to="/pertukaranpelajarlist">
-              <Button color="light-danger">Selengkapnya</Button>
+            <NavLink to="/iku2inboundlist">
+              <Button color="success">Selengkapnya</Button>
              </NavLink>
         </div>
         </Card>
         </Col>
 
         <Col md="6" lg="4">
-          <Card body className="text-center"color="light-info">
-            <CardTitle tag="h5">Input Prestasi</CardTitle>
-            <div>
-              <NavLink to="/addiku2prestasi">
-              <Button body color="info">Input Data</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Jumlah Prestasi oleh Mahasiswa</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataPrestasi}</p></CardText>
+          <Card body className="text-center" color="light-danger">
+            <CardTitle tag="h5"> <p style={{ marginLeft: '50 px' }}>{totalDataPrestasi} ({persentasePrestasi})</p></CardTitle>
+            <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Mahasiswa Berprestasi Tingkat Provinsi, Nasional, dan Internasional</CardSubtitle>
+            <CardText></CardText>
             <div>
             <NavLink to="/iku2prestasilist">
-              <Button color="light-warning">Selengkapnya</Button>
+              <Button color="danger">Selengkapnya</Button>
               </NavLink>
             </div>
           </Card>
         </Col>
         
         </Row>
-        
-        
-        
-        </Row>
-        <Row>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Jumlah Mahasiswa yang Memenuhi Syarat</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{}</p></CardText>
-            <div>
-            <NavLink to="">
-              <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Total Mahasiswa Aktif</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataMahasiswa}</p></CardText>
-            <div>
-            <NavLink to="/mahasiswalist">
-              <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
         
         </Row>
         

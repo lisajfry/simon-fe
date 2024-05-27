@@ -5,23 +5,34 @@ import axios from "axios";
 const PrestasiContext = createContext();
 
 export const PrestasiProvider = ({ children }) => {
-    const [totalDataPrestasi, setTotalDataPrestasi] = useState(0);
+    const [totalData, setTotalData] = useState({
+      totalDataMahasiswaAktif:0,
+      totalDataPrestasi: 0,
+      persentasePrestasi: 0
+    });
   
     useEffect(() => {
-      getTotalDataPrestasi();
+      getTotalData();
     }, []);
   
-    const getTotalDataPrestasi = async () => {
+    const getTotalData = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/iku2prestasi"); // Ganti URL dengan endpoint yang benar
-        setTotalDataPrestasi(response.data.length); // Ubah cara Anda mengambil jumlah data sesuai dengan respons endpoint
+        const responseMahasiswaAktif = await axios.get("http://localhost:8080/mahasiswa");
+        const totalDataMahasiswaAktif = responseMahasiswaAktif.data.filter(mahasiswa => mahasiswa.keterangan === 'mahasiswa aktif').length;
+
+        const responsePrestasi = await axios.get("http://localhost:8080/iku2prestasi"); // Ganti URL dengan endpoint yang benar
+        const totalDataPrestasi = responsePrestasi.data.length;
+
+        const persentasePrestasi = ((totalDataPrestasi / totalDataMahasiswaAktif) * 100).toFixed(2) + '%';
+
+        setTotalData({ totalDataMahasiswaAktif, totalDataPrestasi, persentasePrestasi}); // Ubah cara Anda mengambil jumlah data sesuai dengan respons endpoint
       } catch (error) {
-        console.error("Error fetching total data Prestasi:", error);
+        console.error("Error fetching total data Kegiatan:", error);
       }
     };
     
     return (
-      <PrestasiContext.Provider value={{ totalDataPrestasi, setTotalDataPrestasi }}>
+      <PrestasiContext.Provider value={ totalData}>
         {children}
       </PrestasiContext.Provider>
     );

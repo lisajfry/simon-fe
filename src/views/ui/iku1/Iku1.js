@@ -6,46 +6,20 @@ import SesuaiContext from './RespondenContext';
 import TidakSesuaiContext from './RespondenContext';
 import {  FaDatabase } from 'react-icons/fa';
 import { MahasiswaContext } from '../mahasiswa/MahasiswaContext';
-import {Card,CardText,CardTitle,Button,Row,Col,} from 'reactstrap';
+import {Card,CardText,CardTitle,Button,Row,Col,CardSubtitle} from 'reactstrap';
 import ReactApexChart from 'react-apexcharts';
 
 const Iku1 = () => {
-  const [options, setOptions] = useState({
-    chart: {
-      type: 'bar',
-      height: 350,
-      width: '100%',
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true,
-      },
-    },
-    xaxis: {
-      categories: ['Bekerja', 'Wiraswasta', 'Melanjutkan Pekerjaan', 'Masih Mencari Pekerjaan'],
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    title: {
-      text: 'Capaian IKU1',
-    },
-  });
-
-  const [series, setSeries] = useState([
-    {
-      name: 'Total',
-      data: [75, 20, 50, 30],
-      colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'], // Set warna untuk setiap bar
-    },
-  ]);
-
 
   const {totalDataResponden} = useContext(RespondenContext);
   const {totalDataSesuai} = useContext(SesuaiContext);
+  const {persentaseSesuai}= useContext(SesuaiContext);
   const {totalDataTidakSesuai} = useContext(TidakSesuaiContext);
+  const {persentaseTidakSesuai}= useContext(TidakSesuaiContext)
   const { totalDataLulus } = useContext(MahasiswaContext);
+  const {totalCapaian} = useContext(RespondenContext);
   const [totalData, setTotalData] = useState(null);
+  
   
 
   useEffect(() => {
@@ -76,80 +50,37 @@ const Iku1 = () => {
                     <option value="2">2023</option>
                 </select>
             </div>
-
-           
             <div class="input-group mb-3">
                 <button class="btn btn-primary" type="button">Cari</button>
                 <button class="btn btn-secondary" type="button">Reset Pencarian</button>
             </div>
 
-
             <Col md="6" lg="12">
-          <Card body className="text-center"color="success" inverse>
-            <CardTitle tag="h5">Pencapaian IKU1</CardTitle>
-            <CardText>
-              berapa persen
-            </CardText>
-            <div>
-              <NavLink to="/rekapiku1">
-              <Button color="light-success">Selengkapnya</Button>
-              </NavLink>
-            </div>
+              <Card body className="text-center" color="success" inverse>
+              <CardSubtitle tag="p" className="small" style={{ color: 'black' }}> Capaian dari Target</CardSubtitle>
+              <CardTitle tag="h5"> <p style={{  color: 'black' }}>{totalCapaian} dari 70%</p></CardTitle>
+                  <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Tercapai</CardSubtitle>
+                  <CardText></CardText>
+                  <div>
+                      <NavLink to="/rekapiku1">
+                          <Button color="light-success">Selengkapnya</Button>
+                      </NavLink>
+                  </div>
+              </Card>
+          </Col>
+
+        <Col md="6" lg="12">
+          <Card body className="text-center" color="light-warning" inverse>
+            <CardTitle tag="h5"> <p style={{  color: 'black' }}>{totalDataLulus} </p></CardTitle>
+              <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Total Lulusan</CardSubtitle>
+              <CardText></CardText>
+              <div>
+                  <NavLink to="/lulusanlist">
+                      <Button color="warning">Selengkapnya</Button>
+                  </NavLink>
+              </div>
           </Card>
-        </Col>
-      
-        <Col md="6" lg="4">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Total Data Lulusan</CardTitle>
-            <CardText><p style={{ marginLeft: '50 px' }}>{totalDataLulus}</p></CardText>
-            <div>
-              <NavLink to="/lulusanlist">
-                <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-        <Card body className="text-center">
-          <CardTitle tag="h5">Jumlah responden</CardTitle>
-            <CardText >
-            <p style={{ marginLeft: '10px' }}>{totalDataResponden}</p>
-            </CardText> 
-         <div>
-            <NavLink to="/iku1list">
-              <Button color="light-danger">Selengkapnya</Button>
-             </NavLink>
-        </div>
-        </Card>
-        </Col>
-        </Row>
-        <Row>
-        <Col md="6" lg="4">
-          <Card body className="text-center" color="light-success">
-            <CardTitle tag="h5">Data Sesuai</CardTitle>
-            <CardText><p style={{ marginLeft: '10px' }}>{totalDataSesuai}</p></CardText>
-            <div>
-            
-            <NavLink to="/iku1valid">
-              <Button color="success">Selengkapnya</Button>
-              </NavLink>
-           
-            </div>
-          </Card>
-        </Col>
-        <Col md="6" lg="4">
-        <Card body className="text-center" color="light-warning"> 
-          <CardTitle tag="h5">Tidak Sesuai</CardTitle>
-          <CardText><p style={{ marginLeft: '10px' }}>{totalDataTidakSesuai}</p></CardText>
-         <div>
-            <NavLink to="/iku1notvalid">
-              <Button color="warning">Selengkapnya</Button>
-             </NavLink>
-        </div>
-        </Card>
-        </Col>
-        
-        </Row>
+      </Col>
 
         <Col md="6" lg="12">
           <Card body className="text-center"color="light-info">
@@ -164,6 +95,49 @@ const Iku1 = () => {
             </div>
           </Card>
         </Col>
+      
+        <Col md="6" lg="4">
+        <Card body className="text-center">
+          <CardTitle tag="h5"><p style={{ marginLeft: '10px' }}>{totalDataResponden}</p></CardTitle>
+          <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Jumlah Responden Terkumpul</CardSubtitle>
+            <CardText >
+            
+            </CardText> 
+         <div>
+            <NavLink to="/iku1list">
+              <Button color="light-danger">Selengkapnya</Button>
+             </NavLink>
+        </div>
+        </Card>
+        </Col>
+        
+        <Col md="6" lg="4">
+          <Card body className="text-center" color="light-success">
+            <CardTitle tag="h5"><p style={{ marginLeft: '10px' }}>{totalDataSesuai}  ({persentaseSesuai})</p></CardTitle>
+            <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Responden Yang Sesuai Kriteria</CardSubtitle>
+            <CardText></CardText>
+            <div>
+            <NavLink to="/iku1valid">
+              <Button color="success">Selengkapnya</Button>
+              </NavLink>
+           
+            </div>
+          </Card>
+        </Col>
+        <Col md="6" lg="4">
+        <Card body className="text-center" color="light-danger"> 
+          <CardTitle tag="h5"><p style={{ marginLeft: '10px' }}>{totalDataTidakSesuai} ({persentaseTidakSesuai})</p></CardTitle>
+          <CardSubtitle tag="p" className="small" style={{ color: 'black' }}>Responden Yang Tidak Sesuai Kriteria</CardSubtitle>
+          <CardText></CardText>
+         <div>
+            <NavLink to="/iku1notvalid">
+              <Button color="danger">Selengkapnya</Button>
+             </NavLink>
+        </div>
+        </Card>
+        </Col>
+        
+        </Row>
         
         
     </div>

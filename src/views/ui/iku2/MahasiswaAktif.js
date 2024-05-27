@@ -3,8 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Card, CardBody, CardTitle, Button, Col,Table } from 'reactstrap';
 
-const LulusanList = () => {
-    const [totalDataLulus, setTotalDataLulus] = useState(0);
+const MahasiswaAktifList = () => {
+    const [totalDataMahasiswaAktif, setTotalDataMahasiswaAktif] = useState(0);
     const [mahasiswa, setMahasiswa] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
@@ -18,8 +18,8 @@ const LulusanList = () => {
             const response = await axios.get('http://localhost:8080/mahasiswa');
             setMahasiswa(response.data);
 
-            const totalLulus = response.data.filter(mhs => mhs.keterangan === 'lulus').length;
-            setTotalDataLulus(totalLulus);
+            const totalDataMahasiswaAktif = response.data.filter(mhs => mhs.keterangan === 'mahasiswa aktif').length;
+            setTotalDataMahasiswaAktif(totalDataMahasiswaAktif);
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -40,11 +40,11 @@ const LulusanList = () => {
         <Col>
             <Card>
                 <div>
-                    <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data lulus: {totalDataLulus}</p>
+                    <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data Mahasiswa Aktif: {totalDataMahasiswaAktif}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
                 <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        TABEL LULUSAN 
+                        TABEL MAHASISWA AKTIF 
                     </CardTitle>
                 </div>
                 <CardBody>
@@ -62,7 +62,7 @@ const LulusanList = () => {
                         <tbody>
                             
                                 {currentPosts
-                                    .filter(mhs => mhs.keterangan === 'lulus')
+                                    .filter(mhs => mhs.keterangan === 'mahasiswa aktif')
                                     .map((mahasiswa, index) => (
                                         <tr key={mahasiswa.NIM}>
                                             <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
@@ -87,4 +87,4 @@ const LulusanList = () => {
     );
 };
 
-export default LulusanList;
+export default MahasiswaAktifList;

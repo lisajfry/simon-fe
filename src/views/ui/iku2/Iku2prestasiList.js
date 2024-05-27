@@ -2,22 +2,67 @@ import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 import PrestasiContext from './PrestasiContext';
+import { AiOutlineFilePdf } from 'react-icons/ai';
 
 const Iku2prestasiList = () => {
     const [iku2prestasiList, setIku2prestasiList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { totalDataPrestasi } = useContext(PrestasiContext);
-    const [data, setData] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const itemsPerPage = 5;
+
+    useEffect(() => {
+        fetchIku2prestasiList();
+    }, []);
 
     const fetchNamaMahasiswa = async (NIM) => {
         try {
             const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
             return response.data.nama_mahasiswa;
         } catch (error) {
-            console.error("Error while fetching nama mahasiswa:", error);
+            console.error("Error fetching nama mahasiswa:", error);
             return null;
+        }
+    };
+
+    const fetchNamaDosen = async (NIDN) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/dosen/${NIDN}`);
+            return response.data.nama_dosen;
+        } catch (error) {
+            console.error("Error fetching nama dosen:", error);
+            return null;
+        }
+    };
+
+    const fetchCountries = async (countryCodes) => {
+        try {
+            const response = await axios.get('http://localhost:8080/countries', {
+                params: {
+                    codes: countryCodes.join(',')
+                }
+            });
+            return response.data.map(country => country.name);
+        } catch (error) {
+            console.error("Error fetching countries:", error);
+            return [];
+        }
+    };
+
+    const fetchProvinces = async (provinceCodes) => {
+        try {
+            const response = await axios.get('http://localhost:8080/provinces', {
+                params: {
+                    codes: provinceCodes.join(',')
+                }
+            });
+            return response.data.map(province => province.name);
+        } catch (error) {
+            console.error("Error fetching provinces:", error);
+            return [];
         }
     };
 
@@ -26,7 +71,9 @@ const Iku2prestasiList = () => {
             const response = await axios.get('http://localhost:8080/iku2prestasi');
             const iku2prestasiListWithNama = await Promise.all(response.data.map(async (iku2prestasi) => {
                 const namaMahasiswa = await fetchNamaMahasiswa(iku2prestasi.NIM);
-                return { ...iku2prestasi, nama_mahasiswa: namaMahasiswa };
+                const namaDosen = await fetchNamaDosen(iku2prestasi.NIDN);
+                
+                return { ...iku2prestasi, nama_mahasiswa: namaMahasiswa, nama_dosen: namaDosen };
             }));
             setIku2prestasiList(iku2prestasiListWithNama);
             setLoading(false);
@@ -49,49 +96,89 @@ const Iku2prestasiList = () => {
         }
     };
 
+    const handleNextPage = () => {
+        if ((currentPage * itemsPerPage) < iku2prestasiList.length) {
+            setCurrentPage(currentPage + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+        }
+    };
+
+    const displayedData = iku2prestasiList.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
+
     return (
         <Col>
+            <div className="form-group" style={{ marginBottom: '10px' }}>
+                <Link to="/addiku2prestasi">
+                    <Button color="primary">Input</Button>
+                </Link>
+            </div>
             <Card>
                 <div>
-                    <p style={{ marginLeft: '10px' }}>Total data: {totalDataPrestasi}</p>
+                    <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data: {totalDataPrestasi}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <CardTitle>TABEL PRESTASI</CardTitle>
+                    <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
+                        TABEL PRESTASI MAHASISWA
+                    </CardTitle>
                 </div>
                 <CardBody>
-                    <Table>
+                    <Table responsive>
                         <thead>
-                            <tr> 
-                                <th>No</th>
-                                <th>Mahasiswa Berprestasi</th>
-                                <th>Nama Mahasiswa</th>
-                                <th>Dosen Pembimbing</th>
-                                <th>Nama Dosen</th>
-                                <th>Tingkat Lomba</th>
+                            <tr>
+                                <th></th>
+                                <th>NIM</th>
+                                <th>NIDN</th>
+                                <th>Tingkat Kompetisi</th>
+                                <th>Jumlah Peserta</th>
                                 <th>Prestasi</th>
+                                <th>Jumlah Negara Mengikuti</th>
+                                <th>Negara yang Mengikuti</th>
+                                <th>Jumlah Provinsi Mengikuti</th>
+                                <th>Provinsi yang Mengikuti</th>
+                                <th>Sertifikat</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {iku2prestasiList.map((iku2prestasi, index) => (
-                                <tr key={index}>
-                                    <th scope="row">{index + 1}</th>
+                            {displayedData.map((iku2prestasi, index) => (
+                                <tr key={iku2prestasi.iku2prestasi_id}>
+                                    <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                     <td>{iku2prestasi.NIM}</td>
-                                    <td>{iku2prestasi.nama_mahasiswa}</td>
                                     <td>{iku2prestasi.NIDN}</td>
-                                    <td>{iku2prestasi.nama_dosen}</td>
-                                    <td>{iku2prestasi.tingkat_lomba}</td>
+                                    <td>{iku2prestasi.tingkat_kompetisi}</td>
+                                    <td>{iku2prestasi.jmlh_peserta}</td>
                                     <td>{iku2prestasi.prestasi}</td>
+                                    <td>{iku2prestasi.jmlh_negara_mengikuti}</td>
+                                    <td>{iku2prestasi.countries}</td>
+                                    <td>{iku2prestasi.jmlh_provinsi_mengikuti}</td>
+                                    <td>{iku2prestasi.provinces}</td>
                                     <td>
-                                        <Link to={`/update/iku2prestasi/${iku2prestasi.iku2prestasi_id}`}>
-                                            <Button className="btn" outline color="info">Edit</Button>
-                                        </Link>
-                                        <Button className="btn" outline color="danger" onClick={() => deleteIku2prestasi(iku2prestasi.iku2prestasi_id)}>Delete</Button>
+                                        <a href={`http://localhost:8080/uploads/${iku2prestasi.sertifikat}`} target="_blank" rel="noopener noreferrer">
+                                            <AiOutlineFilePdf />
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                                            <Link to={`/update/iku2/${iku2prestasi.iku2prestasi_id}`}>
+                                                <Button outline color="info" size="sm"><FaEdit /></Button>
+                                            </Link>
+                                            <Button outline color="danger" size="sm" onClick={() => deleteIku2prestasi(iku2prestasi.iku2prestasi_id)}><FaTrash /></Button>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </Table>
+                    <div className="pagination-controls" style={{ display: 'flex', justifyContent: 'center', marginTop: '20px' }}>
+                        <Button onClick={handlePreviousPage} disabled={currentPage === 1} size="sm">Previous</Button>
+                        <span style={{ margin: '0 10px', fontSize: '14px' }}>Page {currentPage}</span>
+                        <Button onClick={handleNextPage} disabled={(currentPage * itemsPerPage) >= iku2prestasiList.length} size="sm">Next</Button>
+                    </div>
                 </CardBody>
             </Card>
         </Col>

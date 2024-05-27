@@ -1,28 +1,119 @@
-import React, { useState } from 'react';
-import axios from "axios";
-import { Container, Row, Card, Col, CardTitle } from "reactstrap";
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Container, Row, Card, Col, CardTitle } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
+import Select from 'react-select';
 
 const AddIku2prestasi = () => {
   const [NIM, setNIM] = useState('');
   const [NIDN, setNIDN] = useState('');
-  const [tingkat_lomba, setTingkatLomba] = useState('');
+  const [tingkatKompetisi, setTingkatKompetisi] = useState('');
+  const [jmlh_peserta, setJmlhPeserta] = useState('');
   const [prestasi, setPrestasi] = useState('');
+  const [jmlh_negara_mengikuti, setJmlhNegaraMengikuti] = useState('');
+  const [countries, setCountries] = useState([]);
+  const [jmlh_provinsi_mengikuti, setJmlhProvinsiMengikuti] = useState('');
+  const [provinces, setProvinces] = useState([]);
+  const [selectedCountries, setSelectedCountries] = useState([]);
+  const [selectedProvinces, setSelectedProvinces] = useState([]);
+  const [sertifikatFile, setSertifikatFile] = useState(null);
+  const [skPenugasanFile, setSkPenugasanFile] = useState(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Fetch options for univ and provinsi if needed when tingkatKompetisi changes
+    if (tingkatKompetisi) {
+      fetchOptions(tingkatKompetisi);
+    }
+
+    // Fetch country data when component mounts
+    axios
+      .get('https://api.first.org/data/v1/countries')
+      .then((response) => {
+        const countryData = response.data.data;
+        const countryOptions = Object.keys(countryData).map((code) => ({
+          value: countryData[code].country,
+          label: countryData[code].country,
+        }));
+        setCountries(countryOptions);
+      })
+      .catch((error) => console.error('Error fetching country data:', error));
+
+    axios
+      .get('https://staggingabsensi.labura.go.id/api-wilayah-indonesia/static/api/provinces.json')
+      .then((response) => {
+        const provinsiData = response.data;
+        const provinsiOptions = provinsiData.map((province) => ({
+          value: province.id,
+          label: province.name,
+        }));
+        setProvinces(provinsiOptions);
+      })
+      .catch((error) => console.error('Error fetching province data:', error));
+  }, [tingkatKompetisi]);
+
+  const fetchOptions = async (tingkat) => {
+    try {
+      const response = await axios.post('/iku2prestasi/getDataByTingkat', {
+        tingkat: tingkat,
+      });
+      // Handle the response data if needed
+    } catch (error) {
+      console.error('Error while fetching data:', error);
+    }
+  };
+
+  const handleTingkatChange = (e) => {
+    setTingkatKompetisi(e.target.value);
+  };
+
+  const handleCountryChange = (selectedOptions) => {
+    setSelectedCountries(selectedOptions);
+  };
+
+  const handleProvincesChange = (selectedOptions) => {
+    setSelectedProvinces(selectedOptions);
+  };
+
+  const handleSertifikatChange = (e) => {
+    const file = e.target.files[0];
+    setSertifikatFile(file);
+  };
+
+  const handleSkPenugasanChange = (e) => {
+    const file = e.target.files[0];
+    setSkPenugasanFile(file);
+  };
 
   const saveIku2prestasiData = async (e) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('NIM', NIM);
     formData.append('NIDN', NIDN);
-    formData.append('tingkat_lomba', tingkat_lomba);
+    formData.append('tingkat_kompetisi', tingkatKompetisi);
+    formData.append('jmlh_peserta', jmlh_peserta);
     formData.append('prestasi', prestasi);
-  
+    if (tingkatKompetisi === 'internasional') {
+      formData.append(
+        'countries',
+        JSON.stringify(selectedCountries.map((option) => option.value))
+      ); // Serialize the array
+      formData.append('jmlh_negara_mengikuti', jmlh_negara_mengikuti);
+    } else if (tingkatKompetisi === 'nasional') {
+      formData.append(
+        'provinces',
+        JSON.stringify(selectedProvinces.map((option) => option.value))
+      );
+      formData.append('jmlh_provinsi_mengikuti', jmlh_provinsi_mengikuti);
+    }
+    formData.append('sertifikat', sertifikatFile);
+    formData.append('sk_penugasan', skPenugasanFile);
+
     try {
-      await axios.post('http://localhost:8080/add/iku2prestasi', formData); // Sesuaikan dengan endpoint yang benar
+      await axios.post('http://localhost:8080/add/iku2prestasi', formData); // Adjust the endpoint as needed
       navigate('/iku2prestasilist', { replace: true });
     } catch (error) {
-      console.error("Error while saving data:", error);
+      console.error('Error while saving data:', error);
     }
   };
 
@@ -31,8 +122,17 @@ const AddIku2prestasi = () => {
       <Container fluid style={{ maxWidth: '80%' }}>
         <Row>
           <Col xs="12" md="12" sm="12">
-            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
-              <CardTitle><b>FORM INPUT IKU 2 Prestasi di Luar Prodi</b></CardTitle>
+            <Card
+              style={{
+                maxWidth: '80%',
+                marginLeft: '-5%',
+                padding: '20px',
+                marginTop: '20px',
+              }}
+            >
+              <CardTitle>
+                <b>FORM INPUT IKU 2 Prestasi di Luar Prodi</b>
+              </CardTitle>
               <form onSubmit={saveIku2prestasiData}>
                 <div className="form-group" style={{ marginTop: '20px' }}>
                   <label htmlFor="NIM">Mahasiswa Berprestasi</label>
@@ -57,18 +157,123 @@ const AddIku2prestasi = () => {
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label className="label">Tingkat Lomba</label>
+                  <label className="label">Tingkat Kompetisi</label>
                   <select
                     className="form-control"
-                    value={tingkat_lomba}
-                    onChange={(e) => setTingkatLomba(e.target.value)}
+                    value={tingkatKompetisi}
+                    onChange={handleTingkatChange}
                   >
-                    <option value="">Pilih Tingkat Lomba</option>
+                    <option value="">Pilih Tingkat Kompetisi</option>
                     <option value="internasional">Internasional</option>
                     <option value="nasional">Nasional</option>
                     <option value="provinsi">Provinsi</option>
                   </select>
                 </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="jmlh_peserta">Jumlah Peserta</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="jmlh_peserta"
+                    value={jmlh_peserta}
+                    onChange={(e) => setJmlhPeserta(e.target.value)}
+                    placeholder="Misal 1000 peserta"
+                  />
+                </div>
+                {tingkatKompetisi === 'internasional' && (
+                  <>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="jmlh_negara_mengikuti">
+                        Jumlah Negara yang Mengikuti
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="jmlh_negara_mengikuti"
+                        value={jmlh_negara_mengikuti}
+                        onChange={(e) =>
+                          setJmlhNegaraMengikuti(e.target.value)
+                        }
+                        placeholder="Minimal 2 negara"
+                      />
+                    </div>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="countries">Negara yang Mengikuti</label>
+                      <Select
+                        isMulti
+                        name="countries"
+                        options={countries}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        value={selectedCountries}
+                        onChange={handleCountryChange}
+                      />
+                    </div>
+                  </>
+                )}
+                {tingkatKompetisi === 'nasional' && (
+                  <>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="jmlh_provinsi_mengikuti">
+                        Jumlah Provinsi yang Mengikuti
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="jmlh_provinsi_mengikuti"
+                        value={jmlh_provinsi_mengikuti}
+                        onChange={(e) =>
+                          setJmlhProvinsiMengikuti(e.target.value)
+                        }
+                        placeholder="Minimal 4 provinsi"
+                      />
+                    </div>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="provinces">Provinsi yang Mengikuti</label>
+                      <Select
+                        isMulti
+                        name="provinces"
+                        options={provinces}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        value={selectedProvinces}
+                        onChange={handleProvincesChange}
+                      />
+                    </div>
+                  </>
+                )}
+
+                {tingkatKompetisi === 'provinsi' && (
+                  <>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="jmlh_provinsi_mengikuti">
+                        Jumlah Provinsi yang Mengikuti
+                      </label>
+                      <input
+                        type="text"
+                        className="form-control"
+                        id="jmlh_provinsi_mengikuti"
+                        value={jmlh_provinsi_mengikuti}
+                        onChange={(e) =>
+                          setJmlhProvinsiMengikuti(e.target.value)
+                        }
+                        placeholder="Diikuti antara 1-3 provinsi"
+                      />
+                    </div>
+                    <div className="form-group" style={{ marginTop: '10px' }}>
+                      <label htmlFor="provinces">Provinsi yang Mengikuti</label>
+                      <Select
+                        isMulti
+                        name="provinces"
+                        options={provinces}
+                        className="basic-multi-select"
+                        classNamePrefix="select"
+                        value={selectedProvinces}
+                        onChange={handleProvincesChange}
+                      />
+                    </div>
+                  </>
+                )}
                 <div className="form-group" style={{ marginTop: '10px' }}>
                   <label className="label">Prestasi</label>
                   <select
@@ -84,7 +289,27 @@ const AddIku2prestasi = () => {
                   </select>
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <button type="submit" className="btn btn-primary">Tambahkan</button>
+                  <label htmlFor="sertifikat">Sertifikat</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="sertifikat"
+                    onChange={handleSertifikatChange}
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="sk_penugasan">SK Penugasan</label>
+                  <input
+                    type="file"
+                    className="form-control"
+                    id="sk_penugasan"
+                    onChange={handleSkPenugasanChange}
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <button type="submit" className="btn btn-primary">
+                    Tambahkan
+                  </button>
                 </div>
               </form>
             </Card>
@@ -96,3 +321,4 @@ const AddIku2prestasi = () => {
 };
 
 export default AddIku2prestasi;
+

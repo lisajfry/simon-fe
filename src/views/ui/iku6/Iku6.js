@@ -1,24 +1,29 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Row, Col } from 'reactstrap';
+import { Row, Col, Button} from 'reactstrap';
 import { FaUsers, FaTrophy } from 'react-icons/fa';
 
 
 const Iku6 = () => {
+    const [totalData, setTotalData] = useState(null); // Define totalData here
+
+
     useEffect(() => {
         fetchTotalData();
     }, []);
 
+
     const fetchTotalData = async () => {
         try {
             const response = await axios.get('http://localhost:8080/iku6');
-            console.log('Total data length:', response.data.length);
+            setTotalData(response.data.length);
         } catch (error) {
             console.error('Error fetching total data:', error);
         }
     };
-    
+
+
     return (
         <div>
             <Row>
@@ -75,7 +80,7 @@ const Iku6 = () => {
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <p>Jumlah Prodi Bekerja Sama :</p>
+                                    <p>Jumlah Mitra Bekerja Sama: {totalData}</p> {/* Use totalData here */}
                                 </div>
                                 <div className="text-center">
                                     <p>Total Prodi Aktif :</p>
@@ -120,12 +125,15 @@ const Iku6 = () => {
                         </div>
                     </div>
                     <div className="d-grid gap-2" style={{ marginTop: "-10px" }}>
-                        <button className="btn btn-primary" type="button">Selengkapnya</button>
+                        <NavLink to="/iku6list">
+                            <Button className="btn btn-primary" type="button">Selengkapnya</Button>
+                        </NavLink>
                     </div>
                 </Col>
             </Row>
         </div>
     );
 };
+
 
 export default Iku6;
