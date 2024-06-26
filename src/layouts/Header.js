@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Navbar,
   Collapse,
@@ -10,30 +10,48 @@ import {
   Dropdown,
   Button,
 } from "reactstrap";
-import { ReactComponent as LogoWhite } from "../assets/images/logos/xtremelogowhite.svg";
 import user1 from "../assets/images/users/user1.jpg";
 
 const Header = () => {
-  const [isOpen, setIsOpen] = React.useState(false);
-  const [dropdownOpen, setDropdownOpen] = React.useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [user, setUser] = useState({ email: "", role: "" });
 
-  const toggle = () => setDropdownOpen((prevState) => !prevState);
-  const Handletoggle = () => {
-    setIsOpen(!isOpen);
-  };
-  const showMobilemenu = () => {
+  const toggleDropdown = () => setDropdownOpen((prevState) => !prevState);
+  const handleToggle = () => setIsOpen(!isOpen);
+  const showMobileMenu = () => {
     document.getElementById("sidebarArea").classList.toggle("showSidebar");
   };
+
+  useEffect(() => {
+    // Simulate fetching user data
+    const loggedInUser = {
+      email: "user@example.com",
+      role: "admin", // can be 'admin', 'dosen', or 'mahasiswa'
+    };
+    if (loggedInUser.email !== "") {
+      setIsLoggedIn(true);
+      setUser(loggedInUser);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+    setUser({ email: "", role: "" });
+    // Redirect to login page or perform other logout actions
+  };
+
   return (
     <Navbar color="primary" dark expand="md">
       <div className="d-flex align-items-center">
         <NavbarBrand href="/" className="d-lg-none">
-          <LogoWhite />
+          Logo
         </NavbarBrand>
         <Button
           color="primary"
           className="d-lg-none"
-          onClick={() => showMobilemenu()}
+          onClick={showMobileMenu}
         >
           <i className="bi bi-list"></i>
         </Button>
@@ -43,36 +61,29 @@ const Header = () => {
           color="primary"
           size="sm"
           className="d-sm-block d-md-none"
-          onClick={Handletoggle}
+          onClick={handleToggle}
         >
-          {isOpen ? (
-            <i className="bi bi-x"></i>
-          ) : (
-            <i className="bi bi-three-dots-vertical"></i>
-          )}
+          {isOpen ? <i className="bi bi-x"></i> : <i className="bi bi-three-dots-vertical"></i>}
         </Button>
       </div>
-
       <Collapse navbar isOpen={isOpen}>
-        <Nav className="me-auto" navbar>
-        </Nav>
-        <Dropdown isOpen={dropdownOpen} toggle={toggle}>
+        <Nav className="me-auto" navbar></Nav>
+        <Dropdown isOpen={dropdownOpen} toggle={toggleDropdown}>
           <DropdownToggle color="primary">
-            <img
-              src={user1}
-              alt="profile"
-              className="rounded-circle"
-              width="30"
-            ></img>
+            <img src={user1} alt="profile" className="rounded-circle" width="30" />
           </DropdownToggle>
           <DropdownMenu>
-            <DropdownItem header>Info</DropdownItem>
-            <DropdownItem>My Account</DropdownItem>
-            <DropdownItem>Edit Profile</DropdownItem>
-            <DropdownItem divider />
-            <DropdownItem>My Balance</DropdownItem>
-            <DropdownItem>Inbox</DropdownItem>
-            <DropdownItem>Logout</DropdownItem>
+            <DropdownItem header>User Info</DropdownItem>
+            {isLoggedIn ? (
+              <>
+                <DropdownItem>{user.email}</DropdownItem>
+                <DropdownItem>Role: {user.role}</DropdownItem>
+                <DropdownItem divider />
+                <DropdownItem onClick={handleLogout}>Logout</DropdownItem>
+              </>
+            ) : (
+              <DropdownItem href="/login">Login</DropdownItem>
+            )}
           </DropdownMenu>
         </Dropdown>
       </Collapse>

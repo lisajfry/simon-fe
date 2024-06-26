@@ -1,13 +1,21 @@
 import React, { useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
+import { Table, Col, Card, CardBody, CardTitle, Button, CardText, Row } from 'reactstrap';
+import Iku4Context from './Iku4Context';
+import { FaExclamationCircle } from 'react-icons/fa';
+
+
+
 // import RespondenContext from './RespondenContext';
 
 const Iku4List = () => {
     const [iku4List, setIku4List] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const {totalDataIku4} = useContext(Iku4Context);
+
+  
     // const { totalDataResponden } = useContext(RespondenContext);
     
     useEffect(() => {
@@ -54,10 +62,47 @@ const Iku4List = () => {
         }
     }
 
+
     return (
+        
         <Col>
+        <Row>
+        <Col md="6" lg="6">
+          <Card body className='text-center'>
+            <CardTitle tag="h5">Cara Perhitungan</CardTitle>
+            <CardText style={{ fontSize: 'small', color: '#999' }}>
+              <div>    </div>
+              <div>(Dosen yang Memiliki Sertifikat Kompetensi : Jumlah Dosen dengan NIDN dan NIDK) x 60 </div>
+              <div> + </div>
+              <div>(Dosen dari Kalangan Praktisi Profesional : Jumlah Dosen dengan NIDN, NIDK, NUP) x 40</div>
+            </CardText>
+          </Card>
+        </Col>
+
+        <Col md="6" lg="6">
+            <Card body className='text-center'>
+              <CardText style={{ fontSize: 'Medium', color: '' }}>
+                <div>Target IKU 4 = 50</div>
+                <div>Persentase Capaian = %</div>
+                <p></p>
+                <div>Hasil = </div>
+              </CardText>
+            </Card>
+          </Col>
+        </Row>
+
+        <div className="form-group">
+                    <Link to="/addiku4">
+                        <button type="submit" className="btn btn-primary">Input</button>
+                    </Link>
+                </div>
             <Card>
+
                 <div>
+                <div>
+                        <p style={{ marginLeft: '10px' }}>Total data: {totalDataIku4}</p>
+                    </div>
+
                     {/* <p style={{ marginLeft: '10px' }}>Total Data: {totalDataResponden}</p> */}
                 </div>
                 <div style={{ textAlign: 'center' }}>
@@ -68,7 +113,7 @@ const Iku4List = () => {
                         <thead>
                             <tr> 
                                 <th>No</th>
-                                <th>NIDN</th>
+                                <th>NIDN/NIDK</th>
                                 <th>Nama Dosen</th>
                                 <th>Status</th>
                                 <th>Bukti PDF</th>

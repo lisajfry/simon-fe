@@ -1,29 +1,39 @@
+import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import { Row, Col, Button} from 'reactstrap';
-import { FaUsers, FaTrophy } from 'react-icons/fa';
+import { NavLink, Link } from 'react-router-dom';
+import { Row, Col, Button, Card, CardTitle, CardBody, Table } from 'reactstrap';
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import { Iku6Context } from './Iku6Context';
 
 
 const Iku6 = () => {
-    const [totalData, setTotalData] = useState(null); // Define totalData here
+    const { totalCapaianiku6 } = useContext(Iku6Context);
+    const [iku6, setIku6] = useState([]);
+    const cardClass = totalCapaianiku6 >= 50 ? 'bg-success' : 'bg-danger';
 
 
     useEffect(() => {
-        fetchTotalData();
+        getIku6List();
     }, []);
 
 
-    const fetchTotalData = async () => {
+    const getIku6List = async () => {
         try {
             const response = await axios.get('http://localhost:8080/iku6');
-            setTotalData(response.data.length);
+            setIku6(response.data);
         } catch (error) {
-            console.error('Error fetching total data:', error);
+            console.error('Error fetching IKU6 data:', error);
         }
     };
 
 
+    const deleteIku6 = async (iku6_id) => {
+        const confirmDelete = window.confirm("Apakah Anda yakin ingin menghapus data?");
+        if (confirmDelete) {
+            await axios.delete(`http://localhost:8080/delete/iku6/${iku6_id}`);
+            getIku6List();
+        }
+    };
     return (
         <div>
             <Row>
@@ -43,10 +53,10 @@ const Iku6 = () => {
                 </div>
             </Row>
             <Row>
-                <div className="input-group mb-3">
-                    <button className="btn btn-primary" type="button">Cari</button>
-                    <button className="btn btn-secondary" type="button">Reset Pencarian</button>
-                </div>
+            <div className="group mb-3">
+                <button class="btn btn-primary" type="button">Cari</button>
+                <button class="btn btn-secondary" type="button">Reset Pencarian</button>
+            </div>
             </Row>
             <Row>
                 <Col xl="5" lg="3">
@@ -56,10 +66,10 @@ const Iku6 = () => {
                             <div className="dropdown no-arrow">
                             </div>
                         </div>
-                        <div className="card-body" style={{ height: "200px", display: "flex", alignItems: "center" }}>
+                        <div className="card-body" style={{ height: "150px", display: "flex", alignItems: "center" }}>
                             <div className="chart-area">
                                 <div className="text-center">
-                                    <p>(Jumlah Program Studi Bekerjasama : Total Program Studi Akhir) X 100%</p>
+                                    <p>(Jumlah Mitra Bekerjasama x Total Program Studi) / Nilai Bobot Mitra</p>
                                 </div>
                             </div>
                         </div>
@@ -73,19 +83,18 @@ const Iku6 = () => {
                             </div>
                         </div>
                         <div className="card-body">
-                            <div className="chart-area">
-                                <div className="text-center">
-                                    <div className="card bg-danger text-white shadow p-1 d-inline-block width=150px ">
-                                        <div className="card-body text-center">Capaian : 563.76%</div>
-                                    </div>
-                                </div>
-                                <div className="text-center">
-                                    <p>Jumlah Mitra Bekerja Sama: {totalData}</p> {/* Use totalData here */}
-                                </div>
-                                <div className="text-center">
-                                    <p>Total Prodi Aktif :</p>
+                        <div className="chart-area">
+                            <div className="text-center">
+                            <div className={`card text-white shadow p-1 d-inline-block width=150px ${cardClass}`}>
+                                <div className="card-body text-center">
+                                Capaian: {totalCapaianiku6}%
                                 </div>
                             </div>
+                            </div>
+                            <div className="text-center">
+                            <p>Jumlah Mitra Bekerja Sama: {iku6.length}</p>
+                            </div>
+                        </div>
                         </div>
                     </div>
                 </Col>
@@ -94,41 +103,65 @@ const Iku6 = () => {
                 <h6 className="mb-3 mt-3" style={{ fontWeight: 'bold' }}>Data Detai IKU 6</h6>
             </Row>
             <Row>
-                <Col xl="5" lg="3">
-                    <div className="card shadow mb-4">
-                        <div className="card-body bg-light-danger" style={{ height: "150px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                            <div>
-                                <FaUsers style={{ color: 'black', fontWeight: 'bold', fontSize: '80px', marginBottom: '10px' }}/>
-                            </div>
-                            <div className="chart-area">
-                                <div className="text-center">
-                                    <p style={{ fontWeight: 'bold' }}>Mbuh</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="d-grid gap-2" style={{ marginTop: "-10px" }}>
-                        <button className="btn btn-danger" type="button">Selengkapnya</button>
-                    </div>
-                </Col>
-                <Col xl="5" lg="3">
-                    <div className="card shadow mb-4">
-                        <div className="card-body bg-light-primary" style={{ height: "150px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                            <div>
-                                <FaTrophy style={{ color: 'black', fontWeight: 'bold', fontSize: '60px', marginBottom: '10px' }}/>
-                            </div>
-                            <div className="chart-area">
-                                <div className="text-center">
-                                    <p style={{ fontWeight: 'bold' }}>Data Per Jenis Kerjasama</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="d-grid gap-2" style={{ marginTop: "-10px" }}>
-                        <NavLink to="/iku6list">
-                            <Button className="btn btn-primary" type="button">Selengkapnya</Button>
-                        </NavLink>
-                    </div>
+                <Col lg="12">
+                    <Card>
+                        <CardTitle tag="h6" className="d-flex justify-content-between align-items-center border-bottom p-3 mb-0">
+                            <span>
+                                <i className="bi bi-card-text me-2"> </i>
+                                Tabel IKU 6
+                            </span>
+                            <NavLink to="/addiku6">
+                                <Button type="button" className="btn btn-primary">Add New</Button>
+                            </NavLink>
+                        </CardTitle>
+                        <CardBody className="">
+                            <p>Jumlah Data: {iku6.length}</p>
+                            <Table bordered striped>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Nama Mitra</th>
+                                        <th>Nama Kegiatan</th>
+                                        <th>Alamat Mitra</th>
+                                        <th>Tanggal Mulai Kegiatan</th>
+                                        <th>Tanggal Selesai Kegiatan</th>
+                                        <th>Kriteria Mitra</th>
+                                        <th>Dokumen Kesepahaman (MOU)</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {iku6.map((iku6Item, index) => (
+                                        <tr key={iku6Item.iku6_id}>
+                                            <td>{index + 1}</td> {/* This ensures the numbering starts from 1 */}
+                                            <td>{iku6Item.nama_mitra}</td>
+                                            <td>{iku6Item.nama_kegiatan}</td>
+                                            <td>{iku6Item.alamat_mitra}</td>
+                                            <td>{iku6Item.tgl_mulai_kegiatan}</td>
+                                            <td>{iku6Item.tgl_selesai_kegiatan}</td>
+                                            <td>{iku6Item.kriteria_mitra}</td>
+                                            <td>
+                                                <Button
+                                                    type="button"
+                                                    onClick={() => window.open(`http://localhost:8080/uploads/${iku6Item.mou}`, '_blank')}
+                                                >
+                                                    Lihat File
+                                                </Button>
+                                            </td>
+                                            <td>
+                                                <Link to={`/update/iku6/${iku6Item.iku6_id}`} className="btn btn-warning">
+                                                    <FaEdit />
+                                                </Link>
+                                                <button onClick={() => deleteIku6(iku6Item.iku6_id)} className="btn btn-danger">
+                                                    <FaTrash />
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                        </CardBody>
+                    </Card>
                 </Col>
             </Row>
         </div>

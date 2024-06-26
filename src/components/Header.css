@@ -1,0 +1,28 @@
+.header {
+    position: fixed;
+    top: 0px;
+    right: 0px;
+    left: 0px;
+    background-color: #ffffff;
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: bold;
+    color: #6ca8f7;
+    height: 100px; /* Menyesuaikan tinggi header */
+    z-index: 1000; /* Menyesuaikan z-index agar di atas konten */
+}
+
+
+.header img {
+    width: 100px;
+    height: 100px;
+}
+
+
+.blue-divider {
+    height: 3px; /* Tinggi pembatas */
+    background-color: blue; /* Warna biru */
+  }
+          
+    
+    

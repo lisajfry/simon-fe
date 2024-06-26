@@ -3,7 +3,8 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import RespondenContext from './RespondenContext';
+import { RespondenContext } from './RespondenContext';
+
 
 const Iku1List = () => {
     const [iku1List, setIku1List] = useState([]);

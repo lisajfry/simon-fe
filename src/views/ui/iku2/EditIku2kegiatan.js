@@ -12,6 +12,7 @@ const EditIku2kegiatan = () => {
     const [sks, setSks] = useState('');
     const [tgl_mulai_kegiatan, setTglMulaiKegiatan] = useState('');
     const [tgl_selesai_kegiatan, setTglSelesaiKegiatan] = useState('');
+    const [NIDN, setNIDN] = useState('');
     const navigate = useNavigate();
     const { iku2kegiatan_id } = useParams();
 
@@ -26,6 +27,7 @@ const EditIku2kegiatan = () => {
             setSks(iku2kegiatan.sks);
             setTglMulaiKegiatan(iku2kegiatan.tgl_mulai_kegiatan);
             setTglSelesaiKegiatan(iku2kegiatan.tgl_selesai_kegiatan);
+            setNIDN(iku2kegiatan.NIDN);
         }
         fetchIku2kegiatan();
     }, [iku2kegiatan_id]);
@@ -40,6 +42,7 @@ const EditIku2kegiatan = () => {
             sks: sks,
             tgl_mulai_kegiatan: tgl_mulai_kegiatan,
             tgl_selesai_kegiatan: tgl_selesai_kegiatan,
+            NIDN: NIDN,
         });
         navigate('/iku2kegiatanlist');
     }
@@ -114,6 +117,16 @@ const EditIku2kegiatan = () => {
                         onChange={(e) => setTglSelesaiKegiatan(e.target.value)}
                         placeholder="Tanggal Selesai Kegiatan" />
                 </div>
+                <div className="form-group" >
+                    <label className="label">NIDN</label>
+                    <input
+                        type="text"
+                        className="form-control"
+                        value={NIDN}
+                        onChange={(e) => setNIDN(e.target.value)}
+                        placeholder="NIDN" />
+                </div>
+
                 <div className="form-group" style={{ marginTop: '10px' }}>
                   <button type="submit" className="btn btn-primary">Update</button>
                 </div>

@@ -39,12 +39,23 @@ const Iku2kegiatanList = () => {
         }
     };
 
+    const fetchNamaDosen = async (NIDN) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/dosen/${NIDN}`);
+            return response.data.nama_dosen;
+        } catch (error) {
+            console.error("Error fetching nama mahasiswa:", error);
+            return null;
+        }
+    };
+
     const fetchIku2kegiatanList = async () => {
         try {
             const response = await axios.get('http://localhost:8080/iku2kegiatan');
             const iku2kegiatanListWithNama = await Promise.all(response.data.map(async (iku2kegiatan) => {
                 const namaMahasiswa = await fetchNamaMahasiswa(iku2kegiatan.NIM);
-                return { ...iku2kegiatan, nama_mahasiswa: namaMahasiswa };
+                const namaDosen = await fetchNamaDosen(iku2kegiatan.NIDN);
+                return { ...iku2kegiatan, nama_mahasiswa: namaMahasiswa, nama_dosen: namaDosen };
             }));
             setIku2kegiatanList(iku2kegiatanListWithNama);
             setLoading(false);
@@ -93,22 +104,23 @@ const Iku2kegiatanList = () => {
                     <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data: {totalDataKegiatan}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        TABEL KEGIATAN MAHASISWA DI LUAR PROGRAM STUDI
-                    </CardTitle>
+                <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                    <i className="bi bi-card-text me-2"> </i>         
+                    Tabel Kegiatan Mahasiswa di Luar Program Studi
+                </CardTitle>
                 </div>
-                <CardBody>
-                    <Table responsive>
+                 <CardBody className="">
+                    <Table bordered striped>
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>NIM</th>
-                                <th>Nama Lulusan</th>
+                                <th>Mahasiswa</th>
                                 <th>Aktivitas</th>
                                 <th>Tempat Kegiatan</th>
                                 <th>SKS</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
+                                <th>Dosen Pembimbing</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -116,13 +128,13 @@ const Iku2kegiatanList = () => {
                             {displayedData.map((iku2kegiatan, index) => (
                                 <tr key={iku2kegiatan.iku2kegiatan_id}>
                                     <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
-                                    <td>{iku2kegiatan.NIM}</td>
-                                    <td>{iku2kegiatan.nama_mahasiswa}</td>
+                                    <td>{iku2kegiatan.NIM} - {iku2kegiatan.nama_mahasiswa}</td>
                                     <td>{iku2kegiatan.aktivitas}</td>
                                     <td>{iku2kegiatan.tempat_kegiatan}</td>
                                     <td>{iku2kegiatan.sks}</td>
                                     <td>{iku2kegiatan.tgl_mulai_kegiatan}</td>
                                     <td>{iku2kegiatan.tgl_selesai_kegiatan}</td>
+                                    <td>{iku2kegiatan.NIDN} - {iku2kegiatan.nama_dosen}</td>
                                     <td>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Link to={`/update/iku2kegiatan/${iku2kegiatan.iku2kegiatan_id}`}>

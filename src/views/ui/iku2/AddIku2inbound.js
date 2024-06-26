@@ -5,10 +5,11 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku2inbound = () => {
   const [NIM, setNIM] = useState('');
-  const [asal_negara, setAsalNegara] = useState('');
-  const [asal_ptn, setAsalPtn] = useState('');
+  const [ptn_asal, setPtnAsal] = useState('');
+  const [ptn_pertukaran, setPtnPertukaran] = useState('');
   const [surat_rekomendasi, setSuratRekomendasi] = useState(null);
   const [sks, setSks] = useState('');
+  const [NIDN, setNIDN] = useState('');
   const [tgl_mulai_inbound, setTglMulaiInbound] = useState('');
   const [tgl_selesai_inbound, setTglSelesaiInbound] = useState('');
   const navigate = useNavigate();
@@ -21,10 +22,11 @@ const AddIku2inbound = () => {
     }
     const formData = new FormData();
     formData.append('NIM', NIM);
-    formData.append('asal_negara', asal_negara);
-    formData.append('asal_ptn', asal_ptn);
+    formData.append('ptn_asal', ptn_asal);
+    formData.append('ptn_pertukaran', ptn_pertukaran);
     formData.append('surat_rekomendasi', surat_rekomendasi);
     formData.append('sks', sks);
+    formData.append('NIDN', NIDN);
     formData.append('tgl_mulai_inbound', tgl_mulai_inbound); // Sesuaikan dengan nama yang diharapkan oleh backend
     formData.append('tgl_selesai_inbound', tgl_selesai_inbound); // Sesuaikan dengan nama yang diharapkan oleh backend
   
@@ -62,25 +64,25 @@ const AddIku2inbound = () => {
                   />
                 </div>  
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label htmlFor="asal_negara">Asal Negara</label>
+                  <label htmlFor="ptn_asal">PTN Asal</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="asal_negara"
-                    value={asal_negara}
-                    onChange={(e) => setAsalNegara(e.target.value)}
-                    placeholder="Asal Negara"
+                    id="ptn_asal"
+                    value={ptn_asal}
+                    onChange={(e) => setPtnAsal(e.target.value)}
+                    placeholder="PTN Asal"
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label htmlFor="asal_ptn">Asal PTN</label>
+                  <label htmlFor="ptn_pertukaran">PTN Tempat Pertukaran</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="asal_ptn"
-                    value={asal_ptn}
-                    onChange={(e) => setAsalPtn(e.target.value)}
-                    placeholder="Asal PTN"
+                    id="ptn_pertukaran"
+                    value={ptn_pertukaran}
+                    onChange={(e) => setPtnPertukaran(e.target.value)}
+                    placeholder="PTN Tempat Pertukaran"
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
@@ -103,6 +105,17 @@ const AddIku2inbound = () => {
                     placeholder="Sks yang dihabiskan mahasiswa inbound di D3TI"
                   />
                 </div>
+                <div className="form-group" style={{ marginTop: '20px' }}>
+                  <label htmlFor="NIDN">Dosen Pembimbing</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="NIDN"
+                    value={NIDN}
+                    onChange={(e) => setNIDN(e.target.value)}
+                    placeholder="NIDN"
+                  />
+                </div>  
                 <div className="form-group" style={{ marginTop: '10px' }}>
                   <label htmlFor="tgl_mulai_inbound">Tanggal Mulai Inbound</label>
                   <input

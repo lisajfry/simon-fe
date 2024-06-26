@@ -3,45 +3,32 @@ import axios from 'axios';
 import { Container, Row, Card, Col, CardTitle, Button } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 
-const EditIku3tridharma = () => {
-    const { iku3tridharma_id } = useParams();
+const EditIku3tridharma = ({ iku3tridharma, fetchIku3tridharmaList }) => {
     const navigate = useNavigate();
 
-    const [NIDN, setNIDN] = useState('');
+    const [NIDN, setNIDN] = useState(iku3tridharma.NIDN);
     const [surat_sk, setSuratSk] = useState(null);
-    const [ptn_tridharma, setPtnTridharma] = useState('');
-    const [tgl_mulai_tridharma, setTglMulaiTridharma] = useState('');
-    const [tgl_selesai_tridharma, setTglSelesaiTridharma] = useState('');
-
-    useEffect(() => {
-        fetchIku3tridharma();
-    }, []);
-
-    const fetchIku3tridharma = async () => {
-        try {
-            const response = await axios.get(`http://localhost:8080/iku3tridharma/${iku3tridharma_id}`);
-            const data = response.data;
-            setNIDN(data.NIDN);
-            setPtnTridharma(data.ptn_tridharma);
-            setTglMulaiTridharma(data.tgl_mulai_tridharma);
-            setTglSelesaiTridharma(data.tgl_selesai_tridharma);
-        } catch (error) {
-            console.error('Error fetching IKU 3 Tridharma:', error);
-        }
-    };
+    const [jenis_tridharma, setJenisTridharma] = useState(iku3tridharma.jenis_tridharma);
+    const [nama_aktivitas_tridharma, setNamaAktivitasTridharma] = useState(iku3tridharma.nama_aktivitas_tridharma);
+    const [tempat_tridharma, setTempatTridharma] = useState(iku3tridharma.tempat_tridharma);
+    const [tgl_mulai_tridharma, setTglMulaiTridharma] = useState(iku3tridharma.tgl_mulai_tridharma);
+    const [tgl_selesai_tridharma, setTglSelesaiTridharma] = useState(iku3tridharma.tgl_selesai_tridharma);
 
     const updateIku3tridharma = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('NIDN', NIDN);
         formData.append('surat_sk', surat_sk);
-        formData.append('ptn_tridharma', ptn_tridharma);
+        formData.append('jenis_tridharma', jenis_tridharma);
+        formData.append('nama_aktivitas_tridharma', nama_aktivitas_tridharma);
+        formData.append('tempat_tridharma', tempat_tridharma);
         formData.append('tgl_mulai_tridharma', tgl_mulai_tridharma);
         formData.append('tgl_selesai_tridharma', tgl_selesai_tridharma);
 
         try {
-            await axios.post(`http://localhost:8080/update/iku3tridharma/${iku3tridharma_id}`, formData);
-            navigate('/iku3tridharmalist', { replace: true });
+            await axios.post(`http://localhost:8080/update/iku3tridharma/${iku3tridharma.iku3tridharma_id}`, formData);
+            fetchIku3tridharmaList(); // Refresh data setelah update
+            navigate('/iku3', { replace: true });
         } catch (error) {
             console.error('Error updating data:', error);
         }
@@ -81,14 +68,38 @@ const EditIku3tridharma = () => {
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>
-                                    <label htmlFor="ptn_tridharma">PTN Tridharma</label>
+                                    <label className="label">Jenis Tridharma</label>
+                                    <select
+                                        className="form-control"
+                                        value={jenis_tridharma}
+                                        onChange={(e) => setJenisTridharma(e.target.value)}
+                                    >
+                                        <option value="">Pilih Jenis</option>
+                                        <option value="pendidikan">Pendidikan</option>
+                                        <option value="penelitian">Penelitian</option>
+                                        <option value="pengabdian kepada masyarakat">Pengabdian Kepada Masyarakat</option>
+                                    </select>
+                                </div>
+                                <div className="form-group" style={{ marginTop: '10px' }}>
+                                    <label htmlFor="nama_aktivitas_tridharma">Nama Aktivitas Tridharma</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="ptn_tridharma"
-                                        value={ptn_tridharma}
-                                        onChange={(e) => setPtnTridharma(e.target.value)}
-                                        placeholder="PTN Tridharma"
+                                        id="nama_aktivitas_tridharma"
+                                        value={nama_aktivitas_tridharma}
+                                        onChange={(e) => setNamaAktivitasTridharma(e.target.value)}
+                                        placeholder="Nama Aktivitas Tridharma"
+                                    />
+                                </div>
+                                <div className="form-group" style={{ marginTop: '10px' }}>
+                                    <label htmlFor="tempat_tridharma">Tempat Tridharma</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="tempat_tridharma"
+                                        value={tempat_tridharma}
+                                        onChange={(e) => setTempatTridharma(e.target.value)}
+                                        placeholder="Tempat Tridharma"
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>

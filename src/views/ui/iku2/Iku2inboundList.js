@@ -4,11 +4,13 @@ import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
 import { AiOutlineFilePdf } from 'react-icons/ai';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import InboundContext from './InboundContext';
 
 const Iku2inboundList = () => {
     const [iku2inboundList, setIku2inboundList] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const { totalDataInbound } = useContext(InboundContext);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
     
@@ -22,6 +24,16 @@ const Iku2inboundList = () => {
         try {
             const response = await axios.get(`http://localhost:8080/mahasiswa/${NIM}`);
             return response.data.nama_mahasiswa;
+        } catch (error) {
+            console.error("Error while fetching nama mahasiswa:", error);
+            return null;
+        }
+    };
+
+    const fetchNamaDosen = async (NIDN) => {
+        try {
+            const response = await axios.get(`http://localhost:8080/dosen/${NIDN}`);
+            return response.data.nama_dosen;
         } catch (error) {
             console.error("Error while fetching nama mahasiswa:", error);
             return null;
@@ -80,24 +92,25 @@ const Iku2inboundList = () => {
             </div>
             <Card>
                 <div>
-                    <p style={{ marginLeft: '10px' }}>Total data: {}</p>
+                    <p style={{ marginLeft: '10px' }}>Total data: {totalDataInbound}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        TABEL DAFTAR MAHASISWA INBOUND
-                    </CardTitle>
+                <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                    <i className="bi bi-card-text me-2"> </i>         
+                    Tabel Daftar Mahasiswa Inbound
+                </CardTitle>
                 </div>
-                <CardBody>
-                    <Table>
+                 <CardBody className="">
+                    <Table bordered striped>
                         <thead>
                             <tr> 
                                 <th>No</th>
-                                <th>NIM</th>
-                                <th>Nama Mahasiswa</th>
-                                <th>Asal Negara</th>
+                                <th>Mahasiswa Inbound</th>
                                 <th>PTN Asal</th>
+                                <th>PTN Tempat Pertukaran</th>
                                 <th>Surat Rekomendasi</th>
                                 <th>Sks</th>
+                                <th>Dosen Pembimbing</th>
                                 <th>Tanggal Mulai</th>
                                 <th>Tanggal Selesai</th>
                                 <th>Actions</th>
@@ -107,16 +120,16 @@ const Iku2inboundList = () => {
                             {iku2inboundList.map((iku2inbound, index) => (
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
-                                    <td>{iku2inbound.NIM}</td>
-                                    <td>{iku2inbound.nama_mahasiswa}</td>
-                                    <td>{iku2inbound.asal_negara}</td>
-                                    <td>{iku2inbound.asal_ptn}</td>
+                                    <td>{iku2inbound.NIM} - {iku2inbound.nama_mahasiswa}</td>
+                                    <td>{iku2inbound.ptn_asal}</td>
+                                    <td>{iku2inbound.ptn_pertukaran}</td>
                                     <td>
                                         <a href={`http://localhost:8080/uploads/${iku2inbound.surat_rekomendasi}`} target="_blank" rel="noopener noreferrer">
                                             <AiOutlineFilePdf /> {/* Gunakan ikon di sini */}
                                         </a>
                                     </td>
                                     <td>{iku2inbound.sks}</td>
+                                    <td>{iku2inbound.NIDN} - {iku2inbound.nama_dosen}</td>
                                     <td>{iku2inbound.tgl_mulai_inbound}</td>
                                     <td>{iku2inbound.tgl_selesai_inbound}</td>
                                     <td>

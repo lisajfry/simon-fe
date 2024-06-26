@@ -1,57 +1,50 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Container, Row, Card, Col, CardTitle, Label, Input, FormGroup, Button } from 'reactstrap';
+import { Container, Row, Card, Col, CardTitle, Label, Input, FormGroup } from 'reactstrap';
 import { useNavigate } from 'react-router-dom';
 
 
+
+
 const AddIku6 = () => {
-    const navigate = useNavigate();
-    const [namaMitra, setNamaMitra] = useState('');
-    const [namaKegiatan, setNamaKegiatan] = useState('');
-    const [alamatMitra, setAlamatMitra] = useState('');
-    const [tglMulaiKegiatan, setTglMulaiKegiatan] = useState('');
-    const [tglSelesaiKegiatan, setTglSelesaiKegiatan] = useState('');
-    const [kriteriaMitra, setKriteriaMitra] = useState('');
+    const [nama_mitra, setNamaMitra] = useState('');
+    const [nama_kegiatan, setNamaKegiatan] = useState('');
+    const [alamat_mitra, setAlamatMitra] = useState('');
+    const [tgl_mulai_kegiatan, setTglMulaiKegiatan] = useState('');
+    const [tgl_selesai_kegiatan, setTglSelesaiKegiatan] = useState('');
+    const [kriteria_mitra, setKriteriaMitra] = useState('');
     const [mou, setMou] = useState(null);
-    const [pks, setPks] = useState(null);
-    const [error, setError] = useState('');
+    const navigate = useNavigate();
 
 
     const saveIku6Data = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        formData.append('nama_mitra', namaMitra);
-        formData.append('nama_kegiatan', namaKegiatan);
-        formData.append('alamat_mitra', alamatMitra);
-        formData.append('tgl_mulai_kegiatan', tglMulaiKegiatan);
-        formData.append('tgl_selesai_kegiatan', tglSelesaiKegiatan);
-        formData.append('kriteria_mitra', kriteriaMitra);
-        if (mou) formData.append('mou', mou);
-        if (pks) formData.append('pks', pks);
+        formData.append('nama_mitra', nama_mitra);
+        formData.append('nama_kegiatan', nama_kegiatan);
+        formData.append('alamat_mitra', alamat_mitra);
+        formData.append('tgl_mulai_kegiatan', tgl_mulai_kegiatan);
+        formData.append('tgl_selesai_kegiatan', tgl_selesai_kegiatan);
+        formData.append('kriteria_mitra', kriteria_mitra);
+        if (mou) {
+            formData.append('mou', mou);
+        }
+
+
 
 
         try {
-            await axios.post('http://localhost:8080/iku6', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            navigate('/iku6list');
-        } catch (error) {
-            console.error('Error saving data:', error);
-            if (error.response && error.response.data) {
-                setError(error.response.data.message || 'An error occurred while saving data.');
-            } else {
-                setError('An error occurred while saving data.');
-            }
-        }
-    };
-
-
-    const handleFileChange = (e, setFile) => {
-        const file = e.target.files[0];
-        setFile(file);
-    };
+            await axios.post('http://localhost:8080/add/iku6', formData); // Sesuaikan dengan endpoint yang benar
+            navigate('/iku6', { replace: true });
+          } catch (error) {
+            console.error("Error while saving data:", error);
+          }
+        };
+     
+        const handleFileChangeMOU = (e) => {
+          const file = e.target.files[0];
+          setMou(file);
+        };
 
 
     return (
@@ -68,7 +61,7 @@ const AddIku6 = () => {
                                         type="text"
                                         className="form-control"
                                         id="nama_mitra"
-                                        value={namaMitra}
+                                        value={nama_mitra}
                                         onChange={(e) => setNamaMitra(e.target.value)}
                                         placeholder="Nama Mitra"
                                     />
@@ -79,7 +72,7 @@ const AddIku6 = () => {
                                         type="text"
                                         className="form-control"
                                         id="nama_kegiatan"
-                                        value={namaKegiatan}
+                                        value={nama_kegiatan}
                                         onChange={(e) => setNamaKegiatan(e.target.value)}
                                         placeholder="Nama Kegiatan"
                                     />
@@ -90,7 +83,7 @@ const AddIku6 = () => {
                                         type="text"
                                         className="form-control"
                                         id="alamat_mitra"
-                                        value={alamatMitra}
+                                        value={alamat_mitra}
                                         onChange={(e) => setAlamatMitra(e.target.value)}
                                         placeholder="Alamat Mitra"
                                     />
@@ -101,7 +94,7 @@ const AddIku6 = () => {
                                         type="date"
                                         className="form-control"
                                         id="tgl_mulai_kegiatan"
-                                        value={tglMulaiKegiatan}
+                                        value={tgl_mulai_kegiatan}
                                         onChange={(e) => setTglMulaiKegiatan(e.target.value)}
                                     />
                                 </FormGroup>
@@ -111,13 +104,13 @@ const AddIku6 = () => {
                                         type="date"
                                         className="form-control"
                                         id="tgl_selesai_kegiatan"
-                                        value={tglSelesaiKegiatan}
+                                        value={tgl_selesai_kegiatan}
                                         onChange={(e) => setTglSelesaiKegiatan(e.target.value)}
                                     />
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="kriteria_mitra">Kriteria Mitra</Label>
-                                    <Input type="select" id="kriteria_mitra" value={kriteriaMitra} onChange={(e) => setKriteriaMitra(e.target.value)}>
+                                    <Input type="select" id="kriteria_mitra" value={kriteria_mitra} onChange={(e) => setKriteriaMitra(e.target.value)}>
                                         <option value="">Pilih Kriteria Mitra</option>
                                         <option value="perusahaan multinasional">Perusahaan Multinasional</option>
                                         <option value="perusahaan nasional berstandar tinggi, BUMN, dan/atau BUMD">Perusahaan Nasional Berstandar Tinggi, BUMN, dan/atau BUMD</option>
@@ -140,20 +133,9 @@ const AddIku6 = () => {
                                         className="form-control"
                                         id="mou"
                                         accept=".pdf"
-                                        onChange={(e) => handleFileChange(e, setMou)}
+                                        onChange={(e) => handleFileChangeMOU(e, setMou)}
                                     />
                                 </FormGroup>
-                                <FormGroup>
-                                    <Label for="pks">Dokumen PKS</Label>
-                                    <input
-                                        type="file"
-                                        className="form-control"
-                                        id="pks"
-                                        accept=".pdf"
-                                        onChange={(e) => handleFileChange(e, setPks)}
-                                    />
-                                </FormGroup>
-                                {error && <div className="alert alert-danger">{error}</div>}
                                 <button type="submit" className="btn btn-primary" style={{ marginTop: '10px' }}>Submit</button>
                             </form>
                         </Card>
@@ -163,6 +145,8 @@ const AddIku6 = () => {
         </div>
     );
 };
+
+
 
 
 export default AddIku6;

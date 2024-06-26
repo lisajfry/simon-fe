@@ -8,10 +8,11 @@ const EditIku2inbound = () => {
     const navigate = useNavigate();
 
     const [NIM, setNIM] = useState('');
-    const [asal_negara, setAsalNegara] = useState('');
-    const [asal_ptn, setAsalPtn] = useState('');
+    const [ptn_asal, setPtnAsal] = useState('');
+    const [ptn_pertukaran, setPtnPertukaran] = useState('');
     const [surat_rekomendasi, setSuratRekomendasi] = useState(null);
     const [sks, setSks] = useState('');
+    const [NIDN, setNIDN] = useState('');
     const [tgl_mulai_inbound, setTglMulaiInbound] = useState('');
     const [tgl_selesai_inbound, setTglSelesaiInbound] = useState('');
 
@@ -24,9 +25,10 @@ const EditIku2inbound = () => {
             const response = await axios.get(`http://localhost:8080/iku2inbound/${iku2inbound_id}`);
             const data = response.data;
             setNIM(data.NIM);
-            setAsalNegara(data.asal_negara);
-            setAsalPtn(data.asal_ptn);
+            setPtnAsal(data.ptn_asal);
+            setPtnPertukaran(data.ptn_pertukaran);
             setSks(data.sks);
+            setNIDN(data.NIDN);
             setTglMulaiInbound(data.tgl_mulai_inbound);
             setTglSelesaiInbound(data.tgl_selesai_inbound);
         } catch (error) {
@@ -38,10 +40,11 @@ const EditIku2inbound = () => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('NIM', NIM);
-        formData.append('asal_negara', asal_negara);
-        formData.append('asal_ptn', asal_ptn);
+        formData.append('ptn_asal', ptn_asal);
+        formData.append('ptn_pertukaran', ptn_pertukaran);
         formData.append('surat_rekomendasi', surat_rekomendasi);
         formData.append('sks', sks);
+        formData.append('NIDN', NIDN);
         formData.append('tgl_mulai_inbound', tgl_mulai_inbound);
         formData.append('tgl_selesai_inbound', tgl_selesai_inbound);
 
@@ -78,25 +81,25 @@ const EditIku2inbound = () => {
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>
-                                    <label htmlFor="asal_negara">Asal Negara</label>
+                                    <label htmlFor="ptn_asal">PTN Asal</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="asal_negara"
-                                        value={asal_negara}
-                                        onChange={(e) => setAsalNegara(e.target.value)}
-                                        placeholder="Asal Negara"
+                                        id="ptn_asal"
+                                        value={ptn_asal}
+                                        onChange={(e) => setPtnAsal(e.target.value)}
+                                        placeholder="PTN Asal"
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>
-                                    <label htmlFor="asal_ptn">PTN Asal</label>
+                                    <label htmlFor="ptn_pertukaran">PTN Tempat Pertukaran</label>
                                     <input
                                         type="text"
                                         className="form-control"
-                                        id="asal-ptn"
-                                        value={asal_ptn}
-                                        onChange={(e) => setAsalPtn(e.target.value)}
-                                        placeholder="Asal PTN"
+                                        id="ptn_pertukaran"
+                                        value={ptn_pertukaran}
+                                        onChange={(e) => setPtnPertukaran(e.target.value)}
+                                        placeholder="PTN Pertukaran"
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>
@@ -117,6 +120,17 @@ const EditIku2inbound = () => {
                                         value={sks}
                                         onChange={(e) => setSks(e.target.value)}
                                         placeholder="Sks"
+                                    />
+                                </div>
+                                <div className="form-group" style={{ marginTop: '20px' }}>
+                                    <label htmlFor="NIDN">Dosen Pembimbing</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="NIDN"
+                                        value={NIDN}
+                                        onChange={(e) => setNIDN(e.target.value)}
+                                        placeholder="NIDN"
                                     />
                                 </div>
                                 <div className="form-group" style={{ marginTop: '10px' }}>

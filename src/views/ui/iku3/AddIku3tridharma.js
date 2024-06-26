@@ -6,7 +6,9 @@ import { useNavigate } from 'react-router-dom';
 const AddIku3tridharma = () => {
   const [NIDN, setNIDN] = useState('');
   const [surat_sk, setSuratSk] = useState(null);
-  const [ptn_tridharma, setPtnTridharma] = useState('');
+  const [jenis_tridharma, setJenisTridharma] = useState('');
+  const [nama_aktivitas_tridharma, setNamaAktivitasTridharma] = useState('');
+  const [tempat_tridharma, setTempatTridharma] = useState('');
   const [tgl_mulai_tridharma, setTglMulaiTridharma] = useState('');
   const [tgl_selesai_tridharma, setTglSelesaiTridharma] = useState('');
   const navigate = useNavigate();
@@ -20,7 +22,9 @@ const AddIku3tridharma = () => {
     const formData = new FormData();
     formData.append('NIDN', NIDN);
     formData.append('surat_sk', surat_sk);
-    formData.append('ptn_tridharma', ptn_tridharma);
+    formData.append('jenis_tridharma', jenis_tridharma);
+    formData.append('nama_aktivitas_tridharma', nama_aktivitas_tridharma);
+    formData.append('tempat_tridharma', tempat_tridharma);
     formData.append('tgl_mulai_tridharma', tgl_mulai_tridharma); // Sesuaikan dengan nama yang diharapkan oleh backend
     formData.append('tgl_selesai_tridharma', tgl_selesai_tridharma); // Sesuaikan dengan nama yang diharapkan oleh backend
   
@@ -67,14 +71,38 @@ const AddIku3tridharma = () => {
                 />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label htmlFor="ptn_tridharma">PTN Tridharma</label>
+                  <label className="label">Jenis Tridharma</label>
+                  <select
+                    className="form-control"
+                    value={jenis_tridharma}
+                    onChange={(e) => setJenisTridharma(e.target.value)}
+                  >
+                    <option value="">Pilih Jenis</option>
+                    <option value="pendidikan">Pendidikan</option>
+                    <option value="penelitian">Penelitian</option>
+                    <option value="pengabdian kepada masyarakat">Pengadian Kepada Masyarakat</option>
+                  </select>
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="nama_aktivitas_tridharma">Nama Aktivitas Tridharma</label>
                   <input
                     type="text"
                     className="form-control"
-                    id="ptn_tridharma"
-                    value={ptn_tridharma}
-                    onChange={(e) => setPtnTridharma(e.target.value)}
-                    placeholder="PTN Tridharma"
+                    id="nama_aktivitas_tridharma"
+                    value={nama_aktivitas_tridharma}
+                    onChange={(e) => setNamaAktivitasTridharma(e.target.value)}
+                    placeholder="Nama Aktivitas Tridharma"
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="tempat_tridharma">Tempat Tridharma</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="tempat_tridharma"
+                    value={tempat_tridharma}
+                    onChange={(e) => setTempatTridharma(e.target.value)}
+                    placeholder="Tempat Tridharma"
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>

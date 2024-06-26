@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Container, Row, Col, Card, CardBody, CardTitle, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Container, Row, Card, Col, CardTitle, Button, Form, FormGroup, Label, Input,CardBody } from 'reactstrap';
 import { useParams, useNavigate } from 'react-router-dom';
 
 
@@ -12,14 +12,14 @@ const EditIku7 = () => {
     const [tahun, setTahun] = useState('');
     const [semester, setSemester] = useState('');
     const [kelas, setKelas] = useState('');
-    const [jum_bobot, setJumBobot] = useState('');
+    const [case_method, setCaseMethod] = useState(0);
+    const [tb_project, setTbProject] = useState(0);
     const [rps, setRPS] = useState(null);
-    const [fileUploaded, setFileUploaded] = useState(false);
 
 
     useEffect(() => {
         fetchIku7();
-    },);
+    }, );
 
 
     const fetchIku7 = async () => {
@@ -31,11 +31,9 @@ const EditIku7 = () => {
             setTahun(iku7Data.tahun);
             setSemester(iku7Data.semester);
             setKelas(iku7Data.kelas);
-            setJumBobot(iku7Data.jum_bobot);
+            setCaseMethod(iku7Data.case_method || 0);
+            setTbProject(iku7Data.tb_project || 0);
             setRPS(iku7Data.rps);
-            if (iku7Data.rps) {
-                setFileUploaded(true);
-            }
         } catch (error) {
             console.error('Error fetching data:', error);
         }
@@ -44,34 +42,32 @@ const EditIku7 = () => {
 
     const updateIku7 = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        formData.append('kode_mk', kode_mk);
+        formData.append('nama_mk', nama_mk);
+        formData.append('tahun', tahun);
+        formData.append('semester', semester);
+        formData.append('kelas', kelas);
+        formData.append('case_method', case_method);
+        formData.append('tb_project', tb_project);
+        formData.append('presentase_bobot', parseInt(case_method) + parseInt(tb_project));
+        if (rps) {
+            formData.append('rps', rps);
+        }
+
+
         try {
-            // Upload file if it's selected
-            if (rps) {
-                const formData = new FormData();
-                formData.append('file', rps);
-                await axios.post(`http://localhost:8080/upload/iku7/${iku7_id}`, formData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data'
-                    }
-                });
-                setFileUploaded(true);
-            }
-
-
-            // Update other data
-            await axios.put(`http://localhost:8080/update/iku7/${iku7_id}`, {
-                kode_mk,
-                nama_mk,
-                tahun,
-                semester,
-                kelas,
-                jum_bobot,
-                rps: rps ? rps.name : null
-            });
-            navigate('/iku7');
+            await axios.put(`http://localhost:8080/update/iku7/${iku7_id}`, formData);
+            navigate('/iku7', { replace: true });
         } catch (error) {
             console.error('Error updating data:', error);
         }
+    };
+
+
+    const handleFileChangeRPS = (e) => {
+        const file = e.target.files[0];
+        setRPS(file);
     };
 
 
@@ -105,8 +101,8 @@ const EditIku7 = () => {
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="Tahun">Tahun</Label>
-                                    <select
-                                        className="form-control"
+                                    <Input
+                                        type="select"
                                         id="Tahun"
                                         value={tahun}
                                         onChange={(e) => setTahun(e.target.value)}
@@ -114,12 +110,12 @@ const EditIku7 = () => {
                                         <option value="">Pilih Tahun</option>
                                         <option value="2022">2022</option>
                                         <option value="2023">2023</option>
-                                    </select>
+                                    </Input>
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="Semester">Semester</Label>
-                                    <select
-                                        className="form-control"
+                                    <Input
+                                        type="select"
                                         id="Semester"
                                         value={semester}
                                         onChange={(e) => setSemester(e.target.value)}
@@ -131,7 +127,7 @@ const EditIku7 = () => {
                                         <option value="4">4</option>
                                         <option value="5">5</option>
                                         <option value="6">6</option>
-                                    </select>
+                                    </Input>
                                 </FormGroup>
                                 <FormGroup>
                                     <Label for="Kelas">Kelas</Label>
@@ -144,31 +140,34 @@ const EditIku7 = () => {
                                     />
                                 </FormGroup>
                                 <FormGroup>
-                                    <Label for="Jum_Bobot">Presentase Bobot</Label>
+                                    <Label for="Case_Method">Case Method</Label>
                                     <Input
                                         type="number"
                                         className="form-control"
-                                        id="Jum_Bobot"
-                                        value={jum_bobot}
-                                        onChange={(e) => setJumBobot(e.target.value)}
-                                        placeholder="Presentase Bobot"
+                                        id="Case_Method"
+                                        value={case_method}
+                                        onChange={(e) => setCaseMethod(e.target.value)}
+                                        placeholder="Case Method"
                                     />
                                 </FormGroup>
                                 <FormGroup>
-                                    {fileUploaded ? (
-                                        <Button
-                                            type="button"
-                                            onClick={() => window.open(`http://localhost:8080/uploads/${rps}`, '_blank')}
-                                        >
-                                            Lihat File
-                                        </Button>
-                                    ) : (
-                                        <Input
-                                            type="file"
-                                            id="RPS"
-                                            onChange={(e) => setRPS(e.target.files[0])}
-                                        />
-                                    )}
+                                    <Label for="Team_Base_Project">Team Base Project</Label>
+                                    <Input
+                                        type="number"
+                                        className="form-control"
+                                        id="Team_Base_Project"
+                                        value={tb_project}
+                                        onChange={(e) => setTbProject(e.target.value)}
+                                        placeholder="Team Base Project"
+                                    />
+                                </FormGroup>
+                                <FormGroup>
+                                    <Label for="RPS">RPS</Label>
+                                    <Input
+                                        type="file"
+                                        id="RPS"
+                                        onChange={handleFileChangeRPS}
+                                    />
                                 </FormGroup>
                                 <Button type="submit" color="primary">Simpan</Button>
                             </Form>

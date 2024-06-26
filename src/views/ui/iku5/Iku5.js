@@ -1,125 +1,130 @@
-import axios from 'axios';
-import { NavLink } from 'react-router-dom';
-import React, { useState, useContext, useEffect } from 'react';
-import {  FaDatabase } from 'react-icons/fa';
-import {Card,CardText,CardTitle,Button,Row,Col,} from 'reactstrap';
+import React, { useContext, useState, useEffect } from 'react';
+import { Card, CardBody, CardTitle, CardSubtitle, Table, Button, Row, Col } from 'reactstrap';
 import ReactApexChart from 'react-apexcharts';
+import Iku5Context from './Iku5Context'; // Assuming this is your context for IKU5 data
+import { NavLink } from 'react-router-dom';
 
 const Iku5 = () => {
-  const [options, setOptions] = useState({
-    chart: {
-      type: 'bar',
-      height: 350,
-      width: '100%',
-    },
-    plotOptions: {
-      bar: {
-        horizontal: true,
-      },
-    },
-    xaxis: {
-      categories: ['Bekerja', 'Wiraswasta', 'Melanjutkan Pekerjaan', 'Masih Mencari Pekerjaan'],
-    },
-    dataLabels: {
-      enabled: false,
-    },
-    title: {
-      text: 'Capaian IKU5',
-    },
-  });
+    const { totalDataKaryaIlmiah, totalDataKaryaTerapan, totalDataKaryaSeni, totalCapaian } = useContext(Iku5Context);
 
-  const [series, setSeries] = useState([
-    {
-      name: 'Total',
-      data: [75, 20, 50, 30],
-      colors: ['#008FFB', '#00E396', '#FEB019', '#FF4560'], // Set warna untuk setiap bar
-    },
-  ]);
+    const [tahun, setTahun] = useState('');
+    const [pieChartData, setPieChartData] = useState({
+        series: [totalDataKaryaIlmiah, totalDataKaryaTerapan, totalDataKaryaSeni],
+        options: {
+            labels: ['Karya Ilmiah', 'Karya Terapan', 'Karya Seni'],
+            colors: ['#28a745', '#007bff', '#dc3545'],
+            legend: {
+                show: true,
+                position: 'bottom',
+                horizontalAlign: 'center',
+                fontSize: '12px',
+                markers: {
+                    width: 8,
+                    height: 8,
+                },
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: (val, opts) => opts.w.config.series[opts.seriesIndex],
+                dropShadow: {
+                    enabled: false,
+                },
+            },
+            plotOptions: {
+                pie: {
+                    size: 80,
+                    donut: {
+                        labels: {
+                            show: true,
+                            total: {
+                                showAlways: true,
+                                show: true,
+                            },
+                        },
+                    },
+                },
+            },
+        },
+    });
 
+    useEffect(() => {
+        setPieChartData({
+            ...pieChartData,
+            series: [totalDataKaryaIlmiah, totalDataKaryaTerapan, totalDataKaryaSeni]
+        });
+    }, [totalDataKaryaIlmiah, totalDataKaryaTerapan, totalDataKaryaSeni]);
 
-  return (
-    <div>
-      <Row>
-        <h5 className="mb-3 mt-3">CAPAIAN IKU5 (Hasil Kerja Dosen Digunakan Masyarakat)</h5>
+    const handleSearch = () => {
+        console.log('Searching data for year:', tahun);
+        // Implement data fetching or filtering based on selected criteria (tahun, type of output)
+        // Example: fetchData(tahun, selectedType);
+    };
 
-            <div class="input-group mb-3">
-                <label class="input-group-text" for="inputGroupSelect01">Tahun</label>
-                <select class="form-select" id="inputGroupSelect01">
-                    <option selected>Pilih</option>
-                    <option value="1">2022</option>
-                    <option value="2">2023</option>
-                </select>
-            </div>
+    return (
+        <div className="p-3">
+            <Row className="mb-3 align-items-center">
+                <Col md="3">
+                    <label className="input-group-text" htmlFor="inputGroupSelect01">Tahun</label>
+                    <select
+                        className="form-select"
+                        value={tahun}
+                        onChange={(e) => setTahun(e.target.value)}
+                    >
+                        <option value="">Pilih</option>
+                        <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                    </select>
+                </Col>
+                <Col md="3">
+                    <Button color="primary" className="me-2" size="sm" onClick={handleSearch}>Cari</Button>
+                    <Button color="secondary" size="sm">Reset</Button>
+                </Col>
+            </Row>
 
-           
-            <div class="input-group mb-3">
-                <button class="btn btn-primary" type="button">Cari</button>
-                <button class="btn btn-secondary" type="button">Reset Pencarian</button>
-            </div>
+            <Row className="mb-3">
+                <Col md="6">
+                    <Card body className="text-center">
+                        <CardTitle tag="h6" className="p-3 mb-0">Pie Chart Capaian IKU5</CardTitle>
+                        <CardBody>
+                            <ReactApexChart options={pieChartData.options} series={pieChartData.series} type="donut" height={260} />
+                        </CardBody>
+                    </Card>
+                </Col>
 
-            <Col md="6" lg="12">
-          <Card body className="text-center"color="success" inverse>
-            <CardTitle tag="h5">Pencapaian IKU5</CardTitle>
-            <CardText>
-              berapa persen
-            </CardText>
-            <div>
-              <NavLink to="/rekapiku4">
-              <Button color="light-success">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
+                <Col md="6">
+                    <Card body className="text-center" color="success" inverse>
+                        <CardSubtitle className="small mb-2" style={{ color: 'black' }}>Capaian dari Target</CardSubtitle>
+                        <CardTitle><p className="mb-0">{totalCapaian} dari 25%</p></CardTitle>
+                        <NavLink to="/rekapiku5">
+                            <Button color="light-success" className="mt-2" size="sm">Selengkapnya</Button>
+                        </NavLink>
+                    </Card>
 
-        <Col md="6" lg="12">
-          <Card body className="text-center"color="light-info">
-            <CardTitle tag="h5">Pengisian Data</CardTitle>
-            <CardText>
-            <FaDatabase style={{ color: 'black', fontWeight: 'bold', fontSize: '35px', marginRight: '10px' }}/>
-            </CardText>
-            <div>
-              <NavLink to="/addiku5">
-              <Button body color="info">Input Data</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>    
-
-        <Col md="4" lg="6">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Data Dosen</CardTitle>
-            <div>
-              <NavLink to="/dosenlist">
-                <Button color="light-warning">Buka</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col>
-        {/* <Col md="4" lg="6">
-          <Card body className="text-center">
-            <CardTitle tag="h5">Dosen Praktisi</CardTitle>
-            <div>
-              <NavLink to="/dosenlist">
-                <Button color="light-warning">Selengkapnya</Button>
-              </NavLink>
-            </div>
-          </Card>
-        </Col> */}
-        <Col md="4" lg="6">
-        <Card body className="text-center">
-          <CardTitle tag="h5">Jumlah Responden</CardTitle>
-         <div>
-            <NavLink to="/iku5list">
-              <Button color="light-warning">Buka</Button>
-             </NavLink>
+                    <Card body className="text mt-3">
+                        <Table size="sm" style={{ fontSize: '12px' }}>
+                            <thead>
+                                <tr>
+                                    <th>Data IKU5</th>
+                                    <th>Tautan</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Karya Ilmiah, Karya Terapan, Karya Seni</td>
+                                    <td>
+                                        <NavLink to="/iku5list">
+                                            <Button size="sm" style={{ fontSize: '12px' }}>Buka</Button>
+                                        </NavLink>
+                                    </td>
+                                </tr>
+                                
+                            </tbody>
+                        </Table>
+                    </Card>
+                </Col>
+            </Row>
         </div>
-        </Card>
-        </Col>
-        
-        </Row>
-      
-    </div>
-  );
+    );
 };
 
 export default Iku5;

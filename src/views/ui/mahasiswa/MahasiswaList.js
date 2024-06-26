@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from "axios";
 import { Link } from 'react-router-dom';
-import { Card, CardBody, CardTitle, Button, Col } from "reactstrap";
+import { Card, CardBody, CardTitle, Button, Col, Table } from "reactstrap";
 import MahasiswaContext from './MahasiswaContext';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const MahasiswaList = () => {
     const { totalDataMahasiswa } = useContext(MahasiswaContext);
+    const { totalData } = useContext(MahasiswaContext);
     const [mahasiswa, setMahasiswa] = useState([]);
+    const [filter, setFilter] = useState('');
+    const handleReset = () => {
+        setFilter(''); // Atur ulang filter
+        setMahasiswa([]); // Kosongkan tabel
+    }
 
     useEffect(() => {
         getMahasiswa();
@@ -14,11 +21,16 @@ const MahasiswaList = () => {
 
     const getMahasiswa = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/mahasiswa");
-            setMahasiswa(response.data);
+            const response = await axios.get('http://localhost:8080/mahasiswa');
+            const filteredData = response.data.filter(mhs => mhs.angkatan === filter);
+            setMahasiswa(filteredData);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
+    }    
+
+    const handleSearch = () => {
+        getMahasiswa();
     }
 
     const deleteMahasiswa = async (NIM) => {
@@ -35,6 +47,20 @@ const MahasiswaList = () => {
 
     return (
         <div>
+            <div class="input-group mb-3">
+                <label class="input-group-text" for="inputGroupSelect01">Angkatan</label>
+                <select class="form-select" id="inputGroupSelect01" value={filter} onChange={(e) => setFilter(e.target.value)}>
+                    <option selected>Pilih</option>
+                    <option value="TI 2020">2020</option>
+                    <option value="TI 2021">2021</option>
+                    <option value="TI 2022">2022</option>
+                    <option value="TI 2023">2023</option>
+                </select>
+            </div>
+            <div >
+                <button class="btn btn-primary" type="button" onClick={handleSearch}>Cari</button>
+                <button class="btn btn-secondary" type="button" onClick={handleReset}>Reset Pencarian</button>
+            </div>
             <Col>
             <div className="form-group" style={{ marginBottom: '10px' }}>
                 <Link to="/addmahasiswa">
@@ -46,11 +72,13 @@ const MahasiswaList = () => {
                         <p style={{ marginLeft: '10px' }}>Total data: {totalDataMahasiswa}</p>
                     </div>
                     <div style={{ textAlign: 'center' }}>
-                        <CardTitle>TABEL Mahasiswa</CardTitle>
-                    </div>
-                    <CardBody>
-                        <div className='row'>
-                            <table className="table is-striped is-fullwidth">
+                    <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                    <i className="bi bi-card-text me-2"> </i>         
+                    Tabel Mahasiswa
+                </CardTitle>
+                </div>
+                 <CardBody className="">
+                    <Table bordered striped>
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -71,15 +99,14 @@ const MahasiswaList = () => {
                                             <td>{mahasiswa.keterangan}</td> 
                                             <td>
                                                 <Link to={`/update/mahasiswa/${mahasiswa.NIM}`}>
-                                                    <Button className="btn" outline color="info">Edit</Button>
+                                                <Button outline color="info" size="sm"><FaEdit /></Button>
                                                 </Link>
-                                                <Button className="btn" outline color="danger" onClick={() => deleteMahasiswa(mahasiswa.NIM)}>Delete</Button>
+                                                <Button outline color="danger" size="sm" onClick={() => deleteMahasiswa(mahasiswa.NIM)}><FaTrash /></Button>
                                             </td>
                                         </tr>
                                     ))}
                                 </tbody>
-                            </table>
-                        </div>
+                            </Table>
                     </CardBody>
                 </Card>
             </Col>

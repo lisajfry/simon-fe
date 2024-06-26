@@ -12,15 +12,26 @@ const AddIku4 = () => {
 
   useEffect(() => {
     fetchNIDNOptions();
+    fetchNIDKOptions();
   }, []);
 
   const fetchNIDNOptions = async () => {
     try {
       const response = await axios.get('http://localhost:8080/dosen');
       console.log('Response:', response.data); // Periksa data response
-      setOptions(response.data);
+      setOptions(prevOptions => [...prevOptions, ...response.data]);
     } catch (error) {
       console.error("Error fetching NIDN options:", error);
+    }
+  };
+
+  const fetchNIDKOptions = async () => {
+    try {
+      const response = await axios.get('http://localhost:8080/dosenNIDK');
+      console.log('Response:', response.data); // Periksa data response
+      setOptions(prevOptions => [...prevOptions, ...response.data]);
+    } catch (error) {
+      console.error("Error fetching NIDK options:", error);
     }
   };
 
@@ -62,7 +73,7 @@ const AddIku4 = () => {
                   >
                     <option value="">Pilih Nama Dosen</option>
                     {options.map((option, index) => (
-                      <option key={index} value={option.NIDN}>{option.nama_dosen}</option>
+                      <option key={index} value={option.NIDN || option.NIDK}>{option.nama_dosen}</option>
                     ))}
                   </select>
                 </div>
@@ -74,9 +85,8 @@ const AddIku4 = () => {
                     onChange={(e) => setStatus(e.target.value)}
                   >
                     <option value="">Pilih Status</option>
-                    <option value="Dosen Berkualifikasi S3">Dosen Berkualifikasi S3</option>
-                    <option value="Sertifikasi Kompetensi Dosen">Sertifikasi Kompetensi Dosen</option>
-                    <option value="Praktisi Menjadi Dosen">Praktisi Menjadi Dosen</option>
+                    <option value="Dosen yang Memiliki Sertifikasi Kompetensi/Profesi">Dosen yang Memiliki Sertifikasi Kompetensi/Profesi</option>
+                    <option value="Dosen dari Kalangan Praktisi Profesional">Dosen dari Kalangan Praktisi Profesional</option>
                     {/* <option value="Praktisi Mengajar (Flagship)">Praktisi Mengajar (Flagship)</option> */}
                   </select>
                 </div>
@@ -98,6 +108,7 @@ const AddIku4 = () => {
         </Row>
       </Container>
     </div>
-  ); 
+  );
 };
+
 export default AddIku4;

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku2kegiatan = () => {
   const [NIM, setNIM] = useState('');
+  const [NIDN, setNIDN] = useState('');
   const [aktivitas, setAktivitas] = useState('');
   const [tempat_kegiatan, setTempatKegiatan] = useState('');
   const [sks, setSks] = useState('');
@@ -16,6 +17,7 @@ const AddIku2kegiatan = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('NIM', NIM);
+    formData.append('NIDN', NIDN);
     formData.append('aktivitas', aktivitas);
     formData.append('tempat_kegiatan', tempat_kegiatan);
     formData.append('tgl_mulai_kegiatan', tgl_mulai_kegiatan); // Sesuaikan dengan nama yang diharapkan oleh backend
@@ -111,6 +113,17 @@ const AddIku2kegiatan = () => {
                     value={tgl_selesai_kegiatan}
                     onChange={(e) => setTglSelesaiKegiatan(e.target.value)}
                     placeholder="Tanggal Selesai Kegiatan"
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '20px' }}>
+                  <label htmlFor="NIDN">Dosen Pembimbing</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="NIDN"
+                    value={NIDN}
+                    onChange={(e) => setNIDN(e.target.value)}
+                    placeholder="NIDN"
                   />
                 </div>
 

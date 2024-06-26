@@ -7,23 +7,24 @@ import Select from 'react-select';
 const AddIku2prestasi = () => {
   const [NIM, setNIM] = useState('');
   const [NIDN, setNIDN] = useState('');
-  const [tingkatKompetisi, setTingkatKompetisi] = useState('');
-  const [jmlh_peserta, setJmlhPeserta] = useState('');
+  const [nama_kompetisi, setNamaKompetisi] = useState('');
+  const [penyelenggara, setPenyelenggara] = useState('');
+  const [tingkat_kompetisi, setTingkatKompetisi] = useState('');
   const [prestasi, setPrestasi] = useState('');
-  const [jmlh_negara_mengikuti, setJmlhNegaraMengikuti] = useState('');
   const [countries, setCountries] = useState([]);
-  const [jmlh_provinsi_mengikuti, setJmlhProvinsiMengikuti] = useState('');
   const [provinces, setProvinces] = useState([]);
+  const [jmlh_peserta, setJmlhPeserta] = useState('');
+  const [jmlh_negara_mengikuti, setJmlhNegaraMengikuti] = useState('');
+  const [jmlh_provinsi_mengikuti, setJmlhProvinsiMengikuti] = useState('');
   const [selectedCountries, setSelectedCountries] = useState([]);
   const [selectedProvinces, setSelectedProvinces] = useState([]);
-  const [sertifikatFile, setSertifikatFile] = useState(null);
-  const [skPenugasanFile, setSkPenugasanFile] = useState(null);
+  const [sertifikat, setSertifikat] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
     // Fetch options for univ and provinsi if needed when tingkatKompetisi changes
-    if (tingkatKompetisi) {
-      fetchOptions(tingkatKompetisi);
+    if (tingkat_kompetisi) {
+      fetchOptions(tingkat_kompetisi);
     }
 
     // Fetch country data when component mounts
@@ -50,7 +51,7 @@ const AddIku2prestasi = () => {
         setProvinces(provinsiOptions);
       })
       .catch((error) => console.error('Error fetching province data:', error));
-  }, [tingkatKompetisi]);
+  }, [tingkat_kompetisi]);
 
   const fetchOptions = async (tingkat) => {
     try {
@@ -77,12 +78,7 @@ const AddIku2prestasi = () => {
 
   const handleSertifikatChange = (e) => {
     const file = e.target.files[0];
-    setSertifikatFile(file);
-  };
-
-  const handleSkPenugasanChange = (e) => {
-    const file = e.target.files[0];
-    setSkPenugasanFile(file);
+    setSertifikat(file);
   };
 
   const saveIku2prestasiData = async (e) => {
@@ -90,32 +86,35 @@ const AddIku2prestasi = () => {
     const formData = new FormData();
     formData.append('NIM', NIM);
     formData.append('NIDN', NIDN);
-    formData.append('tingkat_kompetisi', tingkatKompetisi);
+    formData.append('tingkat_kompetisi', tingkat_kompetisi);
     formData.append('jmlh_peserta', jmlh_peserta);
     formData.append('prestasi', prestasi);
-    if (tingkatKompetisi === 'internasional') {
+    if (tingkat_kompetisi === 'internasional') {
       formData.append(
         'countries',
         JSON.stringify(selectedCountries.map((option) => option.value))
-      ); // Serialize the array
+      );
       formData.append('jmlh_negara_mengikuti', jmlh_negara_mengikuti);
-    } else if (tingkatKompetisi === 'nasional') {
+    } else if (tingkat_kompetisi === 'nasional') {
       formData.append(
         'provinces',
         JSON.stringify(selectedProvinces.map((option) => option.value))
       );
       formData.append('jmlh_provinsi_mengikuti', jmlh_provinsi_mengikuti);
     }
-    formData.append('sertifikat', sertifikatFile);
-    formData.append('sk_penugasan', skPenugasanFile);
+    formData.append('sertifikat', sertifikat);
+
+    // Log the formData object
+    console.log("FormData:", formData);
 
     try {
-      await axios.post('http://localhost:8080/add/iku2prestasi', formData); // Adjust the endpoint as needed
+      await axios.post('http://localhost:8080/add/iku2prestasi', formData);
       navigate('/iku2prestasilist', { replace: true });
     } catch (error) {
       console.error('Error while saving data:', error);
     }
   };
+
 
   return (
     <div>
@@ -131,7 +130,7 @@ const AddIku2prestasi = () => {
               }}
             >
               <CardTitle>
-                <b>FORM INPUT IKU 2 Prestasi di Luar Prodi</b>
+                <b>FORM INPUT IKU 2 Prestasi</b>
               </CardTitle>
               <form onSubmit={saveIku2prestasiData}>
                 <div className="form-group" style={{ marginTop: '20px' }}>
@@ -157,10 +156,32 @@ const AddIku2prestasi = () => {
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="nama_kompetisi">Nama Kompetisi</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="nama_kompetisi"
+                    value={nama_kompetisi}
+                    onChange={(e) => setNamaKompetisi(e.target.value)}
+                    placeholder="Nama Kompetisi"
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label htmlFor="penyelenggara">Penyelenggara</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="penyelenggara"
+                    value={penyelenggara}
+                    onChange={(e) => setPenyelenggara(e.target.value)}
+                    placeholder="Penyelenggara"
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
                   <label className="label">Tingkat Kompetisi</label>
                   <select
                     className="form-control"
-                    value={tingkatKompetisi}
+                    value={tingkat_kompetisi}
                     onChange={handleTingkatChange}
                   >
                     <option value="">Pilih Tingkat Kompetisi</option>
@@ -180,7 +201,7 @@ const AddIku2prestasi = () => {
                     placeholder="Misal 1000 peserta"
                   />
                 </div>
-                {tingkatKompetisi === 'internasional' && (
+                {tingkat_kompetisi === 'internasional' && (
                   <>
                     <div className="form-group" style={{ marginTop: '10px' }}>
                       <label htmlFor="jmlh_negara_mengikuti">
@@ -211,7 +232,7 @@ const AddIku2prestasi = () => {
                     </div>
                   </>
                 )}
-                {tingkatKompetisi === 'nasional' && (
+                {tingkat_kompetisi === 'nasional' && (
                   <>
                     <div className="form-group" style={{ marginTop: '10px' }}>
                       <label htmlFor="jmlh_provinsi_mengikuti">
@@ -243,7 +264,7 @@ const AddIku2prestasi = () => {
                   </>
                 )}
 
-                {tingkatKompetisi === 'provinsi' && (
+                {tingkat_kompetisi === 'provinsi' && (
                   <>
                     <div className="form-group" style={{ marginTop: '10px' }}>
                       <label htmlFor="jmlh_provinsi_mengikuti">
@@ -295,15 +316,6 @@ const AddIku2prestasi = () => {
                     className="form-control"
                     id="sertifikat"
                     onChange={handleSertifikatChange}
-                  />
-                </div>
-                <div className="form-group" style={{ marginTop: '10px' }}>
-                  <label htmlFor="sk_penugasan">SK Penugasan</label>
-                  <input
-                    type="file"
-                    className="form-control"
-                    id="sk_penugasan"
-                    onChange={handleSkPenugasanChange}
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>

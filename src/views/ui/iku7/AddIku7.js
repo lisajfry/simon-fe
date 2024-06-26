@@ -10,17 +10,18 @@ const AddIku7 = () => {
   const [tahun, setTahun] = useState('');
   const [semester, setSemester] = useState('');
   const [kelas, setKelas] = useState('');
-  const [jum_bobot, setJumBobot] = useState('');
+  const [case_method, setCaseMethod] = useState('');
+  const [tb_project, setTbProject] = useState('');
   const [rps, setRPS] = useState(null);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
 
   const saveIku7Data = async (e) => {
     e.preventDefault();
-    if (!rps) {
-      console.error("File RPS harus diunggah.");
-      return;
-    }
+
+
+    // Hitung presentase bobot
+    const presentaseBobot = (parseFloat(case_method) || 0) + (parseFloat(tb_project) || 0);
 
 
     const formData = new FormData();
@@ -29,13 +30,17 @@ const AddIku7 = () => {
     formData.append('tahun', tahun);
     formData.append('semester', semester);
     formData.append('kelas', kelas);
-    formData.append('jum_bobot', jum_bobot);
-    formData.append('rps', rps); // Mengirimkan file RPS
+    formData.append('case_method', case_method);
+    formData.append('tb_project', tb_project);
+    formData.append('presentase_bobot', presentaseBobot); // Kirim presentase bobot ke backend
+    if (rps) {
+      formData.append('rps', rps); // Append the file only if it exists
+    }
 
 
     try {
       await axios.post('http://localhost:8080/add/iku7', formData); // Sesuaikan dengan endpoint yang benar
-      navigate('/iku7', { replace: true });
+      navigate('/iku7list', { replace: true });
     } catch (error) {
       console.error("Error while saving data:", error);
     }
@@ -45,6 +50,11 @@ const AddIku7 = () => {
   const handleFileChangeRPS = (e) => {
     const file = e.target.files[0];
     setRPS(file);
+  };
+
+
+  const handleFocus = (setter) => {
+    setter('');
   };
 
 
@@ -63,6 +73,7 @@ const AddIku7 = () => {
                     className="form-control"
                     id="kodeMK"
                     value={kode_mk}
+                    onFocus={() => handleFocus(setKodeMK)}
                     onChange={(e) => setKodeMK(e.target.value)}
                     placeholder="Kode MK"
                   />
@@ -74,22 +85,22 @@ const AddIku7 = () => {
                     className="form-control"
                     id="namaMK"
                     value={nama_mk}
+                    onFocus={() => handleFocus(setNamaMK)}
                     onChange={(e) => setNamaMK(e.target.value)}
                     placeholder="Nama MK"
                   />
                 </div>
                 <div className="form-group">
                   <label htmlFor="tahun">Tahun</label>
-                  <select
+                  <input
+                    type="text"
                     className="form-control"
                     id="tahun"
                     value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
                     onChange={(e) => setTahun(e.target.value)}
-                  >
-                    <option value="">Pilih Tahun</option>
-                    <option value="2022">2022</option>
-                    <option value="2023">2023</option>
-                  </select>
+                    placeholder="Tahun"
+                  />
                 </div>
                 <div className="form-group">
                   <label htmlFor="semester">Semester</label>
@@ -97,15 +108,12 @@ const AddIku7 = () => {
                     className="form-control"
                     id="semester"
                     value={semester}
+                    onFocus={() => handleFocus(setSemester)}
                     onChange={(e) => setSemester(e.target.value)}
                   >
                     <option value="">Pilih Semester</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                    <option value="4">4</option>
-                    <option value="5">5</option>
-                    <option value="6">6</option>
+                    <option value="1">Ganjil</option>
+                    <option value="2">Genap</option>
                   </select>
                 </div>
                 <div className="form-group">
@@ -114,6 +122,7 @@ const AddIku7 = () => {
                     className="form-control"
                     id="kelas"
                     value={kelas}
+                    onFocus={() => handleFocus(setKelas)}
                     onChange={(e) => setKelas(e.target.value)}
                   >
                     <option value="">Pilih Kelas</option>
@@ -124,14 +133,27 @@ const AddIku7 = () => {
                   </select>
                 </div>
                 <div className="form-group">
-                  <label htmlFor="jumBobot">Presentase Bobot</label>
+                  <label htmlFor="case_method">Nilai Case Method</label>
                   <input
                     type="number"
                     className="form-control"
-                    id="jumBobot"
-                    value={jum_bobot}
-                    onChange={(e) => setJumBobot(e.target.value)}
-                    placeholder="Presentase Bobot"
+                    id="case_method"
+                    value={case_method}
+                    onFocus={() => handleFocus(setCaseMethod)}
+                    onChange={(e) => setCaseMethod(e.target.value)}
+                    placeholder="ketik nilai"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="tb_project">Nilai Team Base Project</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tb_project"
+                    value={tb_project}
+                    onFocus={() => handleFocus(setTbProject)}
+                    onChange={(e) => setTbProject(e.target.value)}
+                    placeholder="ketik nilai"
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>

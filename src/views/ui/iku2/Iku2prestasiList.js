@@ -122,25 +122,19 @@ const Iku2prestasiList = () => {
                     <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data: {totalDataPrestasi}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                    <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        TABEL PRESTASI MAHASISWA
-                    </CardTitle>
+                <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                    <i className="bi bi-card-text me-2"> </i>         
+                    Tabel Prestasi Mahasiswa
+                </CardTitle>
                 </div>
-                <CardBody>
-                    <Table responsive>
+                 <CardBody className="">
+                    <Table bordered striped>
                         <thead>
                             <tr>
-                                <th></th>
+                                <th>No</th>
                                 <th>NIM</th>
-                                <th>NIDN</th>
-                                <th>Tingkat Kompetisi</th>
-                                <th>Jumlah Peserta</th>
-                                <th>Prestasi</th>
-                                <th>Jumlah Negara Mengikuti</th>
-                                <th>Negara yang Mengikuti</th>
-                                <th>Jumlah Provinsi Mengikuti</th>
-                                <th>Provinsi yang Mengikuti</th>
-                                <th>Sertifikat</th>
+                                <th>Nama Mahasiswa</th>
+                                <th>Detail</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -149,22 +143,15 @@ const Iku2prestasiList = () => {
                                 <tr key={iku2prestasi.iku2prestasi_id}>
                                     <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                     <td>{iku2prestasi.NIM}</td>
-                                    <td>{iku2prestasi.NIDN}</td>
-                                    <td>{iku2prestasi.tingkat_kompetisi}</td>
-                                    <td>{iku2prestasi.jmlh_peserta}</td>
-                                    <td>{iku2prestasi.prestasi}</td>
-                                    <td>{iku2prestasi.jmlh_negara_mengikuti}</td>
-                                    <td>{iku2prestasi.countries}</td>
-                                    <td>{iku2prestasi.jmlh_provinsi_mengikuti}</td>
-                                    <td>{iku2prestasi.provinces}</td>
+                                    <td>{iku2prestasi.nama_mahasiswa}</td>
                                     <td>
-                                        <a href={`http://localhost:8080/uploads/${iku2prestasi.sertifikat}`} target="_blank" rel="noopener noreferrer">
-                                            <AiOutlineFilePdf />
-                                        </a>
+                                    <Link to={`/prestasidetail/${iku2prestasi.iku2prestasi_id}`}>
+                                        <Button outline color="success" size="sm">Detail</Button>
+                                    </Link>
                                     </td>
                                     <td>
-                                        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Link to={`/update/iku2/${iku2prestasi.iku2prestasi_id}`}>
+                                        <div style={{ display: 'flex' }}>
+                                            <Link to={`/update/iku2prestasi/${iku2prestasi.iku2prestasi_id}`}>
                                                 <Button outline color="info" size="sm"><FaEdit /></Button>
                                             </Link>
                                             <Button outline color="danger" size="sm" onClick={() => deleteIku2prestasi(iku2prestasi.iku2prestasi_id)}><FaTrash /></Button>

@@ -34,19 +34,19 @@ const UserList = () => {
     return (
         <Row>
         <Col>
-                <div className="form-group">
-                    <Link to="/adduser">
-                        <button type="submit" className="btn btn-primary">Input</button>
-                    </Link>
-                </div>
+        <div className="form-group" style={{ marginBottom: '10px' }}>
+                <Link to="/adduser">
+                    <button type="submit" className="btn btn-primary">Input</button>
+                </Link>
+            </div>
                 <Card>
                     
         <div style={{textAlign: 'center'}}>
     <CardTitle>TABEL USER</CardTitle>
 </div>
 
-        <CardBody>
-        <Table striped>
+    <CardBody className="">
+        <Table bordered striped>
             <thead>
                 <tr>
                     <th>No</th>

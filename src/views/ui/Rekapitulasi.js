@@ -1,10 +1,15 @@
 import { Card, CardText, CardBody, CardTitle, Button, Row, Col, Table } from 'reactstrap';
-import RespondenContext from './iku1/RespondenContext';
+import { Iku7Context } from './iku7/Iku7Context';
+import { Iku6Context } from './iku6/Iku6Context';
 import React, { useState, useContext, useEffect } from 'react';
 import axios from "axios";
+import { RespondenContext } from './iku1/RespondenContext';
 
 const Rekapitulasi = () => {
   const [rekapitulasi, setRekapitulasi] = useState([]);
+  const { totalCapaianiku7 } = useContext(Iku7Context);
+  const { totalCapaianiku6 } = useContext(Iku6Context);
+  const {totalCapaian} = useContext(RespondenContext);
 
     useEffect(() => {
         getRekapitulasi();
@@ -14,7 +19,8 @@ const Rekapitulasi = () => {
     const response = await axios.get('http://localhost:8080/rekap');
     setRekapitulasi(response.data);
 }
-  const {totalCapaian} = useContext(RespondenContext);
+  
+
   return (
     <div>
       <Row>
@@ -67,23 +73,36 @@ const Rekapitulasi = () => {
           </Card>
         </Col>
         <Col md="6" lg="3">
-          <Card body color="light-danger">
+          <Card
+            body
+            color={totalCapaianiku6 >= 50 ? "light-success" : "light-danger"}
+          >
             <CardTitle tag="h5">IKU 6</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{totalCapaianiku6}%</CardText>
             <div>
-              <Button color="danger">Belum Tercapai</Button>
+              <Button color={totalCapaianiku6 >= 50 ? "success" : "danger"}>
+                {totalCapaianiku6 >= 50 ? "Tercapai" : "Belum Tercapai"}
+              </Button>
             </div>
           </Card>
         </Col>
+
         <Col md="6" lg="3">
-          <Card body color="light-success">
+          <Card
+            body
+            color={totalCapaianiku7 >= 50 ? "light-success" : "light-danger"}
+          >
             <CardTitle tag="h5">IKU 7</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{totalCapaianiku7}%</CardText>
             <div>
-              <Button color="success">Tercapai</Button>
+              <Button color={totalCapaianiku7 >= 50 ? "success" : "danger"}>
+                {totalCapaianiku7 >= 50 ? "Tercapai" : "Belum Tercapai"}
+              </Button>
             </div>
           </Card>
         </Col>
+
+
       </Row>
       <Row>
         <Col lg="12">
@@ -136,14 +155,14 @@ const Rekapitulasi = () => {
                   <tr>
                     <th scope="row">6</th>
                     <td>IKU 6 (Kemitraan Program Studi)</td>
-                    <td></td>
-                    <td></td>
+                    <td contentEditable="true">50%</td>
+                    <td>{totalCapaianiku6}%</td>
                   </tr>
                   <tr>
                     <th scope="row">7</th>
                     <td>IKU 7 (Kelas yang Kolaboratif dan Partisipatif)</td>
-                    <td></td>
-                    <td></td>
+                    <td contentEditable="true">50%</td>
+                    <td>{totalCapaianiku7}%</td>
                   </tr>
                 </tbody>
               </Table>

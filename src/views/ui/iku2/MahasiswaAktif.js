@@ -43,12 +43,13 @@ const MahasiswaAktifList = () => {
                     <p style={{ marginLeft: '10px', fontSize: '14px' }}>Total data Mahasiswa Aktif: {totalDataMahasiswaAktif}</p>
                 </div>
                 <div style={{ textAlign: 'center' }}>
-                <CardTitle tag="h5" style={{ fontWeight: 'bold', fontSize: '16px' }}>
-                        TABEL MAHASISWA AKTIF 
-                    </CardTitle>
+                <CardTitle tag="h6" className="border-bottom p-3 mb-0">
+                    <i className="bi bi-card-text me-2"> </i>         
+                    Tabel Mahasiswa Aktif
+                </CardTitle>
                 </div>
-                <CardBody>
-                <Table responsive>
+                 <CardBody className="">
+                    <Table bordered striped>
                         <thead>
                             <tr>
                                 <th>No</th>
