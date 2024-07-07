@@ -39,10 +39,18 @@ const Iku5Detail = () => {
         try {
             const response = await axios.get(`http://localhost:8080/iku5/${iku5_id}`);
             const iku5Data = response.data;
+    
+            // Pastikan iku5Data memiliki properti id_years yang valid
+            if (!iku5Data.id) {
+                throw new Error("ID years tidak ditemukan.");
+            }
+    
             const namaDosenNIDN = await fetchNamaDosen(iku5Data.NIDN);
             const namaDosenNIDK = await fetchNamaDosenNIDK(iku5Data.NIDK);
             const namaDosen = namaDosenNIDN || namaDosenNIDK;
-            
+    
+        
+    
             setIku5({ ...iku5Data, nama_dosen: namaDosen });
             setLoading(false);
         } catch (error) {
@@ -51,6 +59,7 @@ const Iku5Detail = () => {
             console.error('Error fetching IKU 5 Detail:', error);
         }
     };
+    
 
     if (loading) {
         return <p>Loading...</p>;
@@ -111,7 +120,7 @@ const Iku5Detail = () => {
                             </tr>
                             <tr>
                                 <th>Tahun</th>
-                                <td>{iku5.tahun}</td>
+                                <td> {iku5.tahun}</td>
                             </tr>
                         </tbody>
                     </Table>

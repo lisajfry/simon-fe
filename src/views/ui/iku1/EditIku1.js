@@ -8,6 +8,7 @@ const EditIku1 = () => {
     const [status, setStatus] = useState('');
     const [gaji, setGaji] = useState('');
     const [masa_tunggu, setMasaTunggu] = useState('');
+    const [tahun, setTahun] = useState('');
     const navigate = useNavigate();
     const { iku1_id } = useParams();
 
@@ -21,6 +22,8 @@ const EditIku1 = () => {
             setStatus(iku1.status);
             setGaji(iku1.gaji);
             setMasaTunggu(iku1.masa_tunggu);
+            setTahun(iku1.tahun);
+
         }
         fetchIku1();
     }, [iku1_id]);
@@ -48,7 +51,9 @@ const EditIku1 = () => {
             NIM: NIM,
             status: status,
             gaji: gaji,
-            masa_tunggu: masa_tunggu
+            masa_tunggu: masa_tunggu,
+            tahun: tahun
+
         });
         navigate('/iku1list');
     }

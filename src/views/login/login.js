@@ -1,92 +1,73 @@
-import React, { Component } from 'react';
-import { Form } from 'react-bootstrap';
-import axios from 'axios';
-import '../../assets/scss/login.scss';
+import React from 'react';
+import './login.css'; // Import file CSS yang berisi styling
+import { useNavigate } from 'react-router-dom';
 
-class Login extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: '',
-      password: '',
-      errorMessage: '',
-    };
-  }
 
-  handleInputChange = (event) => {
+class Login extends React.Component {
+  state = {
+    email: '',
+    password: '',
+    rememberMe: false
+  };
+  
+
+  handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
     this.setState({
-      [event.target.name]: event.target.value,
-      errorMessage: '', // Clear error message on input change
+      [name]: type === 'checkbox' ? checked : value
     });
-  }
+  };
 
-  handleSubmit = async (event) => {
-    event.preventDefault();
-    const { email, password } = this.state;
-
-    try {
-      const response = await axios.post("http://localhost:8080/user", { email, password });
-      const { token, user } = response.data;
-
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-
-      this.props.history.push("/dashboard");
-    } catch (error) {
-      this.setState({
-        errorMessage: "Email atau password tidak valid. Silakan coba lagi.",
-      });
-    }
-  }
+  handleSubmit = (e) => {
+    e.preventDefault();
+    // Proses login di sini
+    console.log(this.state);
+  
+    // Navigasi ke rute dashboard
+    const navigate = useNavigate();
+    navigate('/dashboard');
+  };
+  
 
   render() {
-    const { email, password, errorMessage } = this.state;
-
     return (
-      <div className="auth" style={{ marginTop: '50px' }}>
-        <div className="d-flex align-items-center auth px-0">
-          <div className="col-lg-4 mx-auto">
-            <div className="auth-form-light text-left py-5 px-4 px-sm-5">
-              <div className="brand-logo">
-                <img src={require("../../assets/images/logos/logouns.png").default} alt="logo" />
-              </div>
-              <h4>Selamat datang!</h4>
-              <h6 className="font-weight-light">Silakan masuk untuk melanjutkan.</h6>
-              <Form className="pt-3" onSubmit={this.handleSubmit}>
-                <Form.Group className="mb-3">
-                  <Form.Control
-                    type="email"
-                    name="email"
-                    value={email}
-                    onChange={this.handleInputChange}
-                    placeholder="Email"
-                    size="lg"
-                    required
-                  />
-                </Form.Group>
-                <Form.Group className="mb-4">
-                  <Form.Control
-                    type="password"
-                    name="password"
-                    value={password}
-                    onChange={this.handleInputChange}
-                    placeholder="Password"
-                    size="lg"
-                    required
-                  />
-                </Form.Group>
-                {errorMessage && (
-                  <div className="alert alert-danger" role="alert">
-                    {errorMessage}
-                  </div>
-                )}
-                <div className="mt-3">
-                  <button type="submit" className="btn btn-primary btn-block btn-lg font-weight-medium auth-form-btn">MASUK</button>
-                </div>
-              </Form>
-            </div>
+      <div className="login-container">
+        <form onSubmit={this.handleSubmit}>
+          <h2>IKU</h2>
+          <div className="input-group">
+            <label htmlFor="email">Email</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              value={this.state.email}
+              onChange={this.handleChange}
+              required
+            />
           </div>
-        </div>
+          <div className="input-group">
+            <label htmlFor="password">Kata Sandi</label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={this.state.password}
+              onChange={this.handleChange}
+              required
+            />
+          </div>
+          <div className="input-group">
+            <input
+              type="checkbox"
+              id="rememberMe"
+              name="rememberMe"
+              checked={this.state.rememberMe}
+              onChange={this.handleChange}
+            />
+            <label htmlFor="rememberMe">Ingat Saya</label>
+          </div>
+          <button type="submit" className="login-button">Masuk</button>
+        </form>
       </div>
     );
   }

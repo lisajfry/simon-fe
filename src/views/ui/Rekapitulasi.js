@@ -1,108 +1,157 @@
+import React, { useState, useContext, useEffect } from 'react';
+import axios from 'axios';
 import { Card, CardText, CardBody, CardTitle, Button, Row, Col, Table } from 'reactstrap';
 import { Iku7Context } from './iku7/Iku7Context';
 import { Iku6Context } from './iku6/Iku6Context';
-import React, { useState, useContext, useEffect } from 'react';
-import axios from "axios";
 import { RespondenContext } from './iku1/RespondenContext';
+import Iku5Context from './iku5/Iku5Context';
+import DosenContext from './dosen/DosenContext'; // Pastikan path ini benar
+import { useSertifikasiProfesi } from './iku4/SertifikasiProfesiContext';
+import { useDosenKalanganPraktisi } from './iku4/DosenKalanganPraktisiContext';
+import Iku4Context from './iku4/Iku4Context';
+import { NavLink } from 'react-router-dom';
+import { Iku2Context } from './iku2/Iku2Context'; // Tambahkan ini
+import Iku3Context from './iku3/Iku3Context';
 
 const Rekapitulasi = () => {
   const [rekapitulasi, setRekapitulasi] = useState([]);
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
   const { totalCapaianiku7 } = useContext(Iku7Context);
   const { totalCapaianiku6 } = useContext(Iku6Context);
-  const {totalCapaian} = useContext(RespondenContext);
+  const { totalData } = useContext(RespondenContext);
+  const { totalCapaianIku1 } = totalData;
+  const { totalDataIku2 } = useContext(Iku2Context); // Tambahkan ini
+  const { totalCapaian: totalCapaianIku2 } = totalDataIku2; // Tambahkan ini
+  const { totalDataIku3 } = useContext(Iku3Context);
+  const { totalCapaianIku3 } = totalDataIku3;
+  const { totalDataIku5 } = useContext(Iku5Context);
+  const { totalCapaianIku5 } = totalDataIku5;
+  const { totalDataDosen, totalDataDosenNIDK } = useContext(DosenContext);
+  const { filteredIku4List: sertifikasiProfesiList, count: sertifikasiProfesiCount } = useSertifikasiProfesi();
+  const { filteredIku4List: kalanganPraktisiList, count: kalanganPraktisiCount } = useDosenKalanganPraktisi();
+  const { totalDataIku4 } = useContext(Iku4Context);
+  const totalDosen = totalDataDosen + totalDataDosenNIDK;
 
-    useEffect(() => {
-        getRekapitulasi();
-    }, []);
+  const perhitungan = totalDosen > 0 ? ((sertifikasiProfesiCount / totalDosen) * 60) + ((kalanganPraktisiCount / totalDosen) * 40) : 0;
+  const buttonColor = perhitungan >= 50 ? 'success' : 'danger';
+  const statusCapaian = perhitungan >= 50 ? 'Hasil Memenuhi' : 'Hasil Tidak Memenuhi';
+  const cardColor = perhitungan >= 50 ? 'light-success' : 'light-danger';
 
-  const getRekapitulasi = async () => {
-    const response = await axios.get('http://localhost:8080/rekap');
-    setRekapitulasi(response.data);
-}
-  
+  useEffect(() => {
+    getRekapitulasi(selectedYear);
+  }, [selectedYear]);
+
+  const getRekapitulasi = async (year) => {
+    try {
+      const response = await axios.get(`http://localhost:8080/rekap?tahun=${year}`);
+      console.log(response.data); // Tambahkan log respons
+      setRekapitulasi(response.data);
+    } catch (error) {
+      console.error('Error fetching data:', error); // Tambahkan log error
+    }
+  };
+
+  const handleYearChange = (e) => {
+    setSelectedYear(e.target.value);
+  };
 
   return (
     <div>
       <Row>
+        <Col md="4">
+          <label htmlFor="yearSelect">Pilih Tahun:</label>
+          <select id="yearSelect" className="form-control" value={selectedYear} onChange={handleYearChange}>
+            {[...Array(10).keys()].map(i => {
+              const year = new Date().getFullYear() - i;
+              return <option key={year} value={year}>{year}</option>;
+            })}
+          </select>
+        </Col>
+      </Row>
+      <Row>
         <h5 className="mb-3 mt-3">REKAPITULASI</h5>
+        
         <Col md="6" lg="3">
-          <Card body color="light-success">
-            <CardTitle tag="h5" >IKU 1</CardTitle>
-            <CardText >{totalCapaian} </CardText>
+          <Card body color={totalCapaianIku1 >= 50 ? 'light-success' : 'light-danger'}>
+            <CardTitle tag="h5">IKU 1</CardTitle>
+            <CardText>{totalCapaianIku1}</CardText>
             <div>
-              <Button color="success">Tercapai</Button> 
+              <Button color={totalCapaianIku1 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianIku1 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
+              </Button>
             </div>
           </Card>
         </Col>
         <Col md="6" lg="3">
-          <Card body color="light-danger">
+          <Card body color={totalCapaianIku2 >= 50 ? 'light-success' : 'light-danger'}>
             <CardTitle tag="h5">IKU 2</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{totalCapaianIku2}%</CardText>
             <div>
-              <Button color="danger">Belum Tercapai</Button>
+              <Button color={totalCapaianIku2 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianIku2 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
+              </Button>
             </div>
           </Card>
         </Col>
         <Col md="6" lg="3">
-          <Card body color="light-success">
+          <Card body color={totalCapaianIku3 >= 50 ? 'light-success' : 'light-danger'}>
             <CardTitle tag="h5">IKU 3</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{totalCapaianIku3}%</CardText>
             <div>
-              <Button color="success">Tercapai</Button>
+              <Button color={totalCapaianIku3 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianIku3 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
+              </Button>
             </div>
           </Card>
         </Col>
         <Col md="6" lg="3">
-          <Card body color="light-danger">
+          <Card body color={perhitungan >= 50 ? "light-success" : "light-danger"}>
             <CardTitle tag="h5">IKU 4</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{perhitungan.toFixed(2)}%</CardText>
             <div>
-              <Button color="danger">Belum Tercapai</Button>
+              <NavLink to="/iku4list">
+                <Button color={perhitungan >= 50 ? "success" : "danger"}>
+                  {perhitungan >= 50 ? "Tercapai" : "Belum Tercapai"}
+                </Button>
+              </NavLink>
             </div>
           </Card>
         </Col>
       </Row>
       <Row>
         <Col md="6" lg="3">
-          <Card body color="light-success">
+          <Card body color={totalCapaianIku5 >= 50 ? 'light-success' : 'light-danger'}>
             <CardTitle tag="h5">IKU 5</CardTitle>
-            <CardText>Skor</CardText>
+            <CardText>{totalCapaianIku5}%</CardText>
             <div>
-              <Button color="success">Tercapai</Button>
+              <Button color={totalCapaianIku5 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianIku5 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
+              </Button>
             </div>
           </Card>
         </Col>
         <Col md="6" lg="3">
-          <Card
-            body
-            color={totalCapaianiku6 >= 50 ? "light-success" : "light-danger"}
-          >
+          <Card body color={totalCapaianiku6 >= 50 ? 'light-success' : 'light-danger'}>
             <CardTitle tag="h5">IKU 6</CardTitle>
             <CardText>{totalCapaianiku6}%</CardText>
             <div>
-              <Button color={totalCapaianiku6 >= 50 ? "success" : "danger"}>
-                {totalCapaianiku6 >= 50 ? "Tercapai" : "Belum Tercapai"}
+              <Button color={totalCapaianiku6 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianiku6 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
               </Button>
             </div>
           </Card>
         </Col>
-
         <Col md="6" lg="3">
-          <Card
-            body
-            color={totalCapaianiku7 >= 50 ? "light-success" : "light-danger"}
-          >
+          <Card body color={totalCapaianiku7 >= 50 ? 'light-success' : 'light-danger'}>
             <CardTitle tag="h5">IKU 7</CardTitle>
             <CardText>{totalCapaianiku7}%</CardText>
             <div>
-              <Button color={totalCapaianiku7 >= 50 ? "success" : "danger"}>
-                {totalCapaianiku7 >= 50 ? "Tercapai" : "Belum Tercapai"}
+              <Button color={totalCapaianiku7 >= 50 ? 'success' : 'danger'}>
+                {totalCapaianiku7 >= 50 ? 'Tercapai' : 'Belum Tercapai'}
               </Button>
             </div>
           </Card>
         </Col>
-
-
       </Row>
       <Row>
         <Col lg="12">
@@ -124,33 +173,33 @@ const Rekapitulasi = () => {
                 <tbody>
                   <tr>
                     <th scope="row">1</th>
-                    <td>IKU 1 ( Lulusan Mendapat Pekerjaan yang Layak)</td>
+                    <td>IKU 1 (Lulusan Mendapat Pekerjaan yang Layak)</td>
                     <td contentEditable="true">60%</td>
-                    <td>{totalCapaian}</td>
+                    <td>{totalCapaianIku1}</td>
                   </tr>
                   <tr>
                     <th scope="row">2</th>
                     <td>IKU 2 (Mahasiswa Mendapat Pengalaman di Luar Program Studi)</td>
-                    <td></td>
-                    <td></td>
+                    <td contentEditable="true">50%</td>
+                    <td>{totalCapaianIku2}%</td>
                   </tr>
                   <tr>
                     <th scope="row">3</th>
                     <td>IKU 3 (Dosen Berkegiatan di Luar Kampus)</td>
-                    <td></td>
-                    <td></td>
+                    <td contentEditable="true">50%</td>
+                    <td>{totalCapaianIku3}%</td>
                   </tr>
                   <tr>
                     <th scope="row">4</th>
-                    <td>IKU 4 (Praktisi Mengajar di dalam kampus)</td>
-                    <td></td>
-                    <td></td>
+                    <td>IKU 4 ()</td>
+                    <td contentEditable="true">50%</td>
+                    <td>{perhitungan.toFixed(2)}%</td>
                   </tr>
                   <tr>
                     <th scope="row">5</th>
                     <td>IKU 5 (Hasil Kerja Dosen Digunakan Oleh Masyarakat Atau Mendapat Rekognisi Internasional)</td>
-                    <td></td>
-                    <td></td>
+                    <td contentEditable="true">50%</td>
+                    <td>{totalCapaianIku5}%</td>
                   </tr>
                   <tr>
                     <th scope="row">6</th>

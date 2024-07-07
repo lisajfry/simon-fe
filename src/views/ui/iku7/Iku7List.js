@@ -1,23 +1,28 @@
 import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { Button, Card, CardTitle, CardBody, Col, Table, Row } from 'reactstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import { Iku7Context } from './Iku7Context'; // Pastikan import Iku7Context dari tempat yang benar
+import { Iku7Context } from './Iku7Context';
 
 
 const Iku7List = () => {
-    const { iku7Data,} = useContext(Iku7Context); // Sesuaikan dengan properti dan fungsi yang ada di Iku7Context
-    const [setIku7] = useState([]);
+    const { iku7Data } = useContext(Iku7Context);
+    const navigate = useNavigate();
+
+
+    const [iku7List, setIku7List] = useState([]);
 
 
     useEffect(() => {
         getIku7List();
-    },);
+    }, []);
+
+
     const getIku7List = async () => {
         try {
             const response = await axios.get('http://localhost:8080/iku7');
-            setIku7(response.data);
+            setIku7List(response.data);
         } catch (error) {
             console.error('Error fetching IKU7 data:', error);
         }
@@ -35,21 +40,25 @@ const Iku7List = () => {
 
     return (
         <div>
+            <h3>IKU7 - Data Iku 7</h3>
             <Row>
                 <Col lg="12">
                     <Card>
                         <CardTitle tag="h6" className="d-flex justify-content-between align-items-center border-bottom p-3 mb-0">
                             <span>
-                                <i className="bi bi-card-text me-2"> </i>
+                                <i className="bi bi-card-text me-2"></i>
                                 Tabel IKU7
                             </span>
-                            <span>Jumlah Mata Kuliah Tayang: {iku7Data.length}</span>
+                            <span>Jumlah Mata Kuliah Tayang: {iku7List.length}</span>
                             <NavLink to="/addiku7">
-                                <Button type="button" className="btn btn-primary">Add</Button>
+                                <Button type="button" className="btn btn-primary">Add New</Button>
                             </NavLink>
                         </CardTitle>
-                        <CardBody className="">
-                            <Table bordered striped>
+                        <CardBody>
+                            <NavLink to="/iku7">
+                                <Button type="button" className="btn btn-secondary mb-3">Kembali</Button>
+                            </NavLink>
+                            <Table bordered striped style={{ fontSize: '12px' }}>
                                 <thead>
                                     <tr>
                                         <th>#</th>
@@ -64,7 +73,7 @@ const Iku7List = () => {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {iku7Data.map((iku, index) => (
+                                    {iku7List.map((iku, index) => (
                                         <tr key={iku.iku7_id}>
                                             <td>{index + 1}</td>
                                             <td>{iku.kode_mk}</td>
@@ -81,10 +90,10 @@ const Iku7List = () => {
                                                 )}
                                             </td>
                                             <td>
-                                                <NavLink to={`/update/iku7/${iku.iku7_id}`} className="btn btn-warning me-2">
+                                                <NavLink to={`/update/iku7/${iku.iku7_id}`} className="btn btn-warning me-2" style={{ fontSize: '12px' }}>
                                                     <FaEdit />
                                                 </NavLink>
-                                                <Button onClick={() => deleteIku7(iku.iku7_id)} className="btn btn-danger">
+                                                <Button onClick={() => deleteIku7(iku.iku7_id)} className="btn btn-danger" style={{ fontSize: '12px' }}>
                                                     <FaTrash />
                                                 </Button>
                                             </td>

@@ -27,12 +27,10 @@ export const Iku7Provider = ({ children }) => {
 
   useEffect(() => {
     calculateAchievementPercentage();
-  }, );
+  },);
 
 
   const calculateAchievementPercentage = () => {
-    // Your logic to calculate achievementPercentage
-    // For example:
     const validDataCount = iku7Data.filter(data => parseInt(data.presentase_bobot) > 49 && data.rps).length;
     const totalData = iku7Data.length;
     const percentage = (validDataCount / totalData) * 100 || 0; // Handle division by zero
@@ -41,10 +39,8 @@ export const Iku7Provider = ({ children }) => {
 
 
   return (
-    <Iku7Context.Provider value={{ iku7Data, totalCapaianiku7 }}>
+    <Iku7Context.Provider value={{ iku7Data, totalCapaianiku7, setIku7Data }}>
       {children}
     </Iku7Context.Provider>
   );
 };
-
-

@@ -1,0 +1,36 @@
+.body-background {
+    background-color: #ffffff; /* Warna latar belakang putih */
+    min-height: 100vh; /* Minimal tinggi 100% viewport */
+    padding: 20px; /* Atur padding sesuai kebutuhan */
+    margin: 0; /* Pastikan margin diatur ke 0 untuk menghindari padding di luar layar */
+    display: flex; /* Gunakan flexbox untuk konten utama */
+    flex-direction: column; /* Susun konten dalam satu kolom */
+}
+
+.container-fluid {
+    flex: 1; /* Gunakan flex: 1 untuk konten agar dapat memanfaatkan seluruh ruang yang tersedia */
+    max-width: 1200px; /* Atur lebar maksimum konten */
+    margin: auto; /* Agar konten berada di tengah layar */
+}
+
+.card-title-small {
+    font-size: 14px;
+}
+
+.card-text-small {
+    font-size: 12px;
+}
+
+.table-small th,
+.table-small td {
+    font-size: 12px;
+}
+
+.btn-small {
+    font-size: 12px;
+}
+
+.input-small {
+    font-size: 12px;
+    height: 30px;
+}

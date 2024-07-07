@@ -1,17 +1,28 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardSubtitle, Table, Button, Row, Col } from 'reactstrap';
 import ReactApexChart from 'react-apexcharts';
 import { RespondenContext } from './RespondenContext';
 
-
 const Iku1 = () => {
-    const { totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi, totalCapaian } = useContext(RespondenContext);
+    const { totalData, selectedYear, setSelectedYear } = useContext(RespondenContext);
+    const { totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi, totalCapaianIku1 } = totalData;
 
-    
-    const [tahun, setTahun] = useState('');
+    // Function to generate a range of years
+    const generateYears = (startYear, endYear) => {
+        let years = [];
+        for (let year = startYear; year <= endYear; year++) {
+            years.push(year);
+        }
+        return years;
+    };
+
+    // Generate years from 2000 to the current year
+    const currentYear = new Date().getFullYear();
+    const years = generateYears(2020, currentYear);
+
     const [pieChartData, setPieChartData] = useState({
-        series: [totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi,],
+        series: [totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi],
         options: {
             labels: ['Mendapat Pekerjaan', 'Wiraswasta', 'Melanjutkan Studi'],
             colors: ['#28a745', '#007bff', '#dc3545'],
@@ -49,18 +60,17 @@ const Iku1 = () => {
         },
     });
 
-    useEffect(() => {
+    const handleSearch = () => {
+        // The data will automatically update due to the context's useEffect dependency on selectedYear
         setPieChartData({
             ...pieChartData,
-            series: [totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi,]
+            series: [totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi],
         });
-    }, [totalDataMendapatPekerjaan, totalDataWiraswasta, totalDataMelanjutkanStudi,]);
-
-    const handleSearch = () => {
-        console.log('Searching data for year:', tahun);
     };
 
-
+    const handleReset = () => {
+        setSelectedYear('');
+    };
 
     return (
         <div className="p-3">
@@ -69,17 +79,18 @@ const Iku1 = () => {
                     <label className="input-group-text" htmlFor="inputGroupSelect01">Tahun</label>
                     <select 
                         className="form-select"
-                        value={tahun}
-                        onChange={(e) => setTahun(e.target.value)}
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
                     >
                         <option value="">Pilih</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
+                        {years.map((year) => (
+                            <option key={year} value={year}>{year}</option>
+                        ))}
                     </select>
                 </Col>
                 <Col md="3">
                     <Button color="primary" className="me-2" size="sm" onClick={handleSearch}>Cari</Button>
-                    <Button color="secondary" size="sm">Reset</Button>
+                    <Button color="secondary" size="sm" onClick={handleReset}>Reset</Button>
                 </Col>
             </Row>
 
@@ -96,7 +107,7 @@ const Iku1 = () => {
                 <Col md="6">
                     <Card body className="text-center" color="success" inverse>
                         <CardSubtitle className="small mb-2" style={{ color: 'black' }}>Capaian dari Target</CardSubtitle>
-                        <CardTitle><p className="mb-0">{totalCapaian} dari 25%</p></CardTitle>
+                        <CardTitle><p className="mb-0">{totalCapaianIku1} dari 25%</p></CardTitle>
                         <NavLink to="/rekapiku1">
                             <Button color="light-success" className="mt-2" size="sm">Selengkapnya</Button>
                         </NavLink>

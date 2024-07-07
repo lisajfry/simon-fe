@@ -4,7 +4,8 @@ import axios from "axios";
 const Iku3Context = createContext();
 
 export const Iku3Provider = ({ children }) => {
-    const [totalData, setTotalData] = useState({
+    const [selectedYear, setSelectedYear] = useState('');
+    const [totalDataIku3, setTotalData] = useState({
         totalDataMahasiswaAktif: 0,
         totalDataIku3Tridharma: 0,
         totalDataIku3Praktisi: 0,
@@ -12,31 +13,33 @@ export const Iku3Provider = ({ children }) => {
         persentasePraktisi: 0,
         totalBobot: 0,
         ratarataBobot: 0,
-        totalCapaian: 0
+        totalCapaianIku3: 0
     });
 
     useEffect(() => {
-        getTotalData();
-    }, []);
+        if (selectedYear) {
+            getTotalData();
+        }
+    }, [selectedYear]);
 
     const getTotalData = async () => {
         try {
             const response = await axios.get("http://localhost:8080/dosen");
             const totalDataDosen = response.data.length;
 
-            const responseTridharma = await axios.get("http://localhost:8080/iku3tridharma");
+            const responseTridharma = await axios.get("http://localhost:8080/iku3tridharma", { params: { year: selectedYear } });
             const iku3tridharma = responseTridharma.data;
 
-            const responsePraktisi = await axios.get("http://localhost:8080/iku3praktisi");
+            const responsePraktisi = await axios.get("http://localhost:8080/iku3praktisi", { params: { year: selectedYear } });
             const iku3praktisi = responsePraktisi.data;
 
-            const responseKegiatan = await axios.get("http://localhost:8080/iku2kegiatan");
+            const responseKegiatan = await axios.get("http://localhost:8080/iku2kegiatan", { params: { year: selectedYear } });
             const iku2kegiatan = responseKegiatan.data;
 
-            const responseInbound = await axios.get("http://localhost:8080/iku2inbound");
+            const responseInbound = await axios.get("http://localhost:8080/iku2inbound", { params: { year: selectedYear } });
             const iku2inbound = responseInbound.data;
 
-            const responsePrestasi = await axios.get("http://localhost:8080/iku2prestasi");
+            const responsePrestasi = await axios.get("http://localhost:8080/iku2prestasi", { params: { year: selectedYear } });
             const iku2prestasi = responsePrestasi.data;
 
             const calculateBobot = (type) => {
@@ -87,7 +90,7 @@ export const Iku3Provider = ({ children }) => {
             const totalDataIku3 = aggregatedData.length;
             const totalBobot = aggregatedData.reduce((accumulator, currentValue) => accumulator + (currentValue.bobot || 0), 0).toFixed(2);
             const ratarataBobot = (totalBobot / totalDataIku3).toFixed(2);
-            const totalCapaian = ((totalDataIku3 * ratarataBobot / totalDataDosen) * 100).toFixed(2);
+            const totalCapaianIku3 = ((totalDataIku3 * ratarataBobot / totalDataDosen) * 100).toFixed(2);
 
             const persentaseTridharma = ((totalDataIku3Tridharma / totalDataDosen) * 100).toFixed(2) + '%';
             const persentasePraktisi = ((totalDataIku3Praktisi / totalDataDosen) * 100).toFixed(2) + '%';
@@ -100,7 +103,7 @@ export const Iku3Provider = ({ children }) => {
                 persentasePraktisi,
                 totalBobot,
                 ratarataBobot,
-                totalCapaian: parseFloat(totalCapaian) + '%'// Mengonversi ke bilangan bulat
+                totalCapaianIku3: parseFloat(totalCapaianIku3) + '%' // Mengonversi ke bilangan bulat
             });
         } catch (error) {
             console.error("Error fetching total data:", error);
@@ -108,7 +111,7 @@ export const Iku3Provider = ({ children }) => {
     };
 
     return (
-        <Iku3Context.Provider value={totalData}>
+        <Iku3Context.Provider value={{ totalDataIku3, selectedYear, setSelectedYear }}>
             {children}
         </Iku3Context.Provider>
     );

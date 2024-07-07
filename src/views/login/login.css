@@ -1,0 +1,35 @@
+/* Style untuk elemen login */
+.login-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f0f8ff; /* AliceBlue */
+  }
+  
+  /* Style untuk input field */
+  input[type="email"],
+  input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #0000ff; /* Blue */
+    border-radius: 5px;
+  }
+  
+  /* Style untuk tombol masuk */
+  button.login-button {
+    background-color: #6495ed; /* CornflowerBlue */
+    color: #ffffff; /* White */
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  /* Style untuk checkbox */
+  input[type="checkbox"] {
+    margin-right: 5px;
+  }
+  

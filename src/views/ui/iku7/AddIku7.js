@@ -4,6 +4,8 @@ import axios from "axios";
 import { Container, Row, Card, Col, CardTitle } from "reactstrap";
 
 
+
+
 const AddIku7 = () => {
   const [kode_mk, setKodeMK] = useState('');
   const [nama_mk, setNamaMK] = useState('');
@@ -16,12 +18,18 @@ const AddIku7 = () => {
   const navigate = useNavigate();
 
 
+
+
   const saveIku7Data = async (e) => {
     e.preventDefault();
 
 
+
+
     // Hitung presentase bobot
     const presentaseBobot = (parseFloat(case_method) || 0) + (parseFloat(tb_project) || 0);
+
+
 
 
     const formData = new FormData();
@@ -38,6 +46,8 @@ const AddIku7 = () => {
     }
 
 
+
+
     try {
       await axios.post('http://localhost:8080/add/iku7', formData); // Sesuaikan dengan endpoint yang benar
       navigate('/iku7list', { replace: true });
@@ -47,10 +57,14 @@ const AddIku7 = () => {
   };
 
 
+
+
   const handleFileChangeRPS = (e) => {
     const file = e.target.files[0];
     setRPS(file);
   };
+
+
 
 
   const handleFocus = (setter) => {
@@ -58,12 +72,15 @@ const AddIku7 = () => {
   };
 
 
+
+
   return (
     <div>
-      <Container fluid style={{ maxWidth: '80%' }}>
+      <h6>IKU7 - Valid</h6>
+      <Container fluid style={{ maxWidth: '90%' }}>
         <Row>
           <Col xs="12" md="12" sm="12">
-            <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
+            <Card style={{ maxWidth: '150%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
               <CardTitle><b>FORM INPUT IKU 7</b></CardTitle>
               <form onSubmit={saveIku7Data}>
                 <div className="form-group">
@@ -166,7 +183,7 @@ const AddIku7 = () => {
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
-                  <button type="submit" className="btn btn-primary">Save</button>
+                  <button type="submit" className="btn btn-primary">Simpan</button>
                 </div>
               </form>
             </Card>
@@ -176,6 +193,8 @@ const AddIku7 = () => {
     </div>
   );
 };
+
+
 
 
 export default AddIku7;

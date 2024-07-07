@@ -5,6 +5,8 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku2kegiatan = () => {
   const [NIM, setNIM] = useState('');
+  const [semester, setSemester] = useState('');
+  const [tahun, setTahun] = useState('');
   const [NIDN, setNIDN] = useState('');
   const [aktivitas, setAktivitas] = useState('');
   const [tempat_kegiatan, setTempatKegiatan] = useState('');
@@ -17,6 +19,8 @@ const AddIku2kegiatan = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('NIM', NIM);
+    formData.append('semester', semester);
+    formData.append('tahun', tahun);
     formData.append('NIDN', NIDN);
     formData.append('aktivitas', aktivitas);
     formData.append('tempat_kegiatan', tempat_kegiatan);
@@ -33,6 +37,13 @@ const AddIku2kegiatan = () => {
   };
   
 
+  const handleSemesterChange = (e) => {
+    setSemester(e.target.value);
+  };
+
+  const handleFocus = (setter) => {
+    setter('');
+  };
 
   return (
     <div>
@@ -54,6 +65,30 @@ const AddIku2kegiatan = () => {
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label className="label">Semester</label>
+                  <select
+                    className="form-control"
+                    value={semester}
+                    onChange={handleSemesterChange}
+                  >
+                    <option value="">Pilih Semester</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
+                  />
+                </div>
+                <div className="form-group" style={{ marginTop: '10px' }}>
                   <label className="label">Aktivitas</label>
                   <select
                     className="form-control"
@@ -62,7 +97,6 @@ const AddIku2kegiatan = () => {
                   >
                     <option value="">Pilih Aktivitas</option>
                     <option value="magang/praktek kerja">Magang/Praktek Kerja</option>
-                    <option value="pertukaran pelajar">Pertukaran Pelajar</option>
                     <option value="proyek kemanusiaan">Proyek Kemanusiaan</option>
                     <option value="mengajar di sekolah">Mengajar di Sekolah</option>
                     <option value="studi/proyek independen">Studi/Proyek Independen</option>

@@ -106,6 +106,7 @@ const Iku2inboundList = () => {
                             <tr> 
                                 <th>No</th>
                                 <th>Mahasiswa Inbound</th>
+                                <th>Semester</th>
                                 <th>PTN Asal</th>
                                 <th>PTN Tempat Pertukaran</th>
                                 <th>Surat Rekomendasi</th>
@@ -121,6 +122,7 @@ const Iku2inboundList = () => {
                                 <tr key={index}>
                                     <th scope="row">{index + 1}</th>
                                     <td>{iku2inbound.NIM} - {iku2inbound.nama_mahasiswa}</td>
+                                    <td>{iku2inbound.semester}</td>
                                     <td>{iku2inbound.ptn_asal}</td>
                                     <td>{iku2inbound.ptn_pertukaran}</td>
                                     <td>
@@ -134,7 +136,7 @@ const Iku2inboundList = () => {
                                     <td>{iku2inbound.tgl_selesai_inbound}</td>
                                     <td>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Link to={`/update/iku2inbound/${iku2inbound.iku2inbound_id}`}>
+                                            <Link to={`/editiku2inbound/${iku2inbound.iku2inbound_id}`}>
                                                 <Button outline color="info" size="sm"><FaEdit /></Button>
                                             </Link>
                                             <Button outline color="danger" size="sm" onClick={() => deleteIku2inbound(iku2inbound.iku2inbound_id)}><FaTrash /></Button>

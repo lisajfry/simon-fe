@@ -4,17 +4,18 @@ import { Container, Row, Card, Col, CardTitle, Label, Input, FormGroup } from 'r
 import { useNavigate } from 'react-router-dom';
 
 
-
-
 const AddIku6 = () => {
     const [nama_mitra, setNamaMitra] = useState('');
     const [nama_kegiatan, setNamaKegiatan] = useState('');
     const [alamat_mitra, setAlamatMitra] = useState('');
+    const [tahun, setTahun] = useState('');
     const [tgl_mulai_kegiatan, setTglMulaiKegiatan] = useState('');
     const [tgl_selesai_kegiatan, setTglSelesaiKegiatan] = useState('');
     const [kriteria_mitra, setKriteriaMitra] = useState('');
     const [mou, setMou] = useState(null);
     const navigate = useNavigate();
+
+
 
 
     const saveIku6Data = async (e) => {
@@ -23,23 +24,26 @@ const AddIku6 = () => {
         formData.append('nama_mitra', nama_mitra);
         formData.append('nama_kegiatan', nama_kegiatan);
         formData.append('alamat_mitra', alamat_mitra);
+        formData.append('tahun', tahun);
         formData.append('tgl_mulai_kegiatan', tgl_mulai_kegiatan);
         formData.append('tgl_selesai_kegiatan', tgl_selesai_kegiatan);
         formData.append('kriteria_mitra', kriteria_mitra);
         if (mou) {
-            formData.append('mou', mou);
+          formData.append('mou', mou);
         }
-
-
-
-
+     
+        console.log('Request data:', formData);
+     
         try {
-            await axios.post('http://localhost:8080/add/iku6', formData); // Sesuaikan dengan endpoint yang benar
-            navigate('/iku6', { replace: true });
-          } catch (error) {
-            console.error("Error while saving data:", error);
-          }
-        };
+          const response = await axios.post('http://localhost:8080/add/iku6', formData);
+          console.log('Response:', response);
+          navigate('/iku6', { replace: true });
+        } catch (error) {
+          console.error('Error adding mitra:', error);
+          console.error('Error message:', error.message);
+          console.error('Error stack:', error.stack);
+        }
+      };
      
         const handleFileChangeMOU = (e) => {
           const file = e.target.files[0];
@@ -49,10 +53,11 @@ const AddIku6 = () => {
 
     return (
         <div>
-            <Container fluid style={{ maxWidth: '80%' }}>
+            <h6>IKU7 - Valid</h6>
+            <Container fluid style={{ maxWidth: '90%' }}>
                 <Row>
                     <Col xs="12" md="12" sm="12">
-                        <Card style={{ maxWidth: '80%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
+                        <Card style={{ maxWidth: '150%', marginLeft: '-5%', padding: '20px', marginTop: '20px' }}>
                             <CardTitle><b>Add Data</b></CardTitle>
                             <form onSubmit={saveIku6Data}>
                                 <FormGroup>
@@ -87,6 +92,19 @@ const AddIku6 = () => {
                                         onChange={(e) => setAlamatMitra(e.target.value)}
                                         placeholder="Alamat Mitra"
                                     />
+                                </FormGroup>
+                                <FormGroup>
+                                <div className="form-group">
+                                    <label htmlFor="tahun">Tahun</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="tahun"
+                                        value={tahun}
+                                        onChange={(e) => setTahun(e.target.value)}
+                                        placeholder="Tahun"
+                                    />
+                                    </div>
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="tgl_mulai_kegiatan">Tanggal Mulai Kegiatan</label>
@@ -145,6 +163,10 @@ const AddIku6 = () => {
         </div>
     );
 };
+
+
+
+
 
 
 

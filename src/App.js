@@ -46,7 +46,6 @@ import AddIku2prestasi from "./views/ui/iku2/AddIku2prestasi.js";
 import EditIku2prestasi from "./views/ui/iku2/EditIku2prestasi.js";
 import { PrestasiProvider } from "./views/ui/iku2/PrestasiContext.js";
 import { InboundProvider } from "./views/ui/iku2/InboundContext.js";
-import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
 import { Iku2Provider } from "./views/ui/iku2/Iku2Context.js";
 import Iku3 from "./views/ui/iku3/Iku3.js";
 import LulusanList from "./views/ui/iku1/Lulusan.js";
@@ -95,8 +94,10 @@ import { DosenKalanganPraktisiProvider } from "./views/ui/iku4/DosenKalanganPrak
 import DosenKalanganPraktisiList from "./views/ui/iku4/DosenKalanganPraktisi.js";
 import SertifikasiProfesiList from "./views/ui/iku4/SertifikasiProfesi.js";
 import Home from "./components/Home.js";
-import YearList from "./views/ui/tahun/yearlist.js";
 import Iku7List from "./views/ui/iku7/Iku7List.js";
+import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
+
+
 
 const App = () => {
   return (
@@ -115,11 +116,10 @@ const App = () => {
                             <Iku4Provider>
                               <SertifikasiProfesiProvider>
                                 <DosenKalanganPraktisiProvider>
-                                    <Routes>
-                                      <Route path="/home" element={<Home />} />
+                                <Routes>
+                                    <Route path="/" element={<Home />} />
                                     <Route path="/login" element={<Login />} />
-                                      <Route path="/" element={<FullLayout />}>
-                                        <Route index element={<Navigate to="/dashboard" />} />
+                                    <Route element={<FullLayout />}>
                                         <Route path="/dashboard" element={<Dashboard />} />
                                         <Route path="/about" element={<About />} />
                                         <Route path="/starter" element={<Starter />} />
@@ -199,9 +199,10 @@ const App = () => {
                                         <Route path="/iku7notvalid" element={<Iku7NotValid />} />
                                         <Route path="/iku7valid" element={<Iku7Valid />} />
                                         <Route path="/iku5detail" element={<Iku5Detail />} />
-                                        <Route path="/dosendarikalanganpraktisi" element={<DosenKalanganPraktisiList />} />
+                                  
+                                        <Route path="/dosenkalanganpraktisi" element={<DosenKalanganPraktisiList />} />
                                         <Route path="/sertifikasiprofesi" element={<SertifikasiProfesiList />} />
-                                        <Route path="/yearlist" element={<YearList />} />
+                                        
                                       </Route>
                                     </Routes>
                                 </DosenKalanganPraktisiProvider>

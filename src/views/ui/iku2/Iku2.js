@@ -2,17 +2,15 @@ import React, { useContext, useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { Card, CardBody, CardTitle, CardSubtitle, Table, Button, Row, Col } from 'reactstrap';
 import ReactApexChart from 'react-apexcharts';
-import Iku2Context from './Iku2Context';
-
-
+import { Iku2Context } from './Iku2Context'; // Pastikan path sesuai dengan lokasi Iku2Context
 
 const Iku2 = () => {
-    const { totalDataKegiatan, totalDataInbound, totalDataPrestasi, totalCapaian } = useContext(Iku2Context);
+    const { totalDataIku2, selectedYear, setSelectedYear } = useContext(Iku2Context);
+    const { totalCapaian: totalCapaianIku2 } = totalDataIku2; // Tambahkan ini
 
-    
-    const [tahun, setTahun] = useState('');
+
     const [pieChartData, setPieChartData] = useState({
-        series: [totalDataKegiatan, totalDataInbound, totalDataPrestasi],
+        series: [totalDataIku2.totalDataKegiatan, totalDataIku2.totalDataInbound, totalDataIku2.totalDataPrestasi],
         options: {
             labels: ['Mahasiswa Berkegiatan di Luar Prodi', 'Mahasiswa Melakukan Inbound', 'Mahasiswa Berprestasi'],
             colors: ['#28a745', '#007bff', '#dc3545'],
@@ -50,18 +48,32 @@ const Iku2 = () => {
         },
     });
 
-    useEffect(() => {
-        setPieChartData({
-            ...pieChartData,
-            series: [totalDataKegiatan, totalDataInbound, totalDataPrestasi]
-        });
-    }, [totalDataKegiatan, totalDataInbound, totalDataPrestasi]);
-
-    const handleSearch = () => {
-        console.log('Searching data for year:', tahun);
+    const generateYears = (startYear, endYear) => {
+        let years = [];
+        for (let year = startYear; year <= endYear; year++) {
+            years.push(year);
+        }
+        return years;
     };
 
+    const currentYear = new Date().getFullYear();
+    const years = generateYears(2020, currentYear);
 
+    useEffect(() => {
+        setPieChartData({
+            series: [totalDataIku2.totalDataKegiatan, totalDataIku2.totalDataInbound, totalDataIku2.totalDataPrestasi],
+            options: pieChartData.options
+        });
+    }, [totalDataIku2, pieChartData.options]);
+
+    const handleSearch = () => {
+        console.log('Searching data for year:', selectedYear);
+        // Implement search logic here if needed
+    };
+
+    const handleReset = () => {
+        setSelectedYear('');
+    };
 
     return (
         <div className="p-3">
@@ -70,17 +82,18 @@ const Iku2 = () => {
                     <label className="input-group-text" htmlFor="inputGroupSelect01">Tahun</label>
                     <select 
                         className="form-select"
-                        value={tahun}
-                        onChange={(e) => setTahun(e.target.value)}
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
                     >
                         <option value="">Pilih</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
+                        {years.map((year) => (
+                            <option key={year} value={year}>{year}</option>
+                        ))}
                     </select>
                 </Col>
                 <Col md="3">
                     <Button color="primary" className="me-2" size="sm" onClick={handleSearch}>Cari</Button>
-                    <Button color="secondary" size="sm">Reset</Button>
+                    <Button color="secondary" size="sm" onClick={handleReset}>Reset</Button>
                 </Col>
             </Row>
 
@@ -97,7 +110,7 @@ const Iku2 = () => {
                 <Col md="6">
                     <Card body className="text-center" color="success" inverse>
                         <CardSubtitle className="small mb-2" style={{ color: 'black' }}>Capaian dari Target</CardSubtitle>
-                        <CardTitle><p className="mb-0">{totalCapaian} dari 25%</p></CardTitle>
+                        <CardTitle><p className="mb-0">{totalCapaianIku2}% dari 25%</p></CardTitle>
                         <NavLink to="/rekapiku2">
                             <Button color="light-success" className="mt-2" size="sm">Selengkapnya</Button>
                         </NavLink>

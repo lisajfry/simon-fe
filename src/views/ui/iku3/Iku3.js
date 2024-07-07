@@ -5,16 +5,14 @@ import ReactApexChart from 'react-apexcharts';
 import Iku3Context from './Iku3Context';
 import PrestasiContext from '../iku2/PrestasiContext';
 
-
 const Iku3 = () => {
-    const { totalDataIku3Tridharma, totalDataIku3Praktisi, totalCapaian } = useContext(Iku3Context);
+    const { totalDataIku3, selectedYear, setSelectedYear } = useContext(Iku3Context);
     const { totalDataPrestasi } = useContext(PrestasiContext);
 
     const [modal, setModal] = useState(false);
     const [selectedIku3tridharma, setSelectedIku3tridharma] = useState(null);
-    const [tahun, setTahun] = useState('');
     const [pieChartData, setPieChartData] = useState({
-        series: [totalDataIku3Tridharma, totalDataIku3Praktisi, totalDataPrestasi],
+        series: [totalDataIku3.totalDataIku3Tridharma, totalDataIku3.totalDataIku3Praktisi, totalDataPrestasi],
         options: {
             labels: ['Tridharma di Kampus Lain', 'Praktisi di Dunia Industri', 'Membimbing Mahasiswa'],
             colors: ['#28a745', '#007bff', '#dc3545'],
@@ -52,22 +50,31 @@ const Iku3 = () => {
         },
     });
 
+    const generateYears = (startYear, endYear) => {
+        let years = [];
+        for (let year = startYear; year <= endYear; year++) {
+            years.push(year);
+        }
+        return years;
+    };
+
+    const currentYear = new Date().getFullYear();
+    const years = generateYears(2020, currentYear);
+
     useEffect(() => {
         setPieChartData({
             ...pieChartData,
-            series: [totalDataIku3Tridharma, totalDataIku3Praktisi, totalDataPrestasi]
+            series: [totalDataIku3.totalDataIku3Tridharma, totalDataIku3.totalDataIku3Praktisi, totalDataPrestasi]
         });
-    }, [totalDataIku3Tridharma, totalDataIku3Praktisi, totalDataPrestasi]);
+    }, [totalDataIku3.totalDataIku3Tridharma, totalDataIku3.totalDataIku3Praktisi, totalDataPrestasi]);
 
     const handleSearch = () => {
-        console.log('Searching data for year:', tahun);
+        console.log('Searching data for year:', selectedYear);
+        // Implement search logic here if needed
     };
 
-    const toggleModal = () => setModal(!modal);
-
-    const openEditModal = (iku3tridharma) => {
-        setSelectedIku3tridharma(iku3tridharma);
-        toggleModal();
+    const handleReset = () => {
+        setSelectedYear('');
     };
 
     return (
@@ -77,17 +84,18 @@ const Iku3 = () => {
                     <label className="input-group-text" htmlFor="inputGroupSelect01">Tahun</label>
                     <select 
                         className="form-select"
-                        value={tahun}
-                        onChange={(e) => setTahun(e.target.value)}
+                        value={selectedYear}
+                        onChange={(e) => setSelectedYear(e.target.value)}
                     >
                         <option value="">Pilih</option>
-                        <option value="2022">2022</option>
-                        <option value="2023">2023</option>
+                        {years.map((year) => (
+                            <option key={year} value={year}>{year}</option>
+                        ))}
                     </select>
                 </Col>
                 <Col md="3">
                     <Button color="primary" className="me-2" size="sm" onClick={handleSearch}>Cari</Button>
-                    <Button color="secondary" size="sm">Reset</Button>
+                    <Button color="secondary" size="sm" onClick={handleReset}>Reset</Button>
                 </Col>
             </Row>
 
@@ -104,7 +112,7 @@ const Iku3 = () => {
                 <Col md="6">
                     <Card body className="text-center" color="success" inverse>
                         <CardSubtitle className="small mb-2" style={{ color: 'black' }}>Capaian dari Target</CardSubtitle>
-                        <CardTitle><p className="mb-0">{totalCapaian} dari 25%</p></CardTitle>
+                        <CardTitle><p className="mb-0">{totalDataIku3.totalCapaianIku3} dari 25%</p></CardTitle>
                         <NavLink to="/rekapiku3">
                             <Button color="light-success" className="mt-2" size="sm">Selengkapnya</Button>
                         </NavLink>

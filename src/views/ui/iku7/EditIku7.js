@@ -181,5 +181,3 @@ const EditIku7 = () => {
 
 
 export default EditIku7;
-
-

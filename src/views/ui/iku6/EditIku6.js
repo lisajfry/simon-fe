@@ -12,17 +12,18 @@ const EditIku6 = () => {
     const [nama_mitra, setNamaMitra] = useState('');
     const [nama_kegiatan, setNamaKegiatan] = useState('');
     const [alamat_mitra, setAlamatMitra] = useState('');
+    const [tahun, setTahun] = useState('');
     const [tgl_mulai_kegiatan, setTglMulaiKegiatan] = useState('');
     const [tgl_selesai_kegiatan, setTglSelesaiKegiatan] = useState('');
     const [kriteria_mitra, setKriteriaMitra] = useState('');
     const [mou, setMou] = useState(null);
 
 
-
-
     useEffect(() => {
         fetchIku6();
     },);
+
+
 
 
     const fetchIku6 = async () => {
@@ -32,6 +33,7 @@ const EditIku6 = () => {
             setNamaMitra(iku6Data.nama_mitra);
             setNamaKegiatan(iku6Data.nama_kegiatan);
             setAlamatMitra(iku6Data.alamat_mitra);
+            setTahun(iku6Data.tahun);
             setTglMulaiKegiatan(iku6Data.tgl_mulai_kegiatan);
             setTglSelesaiKegiatan(iku6Data.tgl_selesai_kegiatan);
             setKriteriaMitra(iku6Data.kriteria_mitra);
@@ -44,12 +46,17 @@ const EditIku6 = () => {
 
 
 
+
+
+
+
     const updateIku6 = async (e) => {
         e.preventDefault();
         const formData = new FormData();
         formData.append('nama_mitra', nama_mitra);
         formData.append('nama_kegiatan', nama_kegiatan);
         formData.append('alamat_mitra', alamat_mitra);
+        formData.append('tahun', tahun);
         formData.append('tgl_mulai_kegiatan', tgl_mulai_kegiatan);
         formData.append('tgl_selesai_kegiatan', tgl_selesai_kegiatan);
         formData.append('kriteria_mitra', kriteria_mitra);
@@ -69,10 +76,18 @@ const EditIku6 = () => {
 
 
 
+
+
+
+
     const handleFileChangeMOU = (e) => {
         const file = e.target.files[0];
         setMou(file);
     };
+
+
+
+
 
 
 
@@ -117,6 +132,19 @@ const EditIku6 = () => {
                                         onChange={(e) => setAlamatMitra(e.target.value)}
                                         placeholder="Alamat Mitra"
                                     />
+                                </FormGroup>
+                                <FormGroup>
+                                <div className="form-group">
+                                    <label htmlFor="tahun">Tahun</label>
+                                    <input
+                                        type="text"
+                                        className="form-control"
+                                        id="tahun"
+                                        value={tahun}
+                                        onChange={(e) => setTahun(e.target.value)}
+                                        placeholder="Tahun"
+                                    />
+                                    </div>
                                 </FormGroup>
                                 <FormGroup>
                                     <label htmlFor="tgl_mulai_kegiatan">Tanggal Mulai Kegiatan</label>

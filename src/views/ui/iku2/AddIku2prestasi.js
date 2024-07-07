@@ -7,6 +7,7 @@ import Select from 'react-select';
 const AddIku2prestasi = () => {
   const [NIM, setNIM] = useState('');
   const [NIDN, setNIDN] = useState('');
+  const [tahun, setTahun] = useState('');
   const [nama_kompetisi, setNamaKompetisi] = useState('');
   const [penyelenggara, setPenyelenggara] = useState('');
   const [tingkat_kompetisi, setTingkatKompetisi] = useState('');
@@ -85,6 +86,7 @@ const AddIku2prestasi = () => {
     e.preventDefault();
     const formData = new FormData();
     formData.append('NIM', NIM);
+    formData.append('tahun', tahun);
     formData.append('NIDN', NIDN);
     formData.append('tingkat_kompetisi', tingkat_kompetisi);
     formData.append('jmlh_peserta', jmlh_peserta);
@@ -115,6 +117,11 @@ const AddIku2prestasi = () => {
     }
   };
 
+  const handleFocus = (setter) => {
+    setter('');
+  };
+
+
 
   return (
     <div>
@@ -142,6 +149,18 @@ const AddIku2prestasi = () => {
                     value={NIM}
                     onChange={(e) => setNIM(e.target.value)}
                     placeholder="NIM"
+                  />
+                </div>
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
                   />
                 </div>
                 <div className="form-group" style={{ marginTop: '20px' }}>

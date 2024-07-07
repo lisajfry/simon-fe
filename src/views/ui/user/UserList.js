@@ -34,9 +34,9 @@ const UserList = () => {
     return (
         <Row>
         <Col>
-        <div className="form-group" style={{ marginBottom: '10px' }}>
+        <div className="mb-3">
                 <Link to="/adduser">
-                    <button type="submit" className="btn btn-primary">Input</button>
+                <Button color="primary" size="sm">Input</Button>
                 </Link>
             </div>
                 <Card>

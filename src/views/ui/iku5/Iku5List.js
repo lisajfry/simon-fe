@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Table, Col, Card, CardBody, CardTitle, Button } from 'reactstrap';
 import { FaEdit, FaTrash } from 'react-icons/fa';
-import Iku5Context from './Iku5Context';
+import { Iku5Context } from './Iku5Context';
 
 const Iku5List = () => {
     const [iku5List, setIku5List] = useState([]);
@@ -11,12 +11,18 @@ const Iku5List = () => {
     const [error, setError] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 5;
-    const { totalDataIku5 } = useContext(Iku5Context); // Destructure totalDataIku5 from context
+    const { totalDataIku5 } = useContext(Iku5Context);
+    // Mengambil nilai total dari context
+const { totalDataIku5: { totalDataDosen, totalDataDosenNIDK,totalData,  totalDataKaryaIlmiah, totalDataKaryaTerapan, totalDataKaryaSeni, totalBobot, ratarataBobot, totalCapaianIku5 }, selectedYear } = useContext(Iku5Context);
+
+
 
 
     useEffect(() => {
-        fetchIku5List();
-    }, []);
+        if (selectedYear !== undefined) {
+            fetchIku5List();
+        }
+    }, [selectedYear]);
 
     const fetchNamaDosen = async (identifier) => {
         try {
@@ -34,8 +40,13 @@ const Iku5List = () => {
     };
 
     const fetchIku5List = async () => {
+        setLoading(true);
         try {
-            const response = await axios.get('http://localhost:8080/iku5');
+            const response = await axios.get('http://localhost:8080/iku5', {
+                params: {
+                    year: selectedYear
+                }
+            });
             const iku5ListWithNama = await Promise.all(response.data.map(async (iku5) => {
                 const namaDosen = await fetchNamaDosen(iku5.NIDN || iku5.NIDK);
                 return { ...iku5, nama_dosen: namaDosen };
@@ -88,7 +99,7 @@ const Iku5List = () => {
                         <i className="bi bi-card-text me-1" style={{ fontSize: '15px' }}></i>
                         Hasil Kerja Dosen Mendapat Rekognisi Internasional atau Digunakan Oleh Masyarakat
                     </CardTitle>
-                    <p style={{ marginLeft: '10px', fontSize: '12px' }}>Total data: {totalDataIku5}</p>
+                    <p style={{ marginLeft: '10px', fontSize: '12px' }}>Total data: {totalData}</p>
                     <Table bordered striped size="sm">
                         <thead style={{ fontSize: '12px' }}>
                             <tr>

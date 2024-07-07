@@ -5,6 +5,9 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku2inbound = () => {
   const [NIM, setNIM] = useState('');
+  const [semester, setSemester] = useState('');
+  const [tahun, setTahun] = useState('');
+
   const [ptn_asal, setPtnAsal] = useState('');
   const [ptn_pertukaran, setPtnPertukaran] = useState('');
   const [surat_rekomendasi, setSuratRekomendasi] = useState(null);
@@ -22,6 +25,9 @@ const AddIku2inbound = () => {
     }
     const formData = new FormData();
     formData.append('NIM', NIM);
+    formData.append('semester', semester);
+    formData.append('tahun', tahun);
+
     formData.append('ptn_asal', ptn_asal);
     formData.append('ptn_pertukaran', ptn_pertukaran);
     formData.append('surat_rekomendasi', surat_rekomendasi);
@@ -44,6 +50,15 @@ const AddIku2inbound = () => {
     setSuratRekomendasi(file); // Menyimpan file sebagai blob
   };
 
+  const handleSemesterChange = (e) => {
+    setSemester(e.target.value);
+  };
+
+  const handleFocus = (setter) => {
+    setter('');
+  };
+
+
   return (
     <div>
       <Container fluid style={{ maxWidth: '80%' }}>
@@ -63,6 +78,30 @@ const AddIku2inbound = () => {
                     placeholder="NIM"
                   />
                 </div>  
+                <div className="form-group" style={{ marginTop: '10px' }}>
+                  <label className="label">Semester</label>
+                  <select
+                    className="form-control"
+                    value={semester}
+                    onChange={handleSemesterChange}
+                  >
+                    <option value="">Pilih Semester</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
+                  />
+                </div>
                 <div className="form-group" style={{ marginTop: '10px' }}>
                   <label htmlFor="ptn_asal">PTN Asal</label>
                   <input

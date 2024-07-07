@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku3praktisi = () => {
   const [NIDN, setNIDN] = useState('');
+  const [tahun, setTahun] = useState('');
   const [surat_sk, setSuratSk] = useState(null);
   const [instansi_praktisi, setInstansiPraktisi] = useState('');
   const [tgl_mulai_praktisi, setTglMulaiPraktisi] = useState('');
@@ -19,6 +20,7 @@ const AddIku3praktisi = () => {
     }
     const formData = new FormData();
     formData.append('NIDN', NIDN);
+    formData.append('tahun', tahun);
     formData.append('surat_sk', surat_sk);
     formData.append('instansi_praktisi', instansi_praktisi);
     formData.append('tgl_mulai_praktisi', tgl_mulai_praktisi); // Sesuaikan dengan nama yang diharapkan oleh backend
@@ -36,6 +38,10 @@ const AddIku3praktisi = () => {
   const handleFileChange = (e) => {
     const file = e.target.files[0]; // Mengambil file yang dipilih
     setSuratSk(file); // Menyimpan file sebagai blob
+  };
+
+  const handleFocus = (setter) => {
+    setter('');
   };
 
   return (
@@ -57,6 +63,19 @@ const AddIku3praktisi = () => {
                     placeholder="NIDN"
                   />
                 </div>  
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
+                  />
+                </div>
+
                 <div className="form-group" style={{ marginTop: '10px' }}>
                 <label htmlFor="surat_sk">Surat SK</label>
                 <input

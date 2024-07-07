@@ -67,3 +67,5 @@ const Iku7Valid = () => {
 
 
 export default Iku7Valid;
+
+

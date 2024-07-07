@@ -115,6 +115,8 @@ const Iku2kegiatanList = () => {
                             <tr>
                                 <th>No</th>
                                 <th>Mahasiswa</th>
+                                <th>Semester</th>
+                                <th>Tahun</th>
                                 <th>Aktivitas</th>
                                 <th>Tempat Kegiatan</th>
                                 <th>SKS</th>
@@ -129,6 +131,8 @@ const Iku2kegiatanList = () => {
                                 <tr key={iku2kegiatan.iku2kegiatan_id}>
                                     <th scope="row">{(currentPage - 1) * itemsPerPage + index + 1}</th>
                                     <td>{iku2kegiatan.NIM} - {iku2kegiatan.nama_mahasiswa}</td>
+                                    <td>{iku2kegiatan.semester}</td>
+                                    <td>{iku2kegiatan.tahun}</td>
                                     <td>{iku2kegiatan.aktivitas}</td>
                                     <td>{iku2kegiatan.tempat_kegiatan}</td>
                                     <td>{iku2kegiatan.sks}</td>
@@ -137,7 +141,7 @@ const Iku2kegiatanList = () => {
                                     <td>{iku2kegiatan.NIDN} - {iku2kegiatan.nama_dosen}</td>
                                     <td>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                            <Link to={`/update/iku2kegiatan/${iku2kegiatan.iku2kegiatan_id}`}>
+                                            <Link to={`/editiku2kegiatan/${iku2kegiatan.iku2kegiatan_id}`}>
                                                 <Button outline color="info" size="sm"><FaEdit /></Button>
                                             </Link>
                                             <Button outline color="danger" size="sm" onClick={() => deleteIku2kegiatan(iku2kegiatan.iku2kegiatan_id)}><FaTrash /></Button>

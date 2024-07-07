@@ -38,13 +38,13 @@ const Cards = () => {
     <div className='cards'>
       <h1>Dokumentasi Upaya Peningkatan Capaian IKU D3 TI PSDKU</h1>
       <Slider {...settings}>
-        <CardItem src='img/img1.jpg' text='Lulusan mendapat pekerjaan yang layak' />
-        <CardItem src='img/img2.jpg' text='Mahasiswa berkegiatan diluar kampus' />
-        <CardItem src='img/img3.jpg' text='Dosen berkegiatan diluar kampus (membimbing mahasiswa berprestasi)' />
-        <CardItem src='img/img4.jpg' text='Dosen praktisi mengajar dikampus' />
-        <CardItem src='img/img5.jpg' text='Hasil kerja dosen digunakan oleh masyarakat' />
-        <CardItem src='img/img6.jpg' text='Program Studi bekerja sama dengan mitra' />
-        <CardItem src='img/img7.jpg' text='Kelas kolaboratif dan partisipasif (dengan metode PBL)' />
+        <CardItem src=' ../../assets/images/img/img1.jpg' text='Lulusan mendapat pekerjaan yang layak' />
+        <CardItem src=' ../../assets/images/img/img2.jpg' text='Mahasiswa berkegiatan diluar kampus' />
+        <CardItem src=' ../../assets/images/img/img3.jpg' text='Dosen berkegiatan diluar kampus (membimbing mahasiswa berprestasi)' />
+        <CardItem src=' ../../assets/images/img/img4.jpg' text='Dosen praktisi mengajar dikampus' />
+        <CardItem src=' ../../assets/images/img/img5.jpg' text='Hasil kerja dosen digunakan oleh masyarakat' />
+        <CardItem src=' ../../assets/images/img/img6.jpg' text='Program Studi bekerja sama dengan mitra' />
+        <CardItem src=' ../../assets/images/img/img7.jpg' text='Kelas kolaboratif dan partisipasif (dengan metode PBL)' />
       </Slider>
     </div>
   );

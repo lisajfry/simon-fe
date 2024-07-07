@@ -1,26 +1,31 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import axios from 'axios';
 
+
 const SertifikasiProfesiContext = createContext();
+
 
 export const SertifikasiProfesiProvider = ({ children }) => {
     const [iku4List, setIku4List] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
+
     useEffect(() => {
         fetchIku4List();
     }, []);
 
+
     const fetchNamaDosen = async (NIDN) => {
         try {
-            const response = await axios.get('http://localhost:8080/dosen/${NIDN}');
+            const response = await axios.get(`http://localhost:8080/dosen/${NIDN}`);
             return response.data.nama_dosen;
         } catch (error) {
             console.error("Error saat mengambil nama dosen:", error);
             return null;
         }
     };
+
 
     const fetchIku4List = async () => {
         try {
@@ -38,8 +43,10 @@ export const SertifikasiProfesiProvider = ({ children }) => {
         }
     };
 
+
     // Filter data berdasarkan status "Dosen yang Memiliki Sertifikasi Kompetensi/Profesi"
     const filteredIku4List = iku4List.filter(iku4 => iku4.status === "Dosen yang Memiliki Sertifikasi Kompetensi/Profesi");
+
 
     return (
         <SertifikasiProfesiContext.Provider value={{ filteredIku4List, count: filteredIku4List.length, loading, error, fetchIku4List }}>
@@ -47,5 +54,6 @@ export const SertifikasiProfesiProvider = ({ children }) => {
         </SertifikasiProfesiContext.Provider>
     );
 };
+
 
 export const useSertifikasiProfesi = () => useContext(SertifikasiProfesiContext);

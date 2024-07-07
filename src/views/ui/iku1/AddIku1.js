@@ -9,6 +9,7 @@ const AddIku1 = () => {
   const [status, setStatus] = useState('');
   const [gaji, setGaji] = useState('');
   const [masa_tunggu, setMasaTunggu] = useState('');
+  const [tahun, setTahun] = useState('');
   const [file, setFile] = useState(null);
   const [options, setOptions] = useState([]);
   const navigate = useNavigate();
@@ -45,6 +46,8 @@ const AddIku1 = () => {
     formData.append('status', status);
     formData.append('gaji', gaji);
     formData.append('masa_tunggu', masa_tunggu);
+    formData.append('tahun', tahun);
+
 
     try {
       await axios.post('http://localhost:8080/import/iku1', formData, {
@@ -65,6 +68,7 @@ const AddIku1 = () => {
     formData.append('status', status);
     formData.append('gaji', gaji);
     formData.append('masa_tunggu', masa_tunggu);
+    formData.append('tahun', tahun);
 
     try {
       await axios.post('http://localhost:8080/add/iku1', formData);
@@ -88,6 +92,10 @@ const AddIku1 = () => {
     } catch (error) {
       console.error("Error while downloading template:", error);
     }
+  };
+
+  const handleFocus = (setter) => {
+    setter('');
   };
 
   return (
@@ -170,9 +178,24 @@ const AddIku1 = () => {
                     <option value="antara 6 sampai 12bulan">Antara 6 sampai 12 bulan</option>
                   </select>
                 </div>
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
+                  />
+                </div>
+
                 <div className="form-group" style={{ marginTop: '10px' }}>
                   <button type="submit" className="btn btn-primary">Tambahkan</button>
                 </div>
+
+                
               </form>
             </Card>
           </Col>

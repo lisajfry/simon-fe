@@ -1,0 +1,49 @@
+.body-background {
+    background-color: #ffffff; /* Warna latar belakang putih */
+    min-height: 100vh; /* Minimal tinggi 100% viewport */
+    padding: 20px; /* Atur padding sesuai kebutuhan */
+    margin: 0; /* Pastikan margin diatur ke 0 untuk menghindari padding di luar layar */
+    display: flex; /* Gunakan flexbox untuk konten utama */
+    flex-direction: column; /* Susun konten dalam satu kolom */
+}
+
+
+@media (min-width: 576px) {
+    .card-container {
+        padding: 105px; /* Padding yang lebih besar untuk layar dengan lebar minimal 576px */
+    }
+}
+
+
+.bar-chart-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 20px 15px !important;
+}
+
+
+.capai-target-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+
+.additional-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+
+
+.col-container {
+    padding: 20px 15px; /* Jarak padding kiri-kanan pada setiap kolom */
+}
+
+
+.menu-link {
+    color: inherit; /* Inherit color from parent */
+}
+
+
+.menu-link.active {
+    color: black; /* Change text color to black when menu is clicked */
+}

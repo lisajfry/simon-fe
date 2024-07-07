@@ -10,13 +10,13 @@ const Iku1List = () => {
     const [iku1List, setIku1List] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const { totalDataResponden } = useContext(RespondenContext);
+    const { totalDataResponden, selectedYear } = useContext(RespondenContext);
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 10;
 
     useEffect(() => {
         fetchIku1List();
-    }, []);
+    }, [selectedYear]);
 
     const fetchNamaMahasiswa = async (NIM) => {
         try {
@@ -29,12 +29,20 @@ const Iku1List = () => {
     };
 
     const fetchIku1List = async () => {
+        setLoading(true);
         try {
             const response = await axios.get('http://localhost:8080/iku1');
-            const iku1ListWithNama = await Promise.all(response.data.map(async (iku1) => {
+            let iku1Data = response.data;
+
+            if (selectedYear) {
+                iku1Data = iku1Data.filter(item => item.tahun === selectedYear);
+            }
+
+            const iku1ListWithNama = await Promise.all(iku1Data.map(async (iku1) => {
                 const namaMahasiswa = await fetchNamaMahasiswa(iku1.NIM);
                 return { ...iku1, nama_mahasiswa: namaMahasiswa };
             }));
+
             setIku1List(iku1ListWithNama);
             setLoading(false);
         } catch (error) {
@@ -93,6 +101,7 @@ const Iku1List = () => {
                                 <th>Status</th>
                                 <th>Gaji</th>
                                 <th>Masa Tunggu</th>
+                                <th>Tahun</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -105,6 +114,7 @@ const Iku1List = () => {
                                     <td>{iku1.status}</td>
                                     <td>{iku1.gaji}</td>
                                     <td>{iku1.masa_tunggu}</td>
+                                    <td>{iku1.tahun}</td>
                                     <td>
                                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                                             <Link to={`/update/iku1/${iku1.iku1_id}`}>

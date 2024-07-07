@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const AddIku3tridharma = () => {
   const [NIDN, setNIDN] = useState('');
+  const [tahun, setTahun] = useState('');
   const [surat_sk, setSuratSk] = useState(null);
   const [jenis_tridharma, setJenisTridharma] = useState('');
   const [nama_aktivitas_tridharma, setNamaAktivitasTridharma] = useState('');
@@ -21,6 +22,7 @@ const AddIku3tridharma = () => {
     }
     const formData = new FormData();
     formData.append('NIDN', NIDN);
+    formData.append('tahun', tahun);
     formData.append('surat_sk', surat_sk);
     formData.append('jenis_tridharma', jenis_tridharma);
     formData.append('nama_aktivitas_tridharma', nama_aktivitas_tridharma);
@@ -42,6 +44,10 @@ const AddIku3tridharma = () => {
     setSuratSk(file); // Menyimpan file sebagai blob
   };
 
+  const handleFocus = (setter) => {
+    setter('');
+  };
+
   return (
     <div>
       <Container fluid style={{ maxWidth: '80%' }}>
@@ -61,6 +67,19 @@ const AddIku3tridharma = () => {
                     placeholder="NIDN"
                   />
                 </div>  
+                <div className="form-group">
+                  <label htmlFor="tahun">Tahun</label>
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="tahun"
+                    value={tahun}
+                    onFocus={() => handleFocus(setTahun)}
+                    onChange={(e) => setTahun(e.target.value)}
+                    placeholder="Tahun"
+                  />
+                </div>
+
                 <div className="form-group" style={{ marginTop: '10px' }}>
                 <label htmlFor="surat_sk">Surat SK</label>
                 <input

@@ -5,22 +5,24 @@ export const Iku5Context = createContext();
 
 export const Iku5Provider = ({ children }) => {
   // State initialization
-  const [totalData, setTotalData] = useState({
+  const [totalDataIku5, setTotalData] = useState({
     totalDataDosen: 0,
     totalDataDosenNIDK: 0,
-    totalDataIku5: 0,
+    totalData: 0,
     totalDataKaryaIlmiah: 0,
     totalDataKaryaTerapan: 0,
     totalDataKaryaSeni: 0,
     totalBobot: 0,
     ratarataBobot: 0,
-    totalCapaian: 0,
+    totalCapaianIku5: 0,
   });
 
-  // Effect to fetch data when component mounts
+  const [selectedYear, setSelectedYear] = useState('');
+
+  // Effect to fetch data when component mounts or when selectedYear changes
   useEffect(() => {
     getTotalData();
-  }, []);
+  }, [selectedYear]);
 
   // Function to get total data for Dosen
   const getTotalDataDosen = async () => {
@@ -55,7 +57,11 @@ export const Iku5Provider = ({ children }) => {
       const totalDosen = await getTotalDataDosen();
       const totalDosenNIDK = await getTotalDataDosenNIDK();
 
-      const responseIku5 = await axios.get("http://localhost:8080/iku5");
+      const responseIku5 = await axios.get("http://localhost:8080/iku5", {
+        params: {
+          year: selectedYear,
+        },
+      });
       const iku5 = responseIku5.data;
 
       // Calculate totals for different types of Karya
@@ -92,9 +98,8 @@ export const Iku5Provider = ({ children }) => {
 
       const totalBobot = (iku5.reduce((acc, cur) => acc + (calculateBobot(cur) || 0), 0)).toFixed(2);
       const ratarataBobot = (totalBobot / iku5.length).toFixed(2);
-      const totalCapaian = (((iku5.length * ratarataBobot) / (totalDosen + totalDosenNIDK) * 50)).toFixed(2);
+      const totalCapaianIku5 = (((iku5.length * ratarataBobot) / (totalDosen + totalDosenNIDK) * 50)).toFixed(2);
 
-      // Update state with the updated values
       setTotalData(prevState => ({
         ...prevState,
         totalDataIku5: iku5.length,
@@ -103,8 +108,9 @@ export const Iku5Provider = ({ children }) => {
         totalDataKaryaSeni,
         totalBobot,
         ratarataBobot,
-        totalCapaian: parseFloat(totalCapaian) + '%'
+        totalCapaianIku5: parseFloat(totalCapaianIku5) + '%'
       }));
+      
 
     } catch (error) {
       console.error("Error fetching total data:", error);
@@ -112,7 +118,7 @@ export const Iku5Provider = ({ children }) => {
   };
 
   return (
-    <Iku5Context.Provider value={totalData}>
+    <Iku5Context.Provider value={{ totalDataIku5, selectedYear, setSelectedYear }}>
       {children}
     </Iku5Context.Provider>
   );

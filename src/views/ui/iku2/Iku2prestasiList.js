@@ -151,7 +151,7 @@ const Iku2prestasiList = () => {
                                     </td>
                                     <td>
                                         <div style={{ display: 'flex' }}>
-                                            <Link to={`/update/iku2prestasi/${iku2prestasi.iku2prestasi_id}`}>
+                                            <Link to={`/editiku2prestasi/${iku2prestasi.iku2prestasi_id}`}>
                                                 <Button outline color="info" size="sm"><FaEdit /></Button>
                                             </Link>
                                             <Button outline color="danger" size="sm" onClick={() => deleteIku2prestasi(iku2prestasi.iku2prestasi_id)}><FaTrash /></Button>

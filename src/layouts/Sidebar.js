@@ -43,11 +43,7 @@ const navigation = [
     href: "/dosenlist",
     icon: "bi bi-people",
   },
-  {
-    title: "Tahun",
-    href: "/yearlist",
-    icon: "bi bi-people",
-  },
+  
 ];
 
 const Sidebar = () => {

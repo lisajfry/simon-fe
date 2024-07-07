@@ -64,7 +64,9 @@ const DosenList = () => {
             <Col>
                 <div className="form-group">
                     <Link to="/adddosen">
-                        <button type="submit" className="btn btn-primary">Input</button>
+                    
+                <Button color="primary" size="sm">Input</Button>
+               
                     </Link>
                 </div>
                 <Card style={{ marginTop: '10px' }}>
@@ -110,7 +112,8 @@ const DosenList = () => {
             <Col>
                 <div className="form-group">
                     <Link to="/adddosenNIDK">
-                        <button type="submit" className="btn btn-primary">Input</button>
+                    <Button color="primary" size="sm">Input</Button>
+
                     </Link>
                 </div>
                 <Card style={{ marginTop: '10px' }}>
