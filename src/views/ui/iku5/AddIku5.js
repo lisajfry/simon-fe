@@ -16,14 +16,12 @@ const AddIku5 = () => {
   const [tahun, setTahun] = useState('');
   const [dosenOptions, setDosenOptions] = useState([]);
   const [dosenNIDKOptions, setDosenNIDKOptions] = useState([]);
-  const [yearOptions, setYearOptions] = useState([]);
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchNIDNOptions();
     fetchNIDKOptions();
-    fetchYearOptions();
   }, []);
 
   const fetchNIDNOptions = async () => {
@@ -50,16 +48,7 @@ const AddIku5 = () => {
     }
   };
 
-  const fetchYearOptions = async () => {
-    try {
-      const response = await axios.get('http://localhost:8080/years');
-      console.log("Year options response: ", response.data); // Logging the response
-      const yearOptions = response.data.map((year) => ({ value: year.id, label: year.year }));
-      setYearOptions(yearOptions);
-    } catch (error) {
-      console.error("Error fetching year options:", error);
-    }
-  };
+  
 
   const saveIku5Data = async (e) => {
     e.preventDefault();
@@ -79,11 +68,11 @@ const AddIku5 = () => {
     formData.append('pendanaan', pendanaan);
     formData.append('kriteria', kriteria);
     formData.append('tahun', tahun);
-
+  
     if (buktiPendukung) {
       formData.append('bukti_pendukung', buktiPendukung);
     }
-
+  
     try {
       const response = await axios.post('http://localhost:8080/add/iku5', formData, {
         headers: {
@@ -91,6 +80,8 @@ const AddIku5 = () => {
         }
       });
       
+      console.log('Response:', response);  // Tambahkan log ini untuk memeriksa response dari server
+  
       if (response.status === 201) {
         console.log('Data berhasil disimpan');
         navigate('/iku5list', { replace: true });
@@ -101,7 +92,7 @@ const AddIku5 = () => {
       console.error("Error while saving data:", error);
     }
   };
-
+  
   const handleFileChange = (e) => {
     setBuktiPendukung(e.target.files[0]);
   };

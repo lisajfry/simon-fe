@@ -8,7 +8,6 @@ const Iku2 = () => {
     const { totalDataIku2, selectedYear, setSelectedYear } = useContext(Iku2Context);
     const { totalCapaian: totalCapaianIku2 } = totalDataIku2; // Tambahkan ini
 
-
     const [pieChartData, setPieChartData] = useState({
         series: [totalDataIku2.totalDataKegiatan, totalDataIku2.totalDataInbound, totalDataIku2.totalDataPrestasi],
         options: {

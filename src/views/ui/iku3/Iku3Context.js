@@ -17,29 +17,26 @@ export const Iku3Provider = ({ children }) => {
     });
 
     useEffect(() => {
-        if (selectedYear) {
-            getTotalData();
-        }
+        getTotalData();
     }, [selectedYear]);
 
     const getTotalData = async () => {
         try {
-            const response = await axios.get("http://localhost:8080/dosen");
+            const params = selectedYear ? { year: selectedYear } : {};
+            const [response, responseTridharma, responsePraktisi, responseKegiatan, responseInbound, responsePrestasi] = await Promise.all([
+                axios.get("http://localhost:8080/dosen"),
+                axios.get("http://localhost:8080/iku3tridharma", { params }),
+                axios.get("http://localhost:8080/iku3praktisi", { params }),
+                axios.get("http://localhost:8080/iku2kegiatan", { params }),
+                axios.get("http://localhost:8080/iku2inbound", { params }),
+                axios.get("http://localhost:8080/iku2prestasi", { params })
+            ]);
+
             const totalDataDosen = response.data.length;
-
-            const responseTridharma = await axios.get("http://localhost:8080/iku3tridharma", { params: { year: selectedYear } });
             const iku3tridharma = responseTridharma.data;
-
-            const responsePraktisi = await axios.get("http://localhost:8080/iku3praktisi", { params: { year: selectedYear } });
             const iku3praktisi = responsePraktisi.data;
-
-            const responseKegiatan = await axios.get("http://localhost:8080/iku2kegiatan", { params: { year: selectedYear } });
             const iku2kegiatan = responseKegiatan.data;
-
-            const responseInbound = await axios.get("http://localhost:8080/iku2inbound", { params: { year: selectedYear } });
             const iku2inbound = responseInbound.data;
-
-            const responsePrestasi = await axios.get("http://localhost:8080/iku2prestasi", { params: { year: selectedYear } });
             const iku2prestasi = responsePrestasi.data;
 
             const calculateBobot = (type) => {
@@ -65,10 +62,8 @@ export const Iku3Provider = ({ children }) => {
             iku2inbound.forEach(item => item.bobot = calculateBobot('inbound'));
             iku2prestasi.forEach(item => item.bobot = calculateBobot('prestasi'));
 
-            // Combine all activities
             const combinedData = [...iku3tridharma, ...iku3praktisi, ...iku2kegiatan, ...iku2inbound, ...iku2prestasi];
 
-            // Aggregate data to use the highest bobot for each lecturer
             const aggregatedData = combinedData.reduce((acc, item) => {
                 const existingItem = acc.find(i => i.NIDN === item.NIDN);
                 if (existingItem) {
@@ -103,7 +98,7 @@ export const Iku3Provider = ({ children }) => {
                 persentasePraktisi,
                 totalBobot,
                 ratarataBobot,
-                totalCapaianIku3: parseFloat(totalCapaianIku3) + '%' // Mengonversi ke bilangan bulat
+                totalCapaianIku3: parseFloat(totalCapaianIku3) + '%' 
             });
         } catch (error) {
             console.error("Error fetching total data:", error);

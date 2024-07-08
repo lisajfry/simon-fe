@@ -5,7 +5,21 @@
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #f0f8ff; /* AliceBlue */
+    background-image: url('https://api.jatimnet.com/jinet/assets/media/news/news/image_front/JATIMNET.COM_MADIUN_zqSFdYk.jpg'); /* Ganti dengan path gambar yang sesuai */
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: rgba(240, 248, 255, 0.9); /* AliceBlue dengan transparansi */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Tambahkan bayangan */
+  }
+  
+  /* Style untuk form login */
+  form {
+    width: 400px; /* Perbesar lebar form */
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.5); /* White dengan transparansi */
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
   
   /* Style untuk input field */
@@ -26,6 +40,7 @@
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+    font-weight: bold; /* Tambahkan tebal pada teks tombol */
   }
   
   /* Style untuk checkbox */

@@ -96,6 +96,8 @@ import SertifikasiProfesiList from "./views/ui/iku4/SertifikasiProfesi.js";
 import Home from "./components/Home.js";
 import Iku7List from "./views/ui/iku7/Iku7List.js";
 import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
+import KegiatanDetail from "./views/ui/iku2/KegiatanDetail.js";
+import InboundDetail from "./views/ui/iku2/InboundDetail.js";
 
 
 
@@ -117,8 +119,7 @@ const App = () => {
                               <SertifikasiProfesiProvider>
                                 <DosenKalanganPraktisiProvider>
                                 <Routes>
-                                    <Route path="/" element={<Home />} />
-                                    <Route path="/login" element={<Login />} />
+                                    <Route path="/" element={<Login />} />
                                     <Route element={<FullLayout />}>
                                         <Route path="/dashboard" element={<Dashboard />} />
                                         <Route path="/about" element={<About />} />
@@ -187,6 +188,10 @@ const App = () => {
                                         <Route path="/editiku7/:iku7_id" element={<EditIku7 />} />
                                         <Route path="/countryform" element={<CountryForm />} />
                                         <Route path="/prestasidetail/:iku2prestasi_id" element={<PrestasiDetail />} />
+                                        <Route path="/kegiatandetail/:iku2kegiatan_id" element={<KegiatanDetail />} />
+                                        <Route path="/inbounddetail/:iku2inbound_id" element={<InboundDetail />} />
+                                        <Route path="/iku5detail/:iku5_id" element={<Iku5Detail />} />
+
                                         <Route path="/dosenberkualifikasis3" element={<DosenBerkualifikasiS3 />} />
                                         <Route path="/sertifikasikompetensidosen" element={<SertifikasiKompetensiDosen />} />
                                         <Route path="/praktisimendidik" element={<PraktisiMenjadiDosenDosen />} />
@@ -198,7 +203,7 @@ const App = () => {
                                         <Route path="/editiku6/:iku6_id" element={<EditIku6 />} />
                                         <Route path="/iku7notvalid" element={<Iku7NotValid />} />
                                         <Route path="/iku7valid" element={<Iku7Valid />} />
-                                        <Route path="/iku5detail" element={<Iku5Detail />} />
+                                        
                                   
                                         <Route path="/dosenkalanganpraktisi" element={<DosenKalanganPraktisiList />} />
                                         <Route path="/sertifikasiprofesi" element={<SertifikasiProfesiList />} />

@@ -34,6 +34,10 @@ const Iku3membimbingList = () => {
                 axios.get('http://localhost:8080/iku2inbound')
             ]);
 
+            console.log("Prestasi Data:", responsePrestasi.data); // Logging data for debugging
+            console.log("Kegiatan Data:", responseKegiatan.data); // Logging data for debugging
+            console.log("Inbound Data:", responseInbound.data);   // Logging data for debugging
+
             const iku2prestasiListWithNama = await mapItems(responsePrestasi.data, 'prestasi');
             const iku2kegiatanListWithNama = await mapItems(responseKegiatan.data, 'kegiatan');
             const iku2inboundListWithNama = await mapItems(responseInbound.data, 'inbound');
@@ -43,6 +47,8 @@ const Iku3membimbingList = () => {
                 ...iku2kegiatanListWithNama,
                 ...iku2inboundListWithNama
             ];
+
+            console.log("Combined Data:", combinedData); // Logging combined data for debugging
 
             setData(combinedData);
             setTotalData(combinedData.length);
@@ -57,7 +63,8 @@ const Iku3membimbingList = () => {
     const mapItems = async (items, type) => {
         return await Promise.all(items.map(async (item) => {
             const namaDosen = await fetchNamaDosen(item.NIDN);
-            return { ...item, nama_dosen: namaDosen, type };
+            const id = type === 'prestasi' ? item.iku2prestasi_id : type === 'kegiatan' ? item.iku2kegiatan_id : item.iku2inbound_id;
+            return { ...item, nama_dosen: namaDosen, type, id };
         }));
     };
 
@@ -87,6 +94,19 @@ const Iku3membimbingList = () => {
 
     const displayedData = data.slice((currentPage - 1) * itemsPerPage, currentPage * itemsPerPage);
 
+    const getDetailPath = (item) => {
+        switch (item.type) {
+            case 'prestasi':
+                return `/prestasidetail/${item.id}`;
+            case 'kegiatan':
+                return `/kegiatandetail/${item.id}`;
+            case 'inbound':
+                return `/inbounddetail/${item.id}`;
+            default:
+                return '#';
+        }
+    };
+
     return (
         <Col xs="12">
             <Card>
@@ -113,7 +133,7 @@ const Iku3membimbingList = () => {
                                     <td>{item.NIDN}</td>
                                     <td>{item.nama_dosen}</td>
                                     <td>
-                                        <Link to={`/${item.type}/${item.id}`}>
+                                        <Link to={getDetailPath(item)}>
                                             <Button outline color="success" size="sm">Detail</Button>
                                         </Link>
                                     </td>

@@ -40,10 +40,6 @@ const Iku5Detail = () => {
             const response = await axios.get(`http://localhost:8080/iku5/${iku5_id}`);
             const iku5Data = response.data;
     
-            // Pastikan iku5Data memiliki properti id_years yang valid
-            if (!iku5Data.id) {
-                throw new Error("ID years tidak ditemukan.");
-            }
     
             const namaDosenNIDN = await fetchNamaDosen(iku5Data.NIDN);
             const namaDosenNIDK = await fetchNamaDosenNIDK(iku5Data.NIDK);
@@ -128,7 +124,7 @@ const Iku5Detail = () => {
                         <Link to={`/update/iku5/${iku5.iku5_id}`}>
                             <Button outline color="info" size="sm"><FaEdit /></Button>
                         </Link>
-                        <Link to="/iku2prestasiList">
+                        <Link to="/iku5list">
                             <Button color="primary" size="sm">Back to List</Button>
                         </Link>
                     </div>

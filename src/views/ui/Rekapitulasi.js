@@ -58,15 +58,7 @@ const Rekapitulasi = () => {
   return (
     <div>
       <Row>
-        <Col md="4">
-          <label htmlFor="yearSelect">Pilih Tahun:</label>
-          <select id="yearSelect" className="form-control" value={selectedYear} onChange={handleYearChange}>
-            {[...Array(10).keys()].map(i => {
-              const year = new Date().getFullYear() - i;
-              return <option key={year} value={year}>{year}</option>;
-            })}
-          </select>
-        </Col>
+        
       </Row>
       <Row>
         <h5 className="mb-3 mt-3">REKAPITULASI</h5>

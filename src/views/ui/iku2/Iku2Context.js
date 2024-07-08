@@ -16,17 +16,16 @@ export const Iku2Provider = ({ children }) => {
   const [selectedYear, setSelectedYear] = useState('');
 
   useEffect(() => {
-    if (selectedYear) {
-      getTotalData();
-    }
+    getTotalData();
   }, [selectedYear]);
 
   const getTotalData = async () => {
     try {
+      const params = selectedYear ? { year: selectedYear } : {};
       const [responseKegiatan, responseInbound, responsePrestasi] = await Promise.all([
-        axios.get('http://localhost:8080/iku2kegiatan', { params: { year: selectedYear } }),
-        axios.get('http://localhost:8080/iku2inbound', { params: { year: selectedYear } }),
-        axios.get('http://localhost:8080/iku2prestasi', { params: { year: selectedYear } }),
+        axios.get('http://localhost:8080/iku2kegiatan', { params }),
+        axios.get('http://localhost:8080/iku2inbound', { params }),
+        axios.get('http://localhost:8080/iku2prestasi', { params }),
       ]);
 
       const iku2kegiatan = responseKegiatan.data;
