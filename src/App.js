@@ -98,6 +98,8 @@ import Iku7List from "./views/ui/iku7/Iku7List.js";
 import { Iku3Provider } from "./views/ui/iku3/Iku3Context.js";
 import KegiatanDetail from "./views/ui/iku2/KegiatanDetail.js";
 import InboundDetail from "./views/ui/iku2/InboundDetail.js";
+import Iku6List from "./views/ui/iku6/Iku6List.js";
+import EditIku5 from "./views/ui/iku5/EditIku5.js";
 
 
 
@@ -138,7 +140,7 @@ const App = () => {
                                         <Route path="/iku7" element={<Iku7 />} />
                                         <Route path="/iku7list" element={<Iku7List />} />
                                         <Route path="/iku1list" element={<Iku1List />} />
-                                        <Route path="/editiku1/:iku1_id" element={<EditIku1 />} />
+                                        <Route path="/update/iku1/:iku1_id" element={<EditIku1 />} />
                                         <Route path="/iku1sesuai" element={<Iku1Sesuai />} />
                                         <Route path="/iku1tidaksesuai" element={<Iku1TidakSesuai />} />
                                         <Route path="/rekapiku1" element={<RekapIku1 />} />
@@ -176,16 +178,17 @@ const App = () => {
                                         <Route path="/iku4" element={<Iku4 />} />
                                         <Route path="/addiku4" element={<AddIku4 />} />
                                         <Route path="/iku4list" element={<Iku4List />} />
-                                        <Route path="/editiku4/:iku4_id" element={<EditIku4 />} />
+                                        <Route path="/update/iku4/:iku4_id" element={<EditIku4 />} />
                                         <Route path="/rekapiku4" element={<RekapIku4 />} />
                                         <Route path="/iku5" element={<Iku5 />} />
                                         <Route path="/addiku5" element={<AddIku5 />} />
                                         <Route path="/iku5list" element={<Iku5List />} />
+                                        <Route path="/update/iku5/:iku5_id" element={<EditIku5 />} />
                                         <Route path="/iku5detail/:iku5_id" element={<Iku5Detail />} />
                                         <Route path="/adddosenpraktisi" element={<AddDosenpraktisi />} />
                                         <Route path="/dosenpraktisilist" element={<DosenpraktisiList />} />
                                         <Route path="/addiku7" element={<AddIku7 />} />
-                                        <Route path="/editiku7/:iku7_id" element={<EditIku7 />} />
+                                       
                                         <Route path="/countryform" element={<CountryForm />} />
                                         <Route path="/prestasidetail/:iku2prestasi_id" element={<PrestasiDetail />} />
                                         <Route path="/kegiatandetail/:iku2kegiatan_id" element={<KegiatanDetail />} />
@@ -199,11 +202,12 @@ const App = () => {
                                         <Route path="/adddosennidk" element={<AddDosenNIDK />} />
                                         <Route path="/editdosennidk/:NIDK" element={<EditDosenNIDK />} />
                                         <Route path="/iku6" element={<Iku6 />} />
+                                        <Route path="/iku6list" element={<Iku6List />} />
                                         <Route path="/addiku6" element={<Addiku6 />} />
-                                        <Route path="/editiku6/:iku6_id" element={<EditIku6 />} />
+                                        <Route path="/update/iku6/:iku6_id" element={<EditIku6 />} />
                                         <Route path="/iku7notvalid" element={<Iku7NotValid />} />
                                         <Route path="/iku7valid" element={<Iku7Valid />} />
-                                        
+                                        <Route path="/update/iku7/:iku7_id" element={<EditIku7 />} />
                                   
                                         <Route path="/dosenkalanganpraktisi" element={<DosenKalanganPraktisiList />} />
                                         <Route path="/sertifikasiprofesi" element={<SertifikasiProfesiList />} />

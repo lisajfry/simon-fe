@@ -47,55 +47,42 @@ const Iku7List = () => {
                         <CardTitle tag="h6" className="d-flex justify-content-between align-items-center border-bottom p-3 mb-0">
                             <span>
                                 <i className="bi bi-card-text me-2"></i>
-                                Tabel IKU7
+                                Tabel IKU 7
                             </span>
-                            <span>Jumlah Mata Kuliah Tayang: {iku7List.length}</span>
                             <NavLink to="/addiku7">
-                                <Button type="button" className="btn btn-primary">Add New</Button>
+                                <Button type="button" className="btn btn-primary btn-small">Add New</Button>
                             </NavLink>
                         </CardTitle>
-                        <CardBody>
-                            <NavLink to="/iku7">
-                                <Button type="button" className="btn btn-secondary mb-3">Kembali</Button>
-                            </NavLink>
-                            <Table bordered striped style={{ fontSize: '12px' }}>
-                                <thead>
+                        <CardBody className="card-text-small">
+                            <p className="card-text-small">Jumlah Data: {iku7Data.length}</p>
+                            <Table bordered responsive>
+                                <thead className="table-secondary text-center">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Kode Mata Kuliah</th>
-                                        <th>Nama Mata Kuliah</th>
-                                        <th>Tahun</th>
+                                        <th>No</th>
+                                        <th>Nama MK</th>
+                                        <th>Case Method</th>
+                                        <th>Team Base Project</th>
                                         <th>Semester</th>
-                                        <th>Kelas</th>
-                                        <th>Presentase Bobot</th>
-                                        <th>RPS</th>
+                                        <th>Tahun</th>
                                         <th>Actions</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {iku7List.map((iku, index) => (
-                                        <tr key={iku.iku7_id}>
-                                            <td>{index + 1}</td>
-                                            <td>{iku.kode_mk}</td>
-                                            <td>{iku.nama_mk}</td>
-                                            <td>{iku.tahun}</td>
-                                            <td>{iku.semester === '1' ? 'Ganjil' : 'Genap'}</td>
-                                            <td>{iku.kelas}</td>
-                                            <td>{iku.presentase_bobot}</td>
+                                <tbody className="text-center">
+                                    {iku7Data.map((iku7Item, index) => (
+                                        <tr key={iku7Item.id}>
+                                            <th scope="row">{index + 1}</th>
+                                            <td>{iku7Item.nama_mk}</td>
+                                            <td>{iku7Item.case_method}</td>
+                                            <td>{iku7Item.tb_project}</td>
+                                            <td>{iku7Item.semester}</td>
+                                            <td>{iku7Item.tahun}</td>
                                             <td>
-                                                {iku.rps ? (
-                                                    <a href={`http://localhost:8080/${iku.rps}`} target="_blank" rel="noopener noreferrer">Lihat File</a>
-                                                ) : (
-                                                    'Belum Upload'
-                                                )}
-                                            </td>
-                                            <td>
-                                                <NavLink to={`/update/iku7/${iku.iku7_id}`} className="btn btn-warning me-2" style={{ fontSize: '12px' }}>
-                                                    <FaEdit />
+                                                <NavLink to={`/update/iku7/${iku7Item.id}`} className="btn btn-warning btn-small">
+                                                    <i className="fa fa-edit"></i>
                                                 </NavLink>
-                                                <Button onClick={() => deleteIku7(iku.iku7_id)} className="btn btn-danger" style={{ fontSize: '12px' }}>
-                                                    <FaTrash />
-                                                </Button>
+                                                <button onClick={() => deleteIku7(iku7Item.id)} className="btn btn-danger btn-small">
+                                                    <i className="fa fa-trash"></i>
+                                                </button>
                                             </td>
                                         </tr>
                                     ))}

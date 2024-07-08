@@ -42,74 +42,68 @@ const Iku6List = () => {
 
     return (
         <Row>
-            <Col lg="12">
-                <Card>
-                    <CardTitle tag="h6" className="d-flex justify-content-between align-items-center border-bottom p-3 mb-0">
-                        <span>
-                            <i className="bi bi-card-text me-2"> </i>
-                            Tabel IKU 6
-                        </span>
-                        <NavLink to="/addiku6">
-                            <Button type="button" className="btn btn-primary">Add</Button>
-                        </NavLink>
-                    </CardTitle>
-                    <CardBody className="">
-                        <p>Jumlah Data: {iku6.length}</p> {/* Tambahkan baris ini untuk menampilkan jumlah data */}
-                        <Table bordered striped>
-                            <thead>
-                                <tr>
-                                    <th>#</th>
-                                    <th>Nama Mitra</th>
-                                    <th>Nama Kegiatan</th>
-                                    <th>Alamat Mitra</th>
-                                    <th>Tanggal Mulai Kegiatan</th>
-                                    <th>Tanggal Selesai Kegiatan</th>
-                                    <th>Kriteria Mitra</th>
-                                    <th>Dokumen Kesepahaman (MOU) </th>
-                                    <th>Dokumen Kesepakatan (PKS) </th>
-                                    <th>Actions</th>
+        <Col lg="12">
+            <Card>
+                <CardTitle tag="h6" className="d-flex justify-content-between align-items-center border-bottom p-3 mb-0">
+                    <span>
+                        <i className="bi bi-card-text me-2"></i>
+                        Tabel IKU 6
+                    </span>
+                    <NavLink to="/addiku6">
+                        <Button type="button" className="btn btn-primary btn-small">Add New</Button>
+                    </NavLink>
+                </CardTitle>
+                <CardBody className="card-text-small">
+                    <p className="card-text-small">Jumlah Data: {iku6.length}</p>
+                    <Table bordered responsive>
+                        <thead className="table-secondary text-center">
+                            <tr>
+                                <th>No</th>
+                                <th>Nama Mitra</th>
+                                <th>Nama Kegiatan</th>
+                                <th>Alamat Mitra</th>
+                                <th>Tahun</th>
+                                <th>Tgl Mulai Kegiatan</th>
+                                <th>Tgl Selesai Kegiatan</th>
+                                <th>Kriteria Mitra</th>
+                                <th>MoU</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-center">
+                            {iku6.map((iku6Item, index) => (
+                                <tr key={iku6Item.iku6_id}>
+                                    <th scope="row">{index + 1}</th>
+                                    <td>{iku6Item.nama_mitra}</td>
+                                    <td>{iku6Item.nama_kegiatan}</td>
+                                    <td>{iku6Item.alamat_mitra}</td>
+                                    <td>{iku6Item.tahun}</td>
+                                    <td>{iku6Item.tgl_mulai_kegiatan}</td>
+                                    <td>{iku6Item.tgl_selesai_kegiatan}</td>
+                                    <td>{iku6Item.kriteria_mitra}</td>
+                                    <td>
+                                        {iku6Item.mou ? (
+                                            <a href={`http://localhost:8080/${iku6Item.mou}`} target="_blank" rel="noopener noreferrer">Lihat File</a>
+                                        ) : (
+                                            'Belum Upload'
+                                        )}
+                                    </td>
+                                    <td>
+                                        <NavLink to={`/update/iku6/${iku6Item.iku6_id}`} className="btn btn-warning btn-small">
+                                            <i className="fa fa-edit"></i>
+                                        </NavLink>
+                                        <button onClick={() => deleteIku6(iku6Item.iku6_id)} className="btn btn-danger btn-small">
+                                            <i className="fa fa-trash"></i>
+                                        </button>
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                {iku6.map((iku6Item, index) => (
-                                    <tr key={iku6Item.iku6_id}>
-                                        <td>{index + 1}</td> {/* This ensures the numbering starts from 1 */}
-                                        <td>{iku6Item.nama_mitra}</td>
-                                        <td>{iku6Item.nama_kegiatan}</td>
-                                        <td>{iku6Item.alamat_mitra}</td>
-                                        <td>{iku6Item.tgl_mulai_kegiatan}</td>
-                                        <td>{iku6Item.tgl_selesai_kegiatan}</td>
-                                        <td>{iku6Item.kriteria_mitra}</td>
-                                        <td>
-                                            <Button
-                                                type="button"
-                                                onClick={() => window.open(`http://localhost:8080/uploads/${iku6Item.mou}`, '_blank')}
-                                            >
-                                                Lihat File
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <Button
-                                                type="button"
-                                                onClick={() => window.open(`http://localhost:8080/uploads/${iku6Item.pks}`, '_blank')}
-                                            >
-                                                Lihat File
-                                            </Button>
-                                        </td>
-                                        <td>
-                                            <Link to={`/update/iku6/${iku6Item.iku6_id}`}>
-                                                <Button type="button" className="btn btn-primary">Edit</Button>
-                                            </Link>
-                                            <Button type="button" className="btn btn-danger" onClick={() => deleteIku6(iku6Item.iku6_id)}>Delete</Button>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </Table>
-                    </CardBody>
-                </Card>
-            </Col>
-        </Row>
+                            ))}
+                        </tbody>
+                    </Table>
+                </CardBody>
+            </Card>
+        </Col>
+    </Row>
     );
 };
 

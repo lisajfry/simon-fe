@@ -62,7 +62,7 @@ const Iku4 = () => {
     series: [sertifikasiProfesiCount, kalanganPraktisiCount],
     options: {
       labels: ['Sertifikasi Profesi', 'Kalangan Praktisi'],
-      colors: ['#FF6384', '#36A2EB'],
+      colors: ['#28a745', '#007bff'],
       legend: {
         show: true,
         position: 'bottom',
@@ -138,13 +138,13 @@ const Iku4 = () => {
 
           <Col>
             <Col md="10" lg="12">
-              <Card body className="text-center" color="danger">
+              <Card body className="text-center" color="success">
                 <CardTitle tag="h5"  size="sm" style={{ fontSize: '12px' }}>Capaian Target IKU 4</CardTitle>
                 <div>
                   <p>{perhitungan.toFixed(2)}% dari 50%</p>
                 </div>
                 <div>
-                  <Button color="light-warning" size="sm" style={{ fontSize: '12px' }}onClick={handleOpenIku4List}>Buka</Button>
+                  <Button color="light-success" size="sm" style={{ fontSize: '12px' }}onClick={handleOpenIku4List}>Buka</Button>
                 </div>
               </Card>
             </Col>
