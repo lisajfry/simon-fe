@@ -1,34 +1,46 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from "axios";
+import axios from 'axios';
 
 
 const Iku4Context = createContext();
 
 
 export const Iku4Provider = ({ children }) => {
-  const [totalDataIku4, setTotalDataIku4] = useState(0);
+    const [totalDataIku4, setTotalDataIku4] = useState({ sertifikasiProfesi: 0, kalanganPraktisi: 0 });
+    const [selectedYear, setSelectedYear] = useState('');
 
 
-  useEffect(() => {
-    getTotalDataIku4();
-  }, []);
+    const fetchDataByYear = async (year) => {
+        try {
+            const response = await axios.get("http://localhost:8080/iku4", {
+                params: { year },
+            });
+            console.log("Response Data:", response.data);
+            const sertifikasiProfesi = response.data.filter(item => item.category === 'sertifikasiProfesi');
+            const kalanganPraktisi = response.data.filter(item => item.category === 'kalanganPraktisi');
+            setTotalDataIku4({
+                sertifikasiProfesi: sertifikasiProfesi.length,
+                kalanganPraktisi: kalanganPraktisi.length,
+            });
+        } catch (error) {
+            console.error("Error fetching total data IKU 4:", error);
+        }
+    };
 
 
-  const getTotalDataIku4 = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/iku4");
-      setTotalDataIku4(response.data.length); // Menggunakan response.data.length
-    } catch (error) {
-      console.error("Error fetching total data iku 4:", error);
-    }
-  };
- 
-  return (
-    <Iku4Context.Provider value={{ totalDataIku4, setTotalDataIku4 }}>
-      {children}
-    </Iku4Context.Provider>
-  );
+    useEffect(() => {
+        fetchDataByYear(selectedYear);
+    }, [selectedYear]);
+
+
+    return (
+        <Iku4Context.Provider value={{ totalDataIku4, selectedYear, setSelectedYear, fetchDataByYear }}>
+            {children}
+        </Iku4Context.Provider>
+    );
 };
 
 
 export default Iku4Context;
+
+

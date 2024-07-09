@@ -44,7 +44,6 @@ export const SertifikasiProfesiProvider = ({ children }) => {
     };
 
 
-    // Filter data berdasarkan status "Dosen yang Memiliki Sertifikasi Kompetensi/Profesi"
     const filteredIku4List = iku4List.filter(iku4 => iku4.status === "Dosen yang Memiliki Sertifikasi Kompetensi/Profesi");
 
 
@@ -57,3 +56,5 @@ export const SertifikasiProfesiProvider = ({ children }) => {
 
 
 export const useSertifikasiProfesi = () => useContext(SertifikasiProfesiContext);
+
+

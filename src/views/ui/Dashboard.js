@@ -37,7 +37,7 @@ const Dashboard = () => {
             <Card style={{ maxWidth: '80%', marginLeft: '-5%' }}> {/* Tambahkan marginLeft negatif di sini */}
               <CardBody>
                 <div className='content mt-3'>
-                  <Slide images={slideimg} duration={200} transitionDuration={50}>
+                  <Slide images={slideimg} duration={1000} transitionDuration={500}>
                     {slideimg.map((image, index) => (
                       <div key={index} className="each-slide">
                         <img src={image} className="slide-img" alt={`Slide ${index}`} style={{ maxWidth: '75vw', height: '75vh', objectFit: 'contain' }} />

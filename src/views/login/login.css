@@ -1,50 +1,68 @@
 /* Style untuk elemen login */
 .login-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100vh;
-    background-image: url('https://api.jatimnet.com/jinet/assets/media/news/news/image_front/JATIMNET.COM_MADIUN_zqSFdYk.jpg'); /* Ganti dengan path gambar yang sesuai */
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-color: rgba(240, 248, 255, 0.9); /* AliceBlue dengan transparansi */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Tambahkan bayangan */
-  }
-  
-  /* Style untuk form login */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-image: url('https://api.jatimnet.com/jinet/assets/media/news/news/image_front/JATIMNET.COM_MADIUN_zqSFdYk.jpg'); /* Ganti dengan path gambar yang sesuai */
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: rgba(240, 248, 255, 0.9); /* AliceBlue dengan transparansi */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3); /* Tambahkan bayangan */
+}
+
+/* Style untuk form login */
+form {
+  width: 90%; /* Sesuaikan lebar form */
+  max-width: 350px; /* Batasi lebar maksimal */
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.5); /* White dengan transparansi */
+  border-radius: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Style untuk input field */
+input[type="email"],
+input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #0000ff; /* Blue */
+  border-radius: 5px;
+}
+
+/* Style untuk tombol masuk */
+button.login-button {
+  background-color: #6495ed; /* CornflowerBlue */
+  color: #ffffff; /* White */
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold; /* Tambahkan tebal pada teks tombol */
+}
+
+/* Style untuk checkbox */
+input[type="checkbox"] {
+  margin-right: 5px;
+}
+
+/* Media queries untuk responsivitas */
+@media (max-width: 600px) {
   form {
-    width: 400px; /* Perbesar lebar form */
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.5); /* White dengan transparansi */
-    border-radius: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    width: 100%;
+    max-width: 90%;
   }
-  
-  /* Style untuk input field */
-  input[type="email"],
-  input[type="password"] {
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  button.login-button {
     width: 100%;
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #0000ff; /* Blue */
-    border-radius: 5px;
   }
-  
-  /* Style untuk tombol masuk */
-  button.login-button {
-    background-color: #6495ed; /* CornflowerBlue */
-    color: #ffffff; /* White */
-    border: none;
-    padding: 10px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold; /* Tambahkan tebal pada teks tombol */
-  }
-  
-  /* Style untuk checkbox */
-  input[type="checkbox"] {
-    margin-right: 5px;
-  }
-  
+}
